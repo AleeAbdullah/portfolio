@@ -238,85 +238,82 @@ const Projects = () => {
           layout
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
         >
-          <AnimatePresence>
-            {filteredProjects.map((project, index) => (
-              <motion.div
-                key={project.title}
-                layout
-                initial={{ opacity: 1, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 20 }}
-                transition={{
-                  duration: 0.3,
-                  delay: index * 0.05,
-                }}
+          {filteredProjects.map((project, index) => (
+            <motion.div
+              key={project.title}
+              layout
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{
+                duration: 0.2,
+                delay: index * 0.02,
+              }}
+              className={cn(
+                "group relative rounded-xl overflow-hidden cursor-pointer shadow-lg transition-all duration-300 flex flex-col",
+                "bg-card border border-border hover:shadow-primary/20"
+              )}
+              onClick={() => openModal(project)}
+              whileHover={{ y: -5, scale: 1.02 }}
+            >
+              <div
                 className={cn(
-                  "group relative rounded-xl overflow-hidden cursor-pointer shadow-lg transition-all duration-300 flex flex-col",
-                  "bg-card border border-border hover:shadow-primary/20"
+                  "relative flex items-center justify-center h-48 overflow-hidden transition-colors duration-300",
+                  "bg-muted group-hover:bg-primary/10"
                 )}
-                onClick={() => openModal(project)}
-                whileHover={{ y: -5, scale: 1.02 }}
               >
-                <div
+                {project.images && project.images[0] ? (
+                  <Image
+                    src={project.images[0]}
+                    alt={project.title}
+                    fill
+                    className="object-cover group-hover:scale-110 transition-transform duration-300"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  />
+                ) : project.category === "app" ? (
+                  <TabletSmartphone
+                    className={cn(
+                      "text-7xl group-hover:scale-110 transition-all duration-300",
+                      "text-muted-foreground group-hover:text-primary"
+                    )}
+                  />
+                ) : (
+                  <MonitorDot
+                    className={cn(
+                      "text-7xl group-hover:scale-110 transition-all duration-300",
+                      "text-muted-foreground group-hover:text-primary"
+                    )}
+                  />
+                )}
+              </div>
+              <div className="p-6 grow flex flex-col">
+                <h3
                   className={cn(
-                    "relative flex items-center justify-center h-48 overflow-hidden transition-colors duration-300",
-                    "bg-muted group-hover:bg-primary/10"
+                    "text-xl font-bold mb-2 truncate transition-colors duration-300",
+                    "text-card-foreground"
                   )}
                 >
-                  {project.images && project.images[0] ? (
-                    <Image
-                      src={project.images[0]}
-                      alt={project.title}
-                      fill
-                      className="object-cover group-hover:scale-110 transition-transform duration-300"
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    />
-                  ) : project.category === "app" ? (
-                    <TabletSmartphone
-                      className={cn(
-                        "text-7xl group-hover:scale-110 transition-all duration-300",
-                        "text-muted-foreground group-hover:text-primary"
-                      )}
-                    />
-                  ) : (
-                    <MonitorDot
-                      className={cn(
-                        "text-7xl group-hover:scale-110 transition-all duration-300",
-                        "text-muted-foreground group-hover:text-primary"
-                      )}
-                    />
+                  {project.title}
+                </h3>
+                <p
+                  className={cn(
+                    "text-sm mb-4 line-clamp-3 grow transition-colors duration-300",
+                    "text-muted-foreground"
                   )}
-                </div>
-                <div className="p-6 grow flex flex-col">
-                  <h3
-                    className={cn(
-                      "text-xl font-bold mb-2 truncate transition-colors duration-300",
-                      "text-card-foreground"
-                    )}
-                  >
-                    {project.title}
-                  </h3>
-                  <p
-                    className={cn(
-                      "text-sm mb-4 line-clamp-3 grow transition-colors duration-300",
-                      "text-muted-foreground"
-                    )}
-                  >
-                    {project.description}
-                  </p>
-                  <span
-                    className={cn(
-                      "text-sm font-semibold mt-auto group-hover:underline transition-colors duration-300",
-                      "text-primary"
-                    )}
-                  >
-                    View Details
-                    <i className="uil uil-arrow-right transform transition-transform duration-300 group-hover:translate-x-1"></i>
-                  </span>
-                </div>
-              </motion.div>
-            ))}
-          </AnimatePresence>
+                >
+                  {project.description}
+                </p>
+                <span
+                  className={cn(
+                    "text-sm font-semibold mt-auto group-hover:underline transition-colors duration-300",
+                    "text-primary"
+                  )}
+                >
+                  View Details
+                  <i className="uil uil-arrow-right transform transition-transform duration-300 group-hover:translate-x-1"></i>
+                </span>
+              </div>
+            </motion.div>
+          ))}
         </motion.div>
       </div>
 
