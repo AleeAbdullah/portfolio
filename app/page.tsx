@@ -15,9 +15,9 @@ import "./globals.css";
 
 export default function Home() {
   return (
-    <main className="">
+    <main className="bg-background transition-colors duration-300 min-h-screen">
       <Header />
-      <div className="lg:ml-[100px]">
+      <div>
         <Hero />
         <About />
         <Qualification />

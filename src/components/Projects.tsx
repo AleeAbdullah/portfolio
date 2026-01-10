@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CircleX, MonitorDot, TabletSmartphone } from "lucide-react";
+import { cn } from "../lib/utils";
 
 const projects = [
   {
@@ -134,28 +135,60 @@ const Projects = () => {
   const closeModal = () => setSelectedProject(null);
 
   return (
-    <section className="py-24 bg-gray-950" id="work">
+    <section
+      className={cn("py-24 transition-colors duration-300", "bg-background")}
+      id="work"
+    >
       <div className="container mx-auto px-6">
-        <div className="relative mb-16 text-center">
-          <h2 className="text-4xl font-bold text-gray-100">Recent Works</h2>
-          <p className="text-center text-rose-500 mt-2">My Portfolio</p>
-        </div>
+        <motion.div
+          className="relative mb-16 text-center"
+          initial={{ opacity: 0, y: -20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, type: "spring" }}
+          viewport={{ once: true }}
+        >
+          <h2
+            className={cn(
+              "text-4xl font-bold transition-colors duration-300",
+              "text-foreground"
+            )}
+          >
+            Recent Works
+          </h2>
+          <p
+            className={cn(
+              "text-center mt-2 transition-colors duration-300",
+              "text-primary"
+            )}
+          >
+            My Portfolio
+          </p>
+        </motion.div>
 
-        <div className="flex justify-center mb-12 gap-4">
+        <motion.div
+          className="flex justify-center mb-12 gap-4"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.1 }}
+          viewport={{ once: true }}
+        >
           {categories.map((category) => (
-            <button
+            <motion.button
               key={category}
               onClick={() => setSelectedCategory(category)}
-              className={`px-6 py-2 rounded-full text-sm font-semibold transition-all duration-300 ${
+              className={cn(
+                "px-6 py-2 rounded-full text-sm font-semibold transition-all duration-300",
                 selectedCategory === category
-                  ? "bg-rose-600 text-white shadow-md shadow-rose-600/30"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
-              }`}
+                  ? "bg-primary text-primary-foreground shadow-md shadow-primary/30"
+                  : "bg-card text-muted-foreground hover:bg-accent border border-border"
+              )}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
               {category.charAt(0).toUpperCase() + category.slice(1)}
-            </button>
+            </motion.button>
           ))}
-        </div>
+        </motion.div>
 
         <motion.div
           layout
@@ -166,32 +199,65 @@ const Projects = () => {
               <motion.div
                 key={project.title}
                 layout
-                initial={{ opacity: 0, y: 50 }}
+                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 50 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="group relative bg-gray-900 rounded-xl overflow-hidden cursor-pointer shadow-lg hover:shadow-rose-600/20 transition-shadow duration-300 flex flex-col"
+                exit={{ opacity: 0, y: 20 }}
+                transition={{
+                  duration: 0.3,
+                  delay: index * 0.05,
+                }}
+                className={cn(
+                  "group relative rounded-xl overflow-hidden cursor-pointer shadow-lg transition-all duration-300 flex flex-col",
+                  "bg-card border border-border hover:shadow-primary/20"
+                )}
                 onClick={() => openModal(project)}
+                whileHover={{ y: -5, scale: 1.02 }}
               >
-                <div className="relative flex items-center justify-center h-48 bg-gray-800/50 group-hover:bg-rose-900/20 transition-colors duration-300">
+                <div
+                  className={cn(
+                    "relative flex items-center justify-center h-48 transition-colors duration-300",
+                    "bg-muted group-hover:bg-primary/10"
+                  )}
+                >
                   {project.category === "app" ? (
                     <TabletSmartphone
-                      className={`text-7xl text-gray-700 group-hover:text-rose-500 group-hover:scale-110 transition-all duration-300`}
+                      className={cn(
+                        "text-7xl group-hover:scale-110 transition-all duration-300",
+                        "text-muted-foreground group-hover:text-primary"
+                      )}
                     />
                   ) : (
                     <MonitorDot
-                      className={`text-7xl text-gray-700 group-hover:text-rose-500 group-hover:scale-110 transition-all duration-300`}
+                      className={cn(
+                        "text-7xl group-hover:scale-110 transition-all duration-300",
+                        "text-muted-foreground group-hover:text-primary"
+                      )}
                     />
                   )}
                 </div>
-                <div className="p-6 flex-grow flex flex-col">
-                  <h3 className="text-xl font-bold text-gray-100 mb-2 truncate">
+                <div className="p-6 grow flex flex-col">
+                  <h3
+                    className={cn(
+                      "text-xl font-bold mb-2 truncate transition-colors duration-300",
+                      "text-card-foreground"
+                    )}
+                  >
                     {project.title}
                   </h3>
-                  <p className="text-gray-400 text-sm mb-4 line-clamp-3 flex-grow">
+                  <p
+                    className={cn(
+                      "text-sm mb-4 line-clamp-3 grow transition-colors duration-300",
+                      "text-muted-foreground"
+                    )}
+                  >
                     {project.description}
                   </p>
-                  <span className="text-rose-500 text-sm font-semibold mt-auto group-hover:underline">
+                  <span
+                    className={cn(
+                      "text-sm font-semibold mt-auto group-hover:underline transition-colors duration-300",
+                      "text-primary"
+                    )}
+                  >
                     View Details
                     <i className="uil uil-arrow-right transform transition-transform duration-300 group-hover:translate-x-1"></i>
                   </span>
@@ -216,55 +282,97 @@ const Projects = () => {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
               transition={{ type: "spring", stiffness: 200, damping: 25 }}
-              className="w-full max-w-2xl bg-gray-900 rounded-2xl shadow-2xl overflow-hidden"
+              className={cn(
+                "w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden transition-colors duration-300",
+                "bg-card border border-border"
+              )}
               onClick={(e) => e.stopPropagation()}
             >
               <div className="p-8 relative overflow-y-auto max-h-[90vh]">
                 <button
                   onClick={closeModal}
-                  className="absolute top-4 right-4 w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-rose-600 transition-colors z-20"
+                  className={cn(
+                    "absolute top-4 right-4 w-10 h-10 rounded-full flex items-center justify-center transition-colors z-20",
+                    "bg-secondary text-secondary-foreground hover:bg-primary hover:text-primary-foreground"
+                  )}
                 >
-                  <CircleX />
+                  <CircleX size={20} />
                 </button>
-                <h2 className="text-3xl font-bold text-white mb-2">
+                <h2
+                  className={cn(
+                    "text-3xl font-bold mb-2 transition-colors duration-300",
+                    "text-card-foreground"
+                  )}
+                >
                   {selectedProject.title}
                 </h2>
-                <p className="text-gray-400 mb-6 text-sm">
+                <p
+                  className={cn(
+                    "mb-6 text-sm transition-colors duration-300",
+                    "text-muted-foreground"
+                  )}
+                >
                   {selectedProject.description}
                 </p>
 
                 <div className="space-y-6">
                   <div>
-                    <h4 className="font-semibold text-white mb-3 border-b border-gray-800 pb-2">
+                    <h4
+                      className={cn(
+                        "font-semibold mb-3 border-b pb-2 transition-colors duration-300",
+                        "text-card-foreground border-border"
+                      )}
+                    >
                       Key Features
                     </h4>
                     <ul className="space-y-2">
                       {selectedProject.features.map((feature: string) => (
                         <li
                           key={feature}
-                          className="flex items-start gap-3 text-sm text-gray-300"
+                          className={cn(
+                            "flex items-start gap-3 text-sm transition-colors duration-300",
+                            "text-muted-foreground"
+                          )}
                         >
-                          <i className="uil uil-check-circle text-rose-500 mt-1"></i>
+                          <i
+                            className={cn(
+                              "uil uil-check-circle mt-1",
+                              "text-primary"
+                            )}
+                          ></i>
                           <span>{feature}</span>
                         </li>
                       ))}
                     </ul>
                   </div>
                   <div>
-                    <h4 className="font-semibold text-white mb-3 border-b border-gray-800 pb-2">
+                    <h4
+                      className={cn(
+                        "font-semibold mb-3 border-b pb-2 transition-colors duration-300",
+                        "text-card-foreground border-border"
+                      )}
+                    >
                       Tech Stack
                     </h4>
                     <div className="flex flex-wrap gap-2">
                       {selectedProject.techStack.map((tech: string) => (
                         <span
                           key={tech}
-                          className="bg-gray-800 text-gray-300 text-xs font-medium px-3 py-1 rounded-full"
+                          className={cn(
+                            "text-xs font-medium px-3 py-1 rounded-full border transition-colors duration-300",
+                            "bg-secondary text-secondary-foreground border-border"
+                          )}
                         >
                           {tech}
                         </span>
                       ))}
                     </div>
-                    <h4 className="font-semibold text-white mt-6 mb-3 border-b border-gray-800 pb-2">
+                    <h4
+                      className={cn(
+                        "font-semibold mt-6 mb-3 border-b pb-2 transition-colors duration-300",
+                        "text-card-foreground border-border"
+                      )}
+                    >
                       Role & Platform
                     </h4>
                     <div className="space-y-2 text-sm">
@@ -273,8 +381,20 @@ const Projects = () => {
                           key={detail.label}
                           className="flex justify-between"
                         >
-                          <span className="text-gray-500">{detail.label}:</span>
-                          <span className="text-gray-300 font-medium">
+                          <span
+                            className={cn(
+                              "transition-colors duration-300",
+                              "text-muted-foreground"
+                            )}
+                          >
+                            {detail.label}:
+                          </span>
+                          <span
+                            className={cn(
+                              "font-medium transition-colors duration-300",
+                              "text-card-foreground"
+                            )}
+                          >
                             {detail.value}
                           </span>
                         </div>
@@ -283,13 +403,21 @@ const Projects = () => {
                   </div>
                 </div>
 
-                <div className="flex gap-4 pt-6 mt-6 border-t border-gray-800">
+                <div
+                  className={cn(
+                    "flex gap-4 pt-6 mt-6 border-t transition-colors duration-300",
+                    "border-border"
+                  )}
+                >
                   {selectedProject.live && (
                     <a
                       href={selectedProject.live}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex-1 py-3 bg-rose-600 text-white rounded-lg hover:bg-rose-700 transition-colors font-medium flex items-center justify-center gap-2"
+                      className={cn(
+                        "flex-1 py-3 rounded-lg transition-colors font-medium flex items-center justify-center gap-2 hover:scale-105 active:scale-95",
+                        "bg-primary text-primary-foreground hover:opacity-90"
+                      )}
                     >
                       <i className="uil uil-external-link-alt"></i>
                       Live Demo
@@ -301,7 +429,10 @@ const Projects = () => {
                       href={selectedProject.github}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex-1 py-3 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors font-medium flex items-center justify-center gap-2"
+                      className={cn(
+                        "flex-1 py-3 rounded-lg transition-colors font-medium flex items-center justify-center gap-2 hover:scale-105 active:scale-95",
+                        "bg-secondary text-secondary-foreground hover:bg-accent"
+                      )}
                     >
                       <i className="uil uil-github"></i>
                       Source Code

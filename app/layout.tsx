@@ -24,7 +24,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <Head>
         <link
           rel="stylesheet"
@@ -35,7 +35,9 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </Head>
-      <body>{children}</body>
+          <body className={geistSans.variable}>
+            {children}
+          </body>
     </html>
   );
 }
