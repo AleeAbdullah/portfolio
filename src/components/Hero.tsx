@@ -1,6 +1,13 @@
 "use client";
 
-import { Building2, Facebook, Instagram, Linkedin } from "lucide-react";
+import {
+  Building2,
+  CodeXml,
+  Facebook,
+  Github,
+  Instagram,
+  Linkedin,
+} from "lucide-react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { useScroll, useTransform } from "framer-motion";
@@ -92,14 +99,14 @@ const Hero = () => {
           </span>
           <div className="inline-flex gap-x-4">
             <a
-              href="https://www.instagram.com/aliabdullah82"
+              href="https://www.github.com/AleeAbdullah"
               target="_blank"
               className={cn(
                 "text-lg transition-all duration-300 hover:-translate-y-1 hover:scale-110",
                 "text-muted-foreground hover:text-primary"
               )}
             >
-              <Instagram />
+              <Github />
             </a>
             <a
               href="https://www.linkedin.com/in/ali-abdullah-854716224"
@@ -119,17 +126,17 @@ const Hero = () => {
                 "text-muted-foreground hover:text-primary"
               )}
             >
-              <Building2 />
+              <CodeXml />
             </a>
             <a
-              href="https://www.facebook.com/share/19c1qtHp9v/"
+              href="https://www.instagram.com/aliabdullah82"
               target="_blank"
               className={cn(
                 "text-lg transition-all duration-300 hover:-translate-y-1 hover:scale-110",
                 "text-muted-foreground hover:text-primary"
               )}
             >
-              <Facebook />
+              <Instagram />
             </a>
           </div>
         </motion.div>

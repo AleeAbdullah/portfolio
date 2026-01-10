@@ -1,7 +1,14 @@
 "use client";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { CircleX, MonitorDot, TabletSmartphone } from "lucide-react";
+import {
+  CircleX,
+  MonitorDot,
+  TabletSmartphone,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
+import Image from "next/image";
 import { cn } from "../lib/utils";
 
 const projects = [
@@ -23,6 +30,7 @@ const projects = [
       "Integrated SEO Blog Engine",
       "User & Role Management",
     ],
+    images: ["/mockups/seasons.webp"],
     github: null,
     live: "https://seasonseateryhi.com",
   },
@@ -49,8 +57,9 @@ const projects = [
       "Robust cart total verification via Cloud Functions",
       "Seamless multi-seller split payments",
     ],
+    images: ["/mockups/safe buy.webp"],
     github: null,
-    live: null,
+    live: "dashboard.safebuy.africa",
   },
   {
     title: "FitKraft",
@@ -75,7 +84,8 @@ const projects = [
       "Secure data encryption and session management",
       "Seamless API integration for content delivery",
     ],
-    github: "https://github.com/ye-bhee-theek-ha/fitkraft",
+    images: ["/mockups/fitkraft.webp"],
+    github: "https://github.com/AleeAbdullah/fitkraft",
     live: null,
   },
   {
@@ -94,7 +104,12 @@ const projects = [
       "Account management and progress tracking",
       "Interactive online learning sessions",
     ],
-    github: "https://github.com/ye-bhee-theek-ha/knowlegequran-Expo-App",
+    images: [
+      "/mockups/Knowlegge Quran.webp",
+      "/mockups/Knowlegge Quran 2.webp",
+      "/mockups/Knowlegge Quran 3.webp",
+    ],
+    github: "https://github.com/AleeAbdullah/knowlegequran-Expo-App",
     live: null,
   },
   {
@@ -113,8 +128,14 @@ const projects = [
       "Automated email notifications",
       "Comprehensive admin dashboard for sellers",
     ],
+    images: [
+      "/mockups/simplfly.webp",
+      "/mockups/simplfly 1.webp",
+      "/mockups/simplfly 2.webp",
+      "/mockups/simplfly 3.webp",
+    ],
     github: "https://github.com/ye-bhee-theek-ha/Simplify",
-    live: null,
+    live: "https://simplifly.scoopcodes.com/",
   },
 ];
 
@@ -123,6 +144,7 @@ const categories = ["all", "app", "web"];
 const Projects = () => {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedProject, setSelectedProject] = useState<any>(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const filteredProjects =
     selectedCategory === "all"
@@ -131,8 +153,30 @@ const Projects = () => {
 
   const openModal = (project: any) => {
     setSelectedProject(project);
+    setCurrentImageIndex(0);
   };
-  const closeModal = () => setSelectedProject(null);
+  const closeModal = () => {
+    setSelectedProject(null);
+    setCurrentImageIndex(0);
+  };
+
+  const nextImage = () => {
+    if (selectedProject?.images) {
+      setCurrentImageIndex(
+        (prev) => (prev + 1) % selectedProject.images.length
+      );
+    }
+  };
+
+  const prevImage = () => {
+    if (selectedProject?.images) {
+      setCurrentImageIndex(
+        (prev) =>
+          (prev - 1 + selectedProject.images.length) %
+          selectedProject.images.length
+      );
+    }
+  };
 
   return (
     <section
@@ -199,7 +243,7 @@ const Projects = () => {
               <motion.div
                 key={project.title}
                 layout
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 1, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 20 }}
                 transition={{
@@ -215,11 +259,19 @@ const Projects = () => {
               >
                 <div
                   className={cn(
-                    "relative flex items-center justify-center h-48 transition-colors duration-300",
+                    "relative flex items-center justify-center h-48 overflow-hidden transition-colors duration-300",
                     "bg-muted group-hover:bg-primary/10"
                   )}
                 >
-                  {project.category === "app" ? (
+                  {project.images && project.images[0] ? (
+                    <Image
+                      src={project.images[0]}
+                      alt={project.title}
+                      fill
+                      className="object-cover group-hover:scale-110 transition-transform duration-300"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    />
+                  ) : project.category === "app" ? (
                     <TabletSmartphone
                       className={cn(
                         "text-7xl group-hover:scale-110 transition-all duration-300",
@@ -298,6 +350,73 @@ const Projects = () => {
                 >
                   <CircleX size={20} />
                 </button>
+
+                {/* Image Gallery */}
+                {selectedProject.images &&
+                  selectedProject.images.length > 0 && (
+                    <div className="relative mb-6 rounded-lg overflow-hidden bg-muted aspect-video">
+                      <Image
+                        src={selectedProject.images[currentImageIndex]}
+                        alt={`${selectedProject.title} - Image ${
+                          currentImageIndex + 1
+                        }`}
+                        fill
+                        className="object-contain"
+                        sizes="(max-width: 768px) 100vw, 768px"
+                      />
+                      {selectedProject.images.length > 1 && (
+                        <>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              prevImage();
+                            }}
+                            className={cn(
+                              "absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center transition-colors z-10",
+                              "bg-black/50 text-white hover:bg-black/70 backdrop-blur-sm"
+                            )}
+                            aria-label="Previous image"
+                          >
+                            <ChevronLeft size={20} />
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              nextImage();
+                            }}
+                            className={cn(
+                              "absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center transition-colors z-10",
+                              "bg-black/50 text-white hover:bg-black/70 backdrop-blur-sm"
+                            )}
+                            aria-label="Next image"
+                          >
+                            <ChevronRight size={20} />
+                          </button>
+                          <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+                            {selectedProject.images.map(
+                              (_: string, index: number) => (
+                                <button
+                                  key={index}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setCurrentImageIndex(index);
+                                  }}
+                                  className={cn(
+                                    "w-2 h-2 rounded-full transition-all",
+                                    currentImageIndex === index
+                                      ? "bg-primary w-6"
+                                      : "bg-white/50 hover:bg-white/70"
+                                  )}
+                                  aria-label={`Go to image ${index + 1}`}
+                                />
+                              )
+                            )}
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  )}
+
                 <h2
                   className={cn(
                     "text-3xl font-bold mb-2 transition-colors duration-300",
@@ -405,7 +524,7 @@ const Projects = () => {
 
                 <div
                   className={cn(
-                    "flex gap-4 pt-6 mt-6 border-t transition-colors duration-300",
+                    "flex flex-col sm:flex-row gap-3 pt-6 mt-6 border-t transition-colors duration-300",
                     "border-border"
                   )}
                 >
@@ -415,12 +534,12 @@ const Projects = () => {
                       target="_blank"
                       rel="noopener noreferrer"
                       className={cn(
-                        "flex-1 py-3 rounded-lg transition-colors font-medium flex items-center justify-center gap-2 hover:scale-105 active:scale-95",
-                        "bg-primary text-primary-foreground hover:opacity-90"
+                        "flex-1 py-3 px-6 rounded-lg transition-all font-semibold flex items-center justify-center gap-2 hover:scale-105 active:scale-95 shadow-md",
+                        "bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-lg"
                       )}
                     >
                       <i className="uil uil-external-link-alt"></i>
-                      Live Demo
+                      Go to Project
                     </a>
                   )}
 
@@ -430,13 +549,24 @@ const Projects = () => {
                       target="_blank"
                       rel="noopener noreferrer"
                       className={cn(
-                        "flex-1 py-3 rounded-lg transition-colors font-medium flex items-center justify-center gap-2 hover:scale-105 active:scale-95",
-                        "bg-secondary text-secondary-foreground hover:bg-accent"
+                        "flex-1 py-3 px-6 rounded-lg transition-all font-semibold flex items-center justify-center gap-2 hover:scale-105 active:scale-95",
+                        "bg-secondary text-secondary-foreground hover:bg-accent border border-border"
                       )}
                     >
                       <i className="uil uil-github"></i>
-                      Source Code
+                      View on GitHub
                     </a>
+                  )}
+
+                  {!selectedProject.live && !selectedProject.github && (
+                    <div
+                      className={cn(
+                        "flex-1 py-3 px-6 rounded-lg text-center text-sm",
+                        "text-muted-foreground bg-muted/50"
+                      )}
+                    >
+                      Links coming soon
+                    </div>
                   )}
                 </div>
               </div>
