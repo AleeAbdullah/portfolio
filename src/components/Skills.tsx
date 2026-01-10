@@ -19,11 +19,10 @@ const Skills = () => {
     ],
     "backend-and-database": [
       { name: "Express.js", percentage: 70 },
-      { name: "Python", percentage: 40 },
+      { name: "Django", percentage: 60 },
       { name: "Firebase", percentage: 95 },
       { name: "Supabase", percentage: 80 },
-      { name: "MongoDB", percentage: 70 },
-      { name: "MySQL", percentage: 60 },
+      { name: "PostgreSQL", percentage: 60 },
     ],
   };
 
@@ -43,7 +42,13 @@ const Skills = () => {
   ];
 
   return (
-    <section className={cn("py-16 md:py-20 lg:py-24 transition-colors duration-300", "bg-background")} id="skills">
+    <section
+      className={cn(
+        "py-16 md:py-20 lg:py-24 transition-colors duration-300",
+        "bg-background"
+      )}
+      id="skills"
+    >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           className="relative mb-12 md:mb-16 text-center"
@@ -52,7 +57,12 @@ const Skills = () => {
           transition={{ duration: 0.6, type: "spring" }}
           viewport={{ once: true }}
         >
-          <h2 className={cn("text-2xl sm:text-3xl font-bold border-b-2 pb-2 inline-block transition-colors duration-300", "text-foreground border-border")}>
+          <h2
+            className={cn(
+              "text-2xl sm:text-3xl font-bold border-b-2 pb-2 inline-block transition-colors duration-300",
+              "text-foreground border-border"
+            )}
+          >
             My Experience
           </h2>
         </motion.div>
@@ -76,7 +86,10 @@ const Skills = () => {
                 <motion.div
                   className="text-2xl sm:text-3xl mr-3 sm:mr-4 transition-colors duration-300"
                   animate={{
-                    color: activeTab === tab.id ? "hsl(var(--primary))" : "hsl(var(--muted-foreground))",
+                    color:
+                      activeTab === tab.id
+                        ? "hsl(var(--primary))"
+                        : "hsl(var(--muted-foreground))",
                   }}
                 >
                   {tab.icon}
@@ -90,7 +103,12 @@ const Skills = () => {
                   >
                     {tab.title}
                   </h1>
-                  <span className={cn("text-xs sm:text-sm transition-colors duration-300", "text-muted-foreground")}>
+                  <span
+                    className={cn(
+                      "text-xs sm:text-sm transition-colors duration-300",
+                      "text-muted-foreground"
+                    )}
+                  >
                     {tab.experience}
                   </span>
                 </div>
@@ -127,16 +145,34 @@ const Skills = () => {
                       transition={{ delay: index * 0.1, duration: 0.4 }}
                     >
                       <div className="flex justify-between mb-2">
-                        <h3 className={cn("text-sm sm:text-base font-medium transition-colors duration-300", "text-foreground")}>
+                        <h3
+                          className={cn(
+                            "text-sm sm:text-base font-medium transition-colors duration-300",
+                            "text-foreground"
+                          )}
+                        >
                           {skill.name}
                         </h3>
-                        <span className={cn("text-xs sm:text-sm transition-colors duration-300", "text-muted-foreground")}>
+                        <span
+                          className={cn(
+                            "text-xs sm:text-sm transition-colors duration-300",
+                            "text-muted-foreground"
+                          )}
+                        >
                           {skill.percentage}%
                         </span>
                       </div>
-                      <div className={cn("h-2 rounded-full overflow-hidden transition-colors duration-300", "bg-muted")}>
+                      <div
+                        className={cn(
+                          "h-2 rounded-full overflow-hidden transition-colors duration-300",
+                          "bg-muted"
+                        )}
+                      >
                         <motion.div
-                          className={cn("h-full rounded-full relative overflow-hidden", "bg-primary")}
+                          className={cn(
+                            "h-full rounded-full relative overflow-hidden",
+                            "bg-primary"
+                          )}
                           initial={{ width: 0 }}
                           animate={{ width: `${skill.percentage}%` }}
                           transition={{
@@ -166,7 +202,6 @@ const Skills = () => {
           </div>
         </div>
       </div>
-
     </section>
   );
 };

@@ -1,5 +1,5 @@
 "use client";
-import { Share2, Sun, Moon } from "lucide-react";
+import { Download, Sun, Moon, List, FileUser } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useThemeStore } from "../store/themeStore";
 import { cn } from "../lib/utils";
@@ -40,7 +40,12 @@ const Header = () => {
   const navLinks = ["home", "about", "skills", "work", "services", "contact"];
 
   return (
-    <nav className={cn("fixed top-0 left-0 w-full h-16 z-50 transition-colors duration-300", "bg-card/95 backdrop-blur-sm border-b border-border")}>
+    <nav
+      className={cn(
+        "fixed top-4 left-1/2 -translate-x-1/2 w-full md:w-3xl h-14 z-50 transition-colors duration-300",
+        "bg-background-secondary backdrop-blur-sm border border-t-0  border-border rounded-b-xl"
+      )}
+    >
       <div className="h-full container mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
         {/* Navigation Links - Left Side */}
         <ul className="hidden md:flex items-center gap-x-6 lg:gap-x-8">
@@ -68,19 +73,10 @@ const Header = () => {
           )}
           onClick={toggleMenu}
         >
-          <i className={`uil ${isOpen ? "uil-times" : "uil-bars"}`}></i>
+          <List size={20} />
         </div>
 
-        {/* Logo - Center */}
-        <div className="absolute left-1/2 -translate-x-1/2">
-          <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center transition-colors duration-300">
-            <a href="#home" className="text-lg text-primary-foreground font-bold">
-              A
-            </a>
-          </div>
-        </div>
-
-        {/* Theme Toggle and Share Icon - Right Side */}
+        {/* Theme Toggle and Download CV Button - Right Side */}
         <div className="flex items-center gap-3">
           {/* Theme Toggle */}
           <button
@@ -98,15 +94,21 @@ const Header = () => {
             )}
           </button>
 
-          {/* Share Icon */}
+          {/* Download CV Button */}
           <button
             onClick={() => {
-              navigator.clipboard.writeText(window.location.href);
+              const link = document.createElement("a");
+              link.href = "/cv.pdf";
+              link.download = "Ali_Abdullah_CV.pdf";
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
             }}
-            className="text-foreground hover:text-primary transition-colors duration-300 cursor-pointer hidden sm:block"
-            aria-label="Share page"
+            className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-4 py-2 rounded-md text-sm transition-colors duration-300 cursor-pointer "
+            aria-label="Download CV"
           >
-            <Share2 size={20} />
+            <FileUser size={20} />
+            Resume
           </button>
         </div>
       </div>
@@ -116,7 +118,9 @@ const Header = () => {
         className={cn(
           "absolute top-16 left-0 w-full transition-all duration-300 md:hidden border-b border-border",
           "bg-card",
-          isOpen ? "opacity-100 visible max-h-96" : "opacity-0 invisible max-h-0 overflow-hidden"
+          isOpen
+            ? "opacity-100 visible max-h-96"
+            : "opacity-0 invisible max-h-0 overflow-hidden"
         )}
       >
         <ul className="py-4">

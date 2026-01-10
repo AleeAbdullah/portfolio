@@ -23,7 +23,7 @@ const Qualification = () => {
         window.pJSDom[0].pJS.fn.vendors.destroypJS();
         window.pJSDom = [];
       }
-      
+
       window.particlesJS("particles-qualification", {
         particles: {
           number: { value: 80, density: { enable: true, value_area: 800 } },
@@ -94,7 +94,10 @@ const Qualification = () => {
 
   return (
     <section
-      className={cn("py-24 relative overflow-hidden transition-colors duration-300", "bg-background")}
+      className={cn(
+        "py-24 relative overflow-hidden transition-colors duration-300",
+        "bg-background"
+      )}
       id="qualification"
     >
       {/* Particles container - z-0 and pointer-events-none are key */}
@@ -109,8 +112,22 @@ const Qualification = () => {
           transition={{ duration: 0.6, type: "spring" }}
           viewport={{ once: true }}
         >
-          <h2 className={cn("text-4xl font-bold transition-colors duration-300", "text-foreground")}>Qualifications</h2>
-          <p className={cn("text-center mt-2 transition-colors duration-300", "text-primary")}>My Personal Journey</p>
+          <h2
+            className={cn(
+              "text-4xl font-bold transition-colors duration-300",
+              "text-foreground"
+            )}
+          >
+            Qualifications
+          </h2>
+          <p
+            className={cn(
+              "text-center mt-2 transition-colors duration-300",
+              "text-primary"
+            )}
+          >
+            My Personal Journey
+          </p>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl mx-auto">
@@ -121,11 +138,26 @@ const Qualification = () => {
             transition={{ duration: 0.6, type: "spring" }}
             viewport={{ once: true }}
           >
-            <h3 className={cn("text-2xl font-medium mb-8 flex items-center justify-center md:justify-start transition-colors duration-300", "text-foreground")}>
-              <i className={cn("uil uil-graduation-cap mr-3 text-3xl transition-colors duration-300", "text-primary")}></i>
+            <h3
+              className={cn(
+                "text-2xl font-medium mb-8 flex items-center justify-center md:justify-start transition-colors duration-300",
+                "text-foreground"
+              )}
+            >
+              <i
+                className={cn(
+                  "uil uil-graduation-cap mr-3 text-3xl transition-colors duration-300",
+                  "text-primary"
+                )}
+              ></i>
               Education
             </h3>
-            <div className={cn("relative border-l-2 pl-10 transition-colors duration-300", "border-border")}>
+            <div
+              className={cn(
+                "relative border-l-2 pl-10 transition-colors duration-300",
+                "border-border"
+              )}
+            >
               <motion.div
                 className="mb-10"
                 initial={{ opacity: 0, x: -20 }}
@@ -134,17 +166,37 @@ const Qualification = () => {
                 viewport={{ once: true }}
               >
                 <motion.div
-                  className={cn("absolute -left-[11px] top-1 h-5 w-5 border-2 rounded-full transition-colors duration-300", "border-primary bg-card")}
+                  className={cn(
+                    "absolute -left-[11px] top-1 h-5 w-5 border-2 rounded-full transition-colors duration-300",
+                    "border-primary bg-card"
+                  )}
                   initial={{ scale: 0 }}
                   whileInView={{ scale: 1 }}
                   transition={{ duration: 0.3, delay: 0.3, type: "spring" }}
                   viewport={{ once: true }}
                 ></motion.div>
-                <h3 className={cn("text-lg font-semibold mb-1 transition-colors duration-300", "text-foreground")}>
+                <h3
+                  className={cn(
+                    "text-lg font-semibold mb-1 transition-colors duration-300",
+                    "text-foreground"
+                  )}
+                >
                   FAST-NUCES, Lahore
                 </h3>
-                <p className={cn("text-md mb-3 transition-colors duration-300", "text-muted-foreground")}>Undergrad BS(CS)</p>
-                <span className={cn("flex items-center gap-x-2 text-sm transition-colors duration-300", "text-primary")}>
+                <p
+                  className={cn(
+                    "text-md mb-3 transition-colors duration-300",
+                    "text-muted-foreground"
+                  )}
+                >
+                  Undergrad BS(CS)
+                </p>
+                <span
+                  className={cn(
+                    "flex items-center gap-x-2 text-sm transition-colors duration-300",
+                    "text-primary"
+                  )}
+                >
                   <i className="uil uil-calendar-alt"></i>2021 - 2025
                 </span>
               </motion.div>
@@ -155,19 +207,37 @@ const Qualification = () => {
                 viewport={{ once: true }}
               >
                 <motion.div
-                  className={cn("absolute -left-[11px] top-1 h-5 w-5 border-2 rounded-full transition-colors duration-300", "border-primary bg-card")}
+                  className={cn(
+                    "absolute -left-[11px] top-1 h-5 w-5 border-2 rounded-full transition-colors duration-300",
+                    "border-primary bg-card"
+                  )}
                   initial={{ scale: 0 }}
                   whileInView={{ scale: 1 }}
                   transition={{ duration: 0.3, delay: 0.5, type: "spring" }}
                   viewport={{ once: true }}
                 ></motion.div>
-                <h3 className={cn("text-lg font-semibold mb-1 transition-colors duration-300", "text-foreground")}>
+                <h3
+                  className={cn(
+                    "text-lg font-semibold mb-1 transition-colors duration-300",
+                    "text-foreground"
+                  )}
+                >
                   FCC
                 </h3>
-                <p className={cn("text-md mb-3 transition-colors duration-300", "text-muted-foreground")}>
+                <p
+                  className={cn(
+                    "text-md mb-3 transition-colors duration-300",
+                    "text-muted-foreground"
+                  )}
+                >
                   FSC Pre Engineering
                 </p>
-                <span className={cn("flex items-center gap-x-2 text-sm transition-colors duration-300", "text-primary")}>
+                <span
+                  className={cn(
+                    "flex items-center gap-x-2 text-sm transition-colors duration-300",
+                    "text-primary"
+                  )}
+                >
                   <i className="uil uil-calendar-alt"></i>2019 - 2021
                 </span>
               </motion.div>
@@ -181,11 +251,26 @@ const Qualification = () => {
             transition={{ duration: 0.6, type: "spring" }}
             viewport={{ once: true }}
           >
-            <h3 className={cn("text-2xl font-medium mb-8 flex items-center justify-center md:justify-start transition-colors duration-300", "text-foreground")}>
-              <i className={cn("uil uil-suitcase mr-3 text-3xl transition-colors duration-300", "text-primary")}></i>
+            <h3
+              className={cn(
+                "text-2xl font-medium mb-8 flex items-center justify-center md:justify-start transition-colors duration-300",
+                "text-foreground"
+              )}
+            >
+              <i
+                className={cn(
+                  "uil uil-suitcase mr-3 text-3xl transition-colors duration-300",
+                  "text-primary"
+                )}
+              ></i>
               Experience
             </h3>
-            <div className={cn("relative border-l-2 pl-10 transition-colors duration-300", "border-border")}>
+            <div
+              className={cn(
+                "relative border-l-2 pl-10 transition-colors duration-300",
+                "border-border"
+              )}
+            >
               <motion.div
                 className="mb-10"
                 initial={{ opacity: 0, x: -20 }}
@@ -194,18 +279,80 @@ const Qualification = () => {
                 viewport={{ once: true }}
               >
                 <motion.div
-                  className={cn("absolute -left-[11px] top-1 h-5 w-5 border-2 rounded-full transition-colors duration-300", "border-primary bg-card")}
+                  className={cn(
+                    "absolute -left-[11px] top-1 h-5 w-5 border-2 rounded-full transition-colors duration-300",
+                    "border-primary bg-card"
+                  )}
                   initial={{ scale: 0 }}
                   whileInView={{ scale: 1 }}
                   transition={{ duration: 0.3, delay: 0.3, type: "spring" }}
                   viewport={{ once: true }}
                 ></motion.div>
-                <h3 className={cn("text-lg font-semibold mb-1 transition-colors duration-300", "text-foreground")}>
+                <h3
+                  className={cn(
+                    "text-lg font-semibold mb-1 transition-colors duration-300",
+                    "text-foreground"
+                  )}
+                >
+                  Ripeseed.io
+                </h3>
+                <p
+                  className={cn(
+                    "text-md mb-3 transition-colors duration-300",
+                    "text-muted-foreground"
+                  )}
+                >
+                  Full Stack Developer
+                </p>
+                <span
+                  className={cn(
+                    "flex items-center gap-x-2 text-sm transition-colors duration-300",
+                    "text-primary"
+                  )}
+                >
+                  <i className="uil uil-calendar-alt"></i>Aug 2025 - Present
+                </span>
+              </motion.div>
+              <motion.div
+                className="mb-10"
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                viewport={{ once: true }}
+              >
+                <motion.div
+                  className={cn(
+                    "absolute -left-[11px] top-1 h-5 w-5 border-2 rounded-full transition-colors duration-300",
+                    "border-primary bg-card"
+                  )}
+                  initial={{ scale: 0 }}
+                  whileInView={{ scale: 1 }}
+                  transition={{ duration: 0.3, delay: 0.3, type: "spring" }}
+                  viewport={{ once: true }}
+                ></motion.div>
+                <h3
+                  className={cn(
+                    "text-lg font-semibold mb-1 transition-colors duration-300",
+                    "text-foreground"
+                  )}
+                >
                   Tech Grus
                 </h3>
-                <p className={cn("text-md mb-3 transition-colors duration-300", "text-muted-foreground")}>Software Engineer</p>
-                <span className={cn("flex items-center gap-x-2 text-sm transition-colors duration-300", "text-primary")}>
-                  <i className="uil uil-calendar-alt"></i>Feb 2025 - Present
+                <p
+                  className={cn(
+                    "text-md mb-3 transition-colors duration-300",
+                    "text-muted-foreground"
+                  )}
+                >
+                  Software Engineer
+                </p>
+                <span
+                  className={cn(
+                    "flex items-center gap-x-2 text-sm transition-colors duration-300",
+                    "text-primary"
+                  )}
+                >
+                  <i className="uil uil-calendar-alt"></i>Sep 2024 - Jul 2025
                 </span>
               </motion.div>
               <motion.div
@@ -215,19 +362,37 @@ const Qualification = () => {
                 viewport={{ once: true }}
               >
                 <motion.div
-                  className={cn("absolute -left-[11px] top-1 h-5 w-5 border-2 rounded-full transition-colors duration-300", "border-primary bg-card")}
+                  className={cn(
+                    "absolute -left-[11px] top-1 h-5 w-5 border-2 rounded-full transition-colors duration-300",
+                    "border-primary bg-card"
+                  )}
                   initial={{ scale: 0 }}
                   whileInView={{ scale: 1 }}
                   transition={{ duration: 0.3, delay: 0.5, type: "spring" }}
                   viewport={{ once: true }}
                 ></motion.div>
-                <h3 className={cn("text-lg font-semibold mb-1 transition-colors duration-300", "text-foreground")}>
+                <h3
+                  className={cn(
+                    "text-lg font-semibold mb-1 transition-colors duration-300",
+                    "text-foreground"
+                  )}
+                >
                   724.One
                 </h3>
-                <p className={cn("text-md mb-3 transition-colors duration-300", "text-muted-foreground")}>
+                <p
+                  className={cn(
+                    "text-md mb-3 transition-colors duration-300",
+                    "text-muted-foreground"
+                  )}
+                >
                   React Native Intern
                 </p>
-                <span className={cn("flex items-center gap-x-2 text-sm transition-colors duration-300", "text-primary")}>
+                <span
+                  className={cn(
+                    "flex items-center gap-x-2 text-sm transition-colors duration-300",
+                    "text-primary"
+                  )}
+                >
                   <i className="uil uil-calendar-alt"></i>Sep 2023 - Jan 2024
                 </span>
               </motion.div>
