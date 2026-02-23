@@ -44,7 +44,7 @@ const Hero = () => {
     <section
       className={cn(
         "h-screen relative overflow-hidden pt-16 transition-colors duration-300 rounded-xl",
-        "bg-background"
+        "bg-background",
       )}
       id="home"
     >
@@ -92,7 +92,7 @@ const Hero = () => {
           <span
             className={cn(
               "font-medium relative after:content-[''] after:absolute after:w-12 after:h-0.5 after:right-[-4rem] after:top-1/2 transition-colors duration-300",
-              "text-muted-foreground after:bg-border"
+              "text-muted-foreground after:bg-border",
             )}
           >
             Follow Me
@@ -103,7 +103,7 @@ const Hero = () => {
               target="_blank"
               className={cn(
                 "text-lg transition-all duration-300 hover:-translate-y-1 hover:scale-110",
-                "text-muted-foreground hover:text-primary"
+                "text-muted-foreground hover:text-primary",
               )}
             >
               <Github />
@@ -113,7 +113,7 @@ const Hero = () => {
               target="_blank"
               className={cn(
                 "text-lg transition-all duration-300 hover:-translate-y-1 hover:scale-110",
-                "text-muted-foreground hover:text-primary"
+                "text-muted-foreground hover:text-primary",
               )}
             >
               <Linkedin />
@@ -123,7 +123,7 @@ const Hero = () => {
               target="_blank"
               className={cn(
                 "text-lg transition-all duration-300 hover:-translate-y-1 hover:scale-110",
-                "text-muted-foreground hover:text-primary"
+                "text-muted-foreground hover:text-primary",
               )}
             >
               <CodeXml />
@@ -133,7 +133,7 @@ const Hero = () => {
               target="_blank"
               className={cn(
                 "text-lg transition-all duration-300 hover:-translate-y-1 hover:scale-110",
-                "text-muted-foreground hover:text-primary"
+                "text-muted-foreground hover:text-primary",
               )}
             >
               <Instagram />
@@ -167,7 +167,7 @@ const Hero = () => {
             variants={itemVariants}
             className={cn(
               "text-5xl md:text-6xl font-bold mb-4 transition-colors duration-300",
-              "text-foreground"
+              "text-foreground",
             )}
           >
             Hi, I'm Ali Abdullah
@@ -176,7 +176,7 @@ const Hero = () => {
             variants={itemVariants}
             className={cn(
               "text-xl md:text-2xl font-medium mb-4 transition-colors duration-300",
-              "text-primary"
+              "text-primary",
             )}
           >
             Full Stack Developer
@@ -185,7 +185,7 @@ const Hero = () => {
             variants={itemVariants}
             className={cn(
               "max-w-md mb-8 leading-relaxed transition-colors duration-300",
-              "text-muted-foreground"
+              "text-muted-foreground",
             )}
           >
             I'm a full stack software developer, with extensive knowledge and
@@ -197,7 +197,7 @@ const Hero = () => {
             href="#about"
             className={cn(
               "inline-flex items-center gap-2 px-6 py-3 rounded-md font-medium relative z-10 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:opacity-90",
-              "bg-primary text-primary-foreground"
+              "bg-primary text-primary-foreground",
             )}
           >
             <i className="uil uil-user"></i>

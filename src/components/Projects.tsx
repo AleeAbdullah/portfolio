@@ -137,6 +137,40 @@ const projects = [
     github: "https://github.com/ye-bhee-theek-ha/Simplify",
     live: "https://simplifly.scoopcodes.com/",
   },
+  {
+    title: "Healing Hands CPR Training Platform",
+    category: "web",
+    description:
+      "A comprehensive CPR certification training platform that enables students to browse AHA-certified courses, complete multi-step registration, and securely process payments. Features include course management, Stripe payment integration, admin transaction dashboard, contact forms with email notifications, and a static-export compatible architecture for easy deployment.",
+    details: [
+      { label: "Platform", value: "Web" },
+      { label: "Role", value: "sole Full Stack Developer" },
+    ],
+    techStack: [
+      "Next.js",
+      "React",
+      "TypeScript",
+      "Tailwind CSS",
+      "Stripe",
+      "Supabase",
+      "Lucide React",
+    ],
+    features: [
+      "Multi-step course registration flow with progress tracking",
+      "Stripe payment processing with secure checkout sessions",
+      "Admin dashboard for transaction and order management",
+      "Course catalog with detailed course information",
+      "Contact form with Supabase Edge Function email integration",
+      "Authentication system with protected admin routes",
+      "Static site export compatible architecture",
+      "Responsive design with modern UI components",
+      "Real-time transaction status updates via webhooks",
+      "Digital business card and book showcase sections",
+    ],
+    images: ["/mockups/cpr.webp"],
+    github: null,
+    live: "https://healinghandusa.com/",
+  },
 ];
 
 const categories = ["all", "app", "web"];
