@@ -1,10 +1,13 @@
 "use client";
-import { Share2 } from "lucide-react";
+import { Download, Sun, Moon, List, FileUser } from "lucide-react";
 import { useState, useEffect } from "react";
+import { useThemeStore } from "../store/themeStore";
+import { cn } from "../lib/utils";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeLink, setActiveLink] = useState("home");
+  const { theme, toggleTheme } = useThemeStore();
 
   useEffect(() => {
     const sections = document.querySelectorAll("section[id]");
@@ -37,116 +40,107 @@ const Header = () => {
   const navLinks = ["home", "about", "skills", "work", "services", "contact"];
 
   return (
-    <>
-      {/* Top Navigation Bar for screens smaller than lg */}
-      <nav className="fixed top-0 left-0 w-full h-16 bg-gray-950 border-b border-gray-900 z-50 lg:hidden">
-        <div className="h-full flex items-center justify-between px-4">
-          {/* Logo */}
-          <div className="w-10 h-10 rounded-full bg-rose-600 flex items-center justify-center">
-            <a href="#" className="text-lg text-gray-100 font-bold">
-              A
-            </a>
-          </div>
-
-          {/* Desktop view (sm to lg) - Show all links */}
-          <ul className="hidden sm:flex items-center gap-x-12">
-            {navLinks.map((link) => (
-              <li key={link}>
-                <a
-                  href={`#${link}`}
-                  onClick={() => handleLinkClick(link)}
-                  className={`text-sm font-medium transition-colors duration-300 hover:text-rose-600 ${
-                    activeLink === link ? "text-rose-600" : "text-gray-100"
-                  }`}
-                >
-                  {link.charAt(0).toUpperCase() + link.slice(1)}
-                </a>
-              </li>
-            ))}
-          </ul>
-
-          {/* Mobile menu button (only on very small screens) */}
-          <div
-            className="h-10 w-10 text-xl rounded-md bg-rose-600 text-gray-100 flex justify-center items-center cursor-pointer sm:hidden"
-            onClick={toggleMenu}
-          >
-            <i className={`uil ${isOpen ? "uil-times" : "uil-bars"}`}></i>
-          </div>
-        </div>
-
-        {/* Mobile dropdown menu (only for very small screens) */}
-        <div
-          className={`absolute top-16 left-0 w-full bg-gray-950 border-b border-gray-900 transition-all duration-300 sm:hidden ${
-            isOpen ? "opacity-100 visible" : "opacity-0 invisible"
-          }`}
-        >
-          <ul className="py-4">
-            {navLinks.map((link) => (
-              <li key={link}>
-                <a
-                  href={`#${link}`}
-                  onClick={() => handleLinkClick(link)}
-                  className={`block px-4 py-2 text-sm font-medium transition-colors duration-300 hover:bg-gray-900 ${
-                    activeLink === link ? "text-rose-600" : "text-gray-100"
-                  }`}
-                >
-                  {link.charAt(0).toUpperCase() + link.slice(1)}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </nav>
-
-      {/* Desktop Sidebar */}
-      <aside className="fixed w-24 h-screen bg-gray-950 border-r border-gray-900 z-50 hidden lg:block">
-        <nav className="h-full flex flex-col">
-          {/* Logo */}
-          <div className="pt-7 pb-12">
-            <div className="w-10 h-10 rounded-full bg-rose-600 mx-auto flex items-center justify-center">
-              <a href="#" className="text-lg text-gray-100 font-bold">
-                A
+    <nav
+      className={cn(
+        "fixed top-4 left-1/2 -translate-x-1/2 w-full md:w-3xl h-14 z-50 transition-colors duration-300",
+        "bg-background-secondary backdrop-blur-sm border border-t-0  border-border rounded-b-xl"
+      )}
+    >
+      <div className="h-full container mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+        {/* Navigation Links - Left Side */}
+        <ul className="hidden md:flex items-center gap-x-6 lg:gap-x-8">
+          {navLinks.map((link) => (
+            <li key={link}>
+              <a
+                href={`#${link}`}
+                onClick={() => handleLinkClick(link)}
+                className={cn(
+                  "text-sm font-medium transition-colors duration-300 hover:text-primary",
+                  activeLink === link ? "text-primary" : "text-foreground"
+                )}
+              >
+                {link.charAt(0).toUpperCase() + link.slice(1)}
               </a>
-            </div>
-          </div>
+            </li>
+          ))}
+        </ul>
 
-          {/* Navigation Links */}
-          <div className="flex-1 flex items-center">
-            <ul className="w-full space-y-12">
-              {navLinks.map((link) => (
-                <li key={link} className="relative flex justify-center">
-                  <a
-                    href={`#${link}`}
-                    onClick={() => handleLinkClick(link)}
-                    className={`block text-sm font-medium transition-colors duration-300 hover:text-rose-600 transform -rotate-90 whitespace-nowrap ${
-                      activeLink === link ? "text-rose-600" : "text-gray-100"
-                    }`}
-                  >
-                    {link.charAt(0).toUpperCase() + link.slice(1)}
-                  </a>
-                  {activeLink === link && (
-                    <span className="absolute w-1.5 h-1.5 bg-rose-600 rounded-full right-1/6 top-1/2 -translate-y-1/2"></span>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </div>
+        {/* Mobile menu button - Left Side (only on small screens) */}
+        <div
+          className={cn(
+            "h-10 w-10 text-xl rounded-md text-primary-foreground flex justify-center items-center cursor-pointer md:hidden transition-colors duration-300",
+            "bg-primary hover:opacity-90"
+          )}
+          onClick={toggleMenu}
+        >
+          <List size={20} />
+        </div>
 
-          {/* Share Icon */}
-          <div className="pb-7 w-full flex justify-center">
-            <button
-              onClick={() => {
-                navigator.clipboard.writeText(window.location.href);
-              }}
-            >
-              <div className="text-center cursor-pointer ">
-                <Share2 />
-              </div>
-            </button>
-          </div>
-        </nav>
-      </aside>
-    </>
+        {/* Theme Toggle and Download CV Button - Right Side */}
+        <div className="flex items-center gap-3">
+          {/* Theme Toggle */}
+          <button
+            onClick={toggleTheme}
+            className={cn(
+              "w-10 h-10 rounded-md flex justify-center items-center cursor-pointer transition-all duration-300 hover:scale-110",
+              "bg-secondary text-secondary-foreground hover:bg-accent"
+            )}
+            aria-label="Toggle theme"
+          >
+            {theme === "light" ? (
+              <Moon size={18} className="text-primary" />
+            ) : (
+              <Sun size={18} className="text-primary" />
+            )}
+          </button>
+
+          {/* Download CV Button */}
+          <button
+            onClick={() => {
+              const link = document.createElement("a");
+              link.href = "/cv.pdf";
+              link.download = "Ali_Abdullah_CV.pdf";
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+            }}
+            className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-4 py-2 rounded-md text-sm transition-colors duration-300 cursor-pointer "
+            aria-label="Download CV"
+          >
+            <FileUser size={20} />
+            Resume
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile dropdown menu (only for small screens) */}
+      <div
+        className={cn(
+          "absolute top-16 left-0 w-full transition-all duration-300 md:hidden border-b border-border",
+          "bg-card",
+          isOpen
+            ? "opacity-100 visible max-h-96"
+            : "opacity-0 invisible max-h-0 overflow-hidden"
+        )}
+      >
+        <ul className="py-4">
+          {navLinks.map((link) => (
+            <li key={link}>
+              <a
+                href={`#${link}`}
+                onClick={() => handleLinkClick(link)}
+                className={cn(
+                  "block px-4 py-2 text-sm font-medium transition-colors duration-300 hover:bg-accent",
+                  activeLink === link ? "text-primary" : "text-foreground"
+                )}
+              >
+                {link.charAt(0).toUpperCase() + link.slice(1)}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </nav>
   );
 };
 

@@ -1,5 +1,7 @@
 "use client";
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { cn } from "../lib/utils";
 
 interface Service {
   title: string;
@@ -71,151 +73,143 @@ const Services = () => {
   };
 
   return (
-    <section className="py-16 md:py-20 lg:py-24 bg-gray-950" id="services">
+    <section className={cn("py-16 md:py-20 lg:py-24 transition-colors duration-300", "bg-background")} id="services">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="relative mb-12 md:mb-16 text-center">
-          <span className="text-xs sm:text-sm font-medium text-gray-100 absolute -top-3 left-1/2 transform -translate-x-1/2">
+        <motion.div
+          className="relative mb-12 md:mb-16 text-center"
+          initial={{ opacity: 0, y: -20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, type: "spring" }}
+          viewport={{ once: true }}
+        >
+          <span className={cn("text-xs sm:text-sm font-medium absolute -top-3 left-1/2 transform -translate-x-1/2 px-2 transition-colors duration-300", "text-muted-foreground bg-background")}>
             Services
           </span>
-          <h2 className="text-2xl sm:text-3xl font-bold text-gray-100 border-b-2 border-gray-800 pb-2 inline-block">
+          <h2 className={cn("text-2xl sm:text-3xl font-bold border-b-2 pb-2 inline-block transition-colors duration-300", "text-foreground border-border")}>
             What I Offer
           </h2>
-        </div>
+        </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 max-w-6xl mx-auto">
           {services.map((service, index) => (
-            <div
-              className="group relative bg-gray-900 p-8 lg:p-10 rounded-xl transition-all duration-500 hover:bg-gray-800 hover:scale-105 hover:shadow-2xl opacity-0 animate-[fadeInUp_0.6s_ease-out_forwards]"
-              style={{ animationDelay: `${index * 0.1}s` }}
+            <motion.div
+              className={cn("group relative p-8 lg:p-10 rounded-xl transition-all duration-500 hover:scale-105 hover:shadow-2xl", "bg-card border border-border")}
               key={index}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1, type: "spring" }}
+              viewport={{ once: true }}
+              whileHover={{ y: -5 }}
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-rose-600/10 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <div className={cn("absolute inset-0 bg-gradient-to-br to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500", "from-primary/10")}></div>
 
               <i
-                className={`${service.icon} block text-4xl lg:text-5xl text-rose-600 mb-6 transition-transform duration-500 group-hover:scale-110`}
+                className={cn(`${service.icon} block text-4xl lg:text-5xl mb-6 transition-transform duration-500 group-hover:scale-110`, "text-primary")}
               ></i>
 
               <h3
-                className="text-xl lg:text-2xl font-semibold mb-4 text-gray-100 leading-tight"
+                className={cn("text-xl lg:text-2xl font-semibold mb-4 leading-tight transition-colors duration-300", "text-card-foreground")}
                 dangerouslySetInnerHTML={{ __html: service.title }}
               ></h3>
 
-              <p className="text-gray-400 text-sm mb-6 line-clamp-3">
+              <p className={cn("text-sm mb-6 line-clamp-3 transition-colors duration-300", "text-muted-foreground")}>
                 {service.description}
               </p>
 
               <button
                 onClick={() => openModal(service)}
-                className="group/btn inline-flex items-center gap-2 text-rose-600 hover:text-rose-500 transition-colors duration-300"
+                className={cn("group/btn inline-flex items-center gap-2 transition-colors duration-300", "text-primary hover:opacity-80")}
               >
                 <span className="text-sm font-medium">View More</span>
                 <i className="uil uil-arrow-right transform transition-transform duration-300 group-hover/btn:translate-x-1"></i>
               </button>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
 
       {/* Modal */}
-      <div
-        className={`fixed inset-0 bg-black/60 backdrop-blur-sm flex justify-center items-center z-50 p-4 transition-all duration-300 ${
-          isModalOpen ? "opacity-100 visible" : "opacity-0 invisible"
-        }`}
-        onClick={closeModal}
-      >
-        <div
-          className={`w-full max-w-2xl bg-gray-900 rounded-2xl shadow-2xl transform transition-all duration-300 ${
-            isModalOpen ? "scale-100 translate-y-0" : "scale-95 translate-y-10"
-          }`}
-          onClick={(e) => e.stopPropagation()}
-        >
-          {selectedService && (
-            <>
+      <AnimatePresence>
+        {isModalOpen && selectedService && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm flex justify-center items-center z-50 p-4"
+            onClick={closeModal}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 20 }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              className={cn("w-full max-w-2xl rounded-2xl shadow-2xl transition-colors duration-300", "bg-card border border-border")}
+              onClick={(e) => e.stopPropagation()}
+            >
               <div className="relative p-8 lg:p-10">
                 <button
                   onClick={closeModal}
-                  className="absolute top-6 right-6 w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-gray-700 transition-colors duration-300 group"
+                  className={cn("absolute top-6 right-6 w-10 h-10 rounded-full flex items-center justify-center transition-colors duration-300 group", "bg-secondary text-secondary-foreground hover:bg-primary hover:text-primary-foreground")}
                 >
-                  <i className="uil uil-times text-xl text-gray-400 group-hover:text-white transition-colors"></i>
+                  <i className="uil uil-times text-xl transition-colors"></i>
                 </button>
 
-                <div className="text-center mb-8">
+                <motion.div
+                  className="text-center mb-8"
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 }}
+                >
                   <i
-                    className={`${selectedService.icon} text-5xl text-rose-600 mb-4`}
+                    className={cn(`${selectedService.icon} text-5xl mb-4`, "text-primary")}
                   ></i>
                   <h3
-                    className="text-2xl lg:text-3xl font-bold text-gray-100 mb-4"
+                    className={cn("text-2xl lg:text-3xl font-bold mb-4 transition-colors duration-300", "text-card-foreground")}
                     dangerouslySetInnerHTML={{
                       __html: selectedService.title.replace("<br />", " "),
                     }}
                   ></h3>
-                  <p className="text-gray-400 max-w-lg mx-auto">
+                  <p className={cn("max-w-lg mx-auto transition-colors duration-300", "text-muted-foreground")}>
                     {selectedService.description}
                   </p>
-                </div>
+                </motion.div>
 
                 <div className="space-y-4">
-                  <h4 className="text-lg font-semibold text-gray-100 mb-4">
+                  <h4 className={cn("text-lg font-semibold mb-4 transition-colors duration-300", "text-card-foreground")}>
                     Services Include:
                   </h4>
                   <ul className="grid gap-y-3">
                     {selectedService.details.map((detail, i) => (
-                      <li
+                      <motion.li
                         key={i}
-                        className="flex items-start gap-x-3 opacity-0 animate-[slideInLeft_0.5s_ease-out_forwards]"
-                        style={{ animationDelay: `${i * 0.05}s` }}
+                        className="flex items-start gap-x-3"
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.2 + i * 0.05 }}
                       >
-                        <i className="uil uil-check-circle text-rose-600 text-xl mt-0.5 flex-shrink-0"></i>
-                        <p className="text-gray-300">{detail}</p>
-                      </li>
+                        <i className={cn("uil uil-check-circle text-xl mt-0.5 flex-shrink-0", "text-primary")}></i>
+                        <p className={cn("transition-colors duration-300", "text-muted-foreground")}>{detail}</p>
+                      </motion.li>
                     ))}
                   </ul>
                 </div>
 
                 <div className="mt-8 flex justify-center">
-                  <button
+                  <motion.button
                     onClick={closeModal}
-                    className="px-8 py-3 bg-rose-600 text-white rounded-lg hover:bg-rose-700 transition-colors duration-300 font-medium"
+                    className={cn("px-8 py-3 rounded-lg transition-colors duration-300 font-medium", "bg-primary text-primary-foreground hover:opacity-90")}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
                   >
                     Got it, thanks!
-                  </button>
+                  </motion.button>
                 </div>
               </div>
-            </>
-          )}
-        </div>
-      </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-      <style jsx>{`
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        @keyframes slideInLeft {
-          from {
-            opacity: 0;
-            transform: translateX(-20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateX(0);
-          }
-        }
-
-        .line-clamp-3 {
-          display: -webkit-box;
-          -webkit-line-clamp: 3;
-          -webkit-box-orient: vertical;
-          overflow: hidden;
-        }
-      `}</style>
     </section>
   );
 };

@@ -1,0 +1,100 @@
+---
+description: 
+globs: dal/**/*,data-access-layer.mdc
+alwaysApply: false
+---
+# Data Access Layer (DAL) System Rules
+
+## 📁 DAL Structure & Organization
+
+### Directory Structure
+- **Feature-based Organization**: Create separate directories for each service/feature domain (e.g., `auth/`, `contacts/`, `quotes/`)
+- **Module-specific Files**: Each directory must contain at minimum two files:
+  - `[module].services.ts` - API service functions and HTTP client logic
+  - `[module].types.ts` - TypeScript type definitions for API requests/responses
+
+### File Naming Conventions
+- **Services**: `[module].services.ts` (e.g., `contacts.services.ts`, `auth.services.ts`)
+- **Types**: `[module].types.ts` (e.g., `contacts.types.ts`, `auth.types.ts`)
+- **API Routes**: Centralized in root-level `api-routes.ts` file
+- **Naming Style**: Use kebab-case for directory names, lowercase with dots for file names
+
+### API Routes Management
+- **Centralized Routes**: Define all API endpoints in `dal/api-routes.ts`
+- **Constant Naming**: Use ALL_CAPS for route constants (e.g., `API_ROUTES.CONTACTS.BASE`)
+- **Nested Structure**: Organize routes by feature with consistent hierarchical structure
+- **Dynamic Routes**: Use functions for parameterized routes (e.g., `BY_ID: (id: number) => \`/api/contacts/${id}/\``)
+
+### Type Definitions
+- **API Types**: Store all API-related types in module-specific `.types.ts` files
+- **Request/Response**: Define separate types for API requests and responses
+- **Shared Types**: Keep DAL-specific shared types in the module where they're primarily used
+- **Type Naming**: Use descriptive names with suffixes (e.g., `CreateContactRequest`, `ContactResponse`)
+
+### Service Implementation
+- **HTTP Client**: Use configured Axios instance for all API calls
+- **Async/Await**: Use async/await pattern for all service functions
+- **Return Types**: Always specify return types for service functions
+
+## Example Structure
+```
+dal/
+├── api-routes.ts              # Centralized API route constants
+├── auth/
+│   ├── auth.services.ts       # Authentication API services (with React Query hooks)
+│   └── auth.types.ts          # Authentication type definitions
+├── contacts/
+│   ├── contacts.services.ts   # Contact management API services (with React Query hooks)
+│   ├── contacts.types.ts      # Contact type definitions
+│   └── contacts.constants.ts  # Contact constants variables to use
+└── quotes/
+    ├── quotes.services.ts     # Quote management API services (with React Query hooks)
+    └── quotes.types.ts        # Quote type definitions
+```
+
+## 🔄 TanStack React Query Integration (v5.81.2)
+
+### Custom Hook Patterns
+- **Query Hooks**: Use `useEntityName` pattern for data fetching (e.g., `useContacts`, `useQuotes`)
+- **Mutation Hooks**: Use `useActionEntity` pattern for mutations (e.g., `useCreateContact`, `useUpdateContact`, `useDeleteContact`)
+- **Hook Exports**: All hooks must be exported from the module's service file
+
+### Example Hook Implementation
+```typescript
+// Query Hook Example
+export const useContacts = (params: IContactsParams) => {
+  const axiosAuth = useAxiosAuth();
+
+  return useQuery({
+    queryKey: ['contacts', params],
+    queryFn: async (): Promise<IContactsResponse> => {
+      const response = await axiosAuth.get(API_ROUTES.CONTACTS.BASE, { params });
+      return response.data;
+    }
+  });
+};
+
+// Mutation Hook Example
+export const useCreateContact = () => {
+  const axiosAuth = useAxiosAuth();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (data: ICreateContactRequest): Promise<IContactResponse> => {
+      const response = await axiosAuth.post(API_ROUTES.CONTACTS.BASE, data);
+      return response.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['contacts'] });
+    }
+  });
+};
+```
+
+## Implementation Guidelines
+1. **Single Responsibility**: Each service file handles only one feature domain
+2. **Consistent Patterns**: Follow established patterns for similar operations across modules
+3. **Type Safety**: Ensure all API calls are fully typed with request/response interfaces
+4. **Reusability**: Design service functions to be reusable across different components
+5. **Maintainability**: Keep functions focused and avoid complex logic in service layers
+6. **React Query Best Practices**: Follow TanStack React Query best practices for optimal performance

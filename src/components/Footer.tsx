@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowUp, Github, Linkedin, Phone, Mail } from "lucide-react";
+import { cn } from "../lib/utils";
 
 const Footer = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -60,7 +61,7 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="relative bg-gray-950 pt-20">
+    <footer className={cn("relative pt-20 transition-colors duration-300", "bg-background")}>
       {/* Wave SVG */}
       <div className="absolute top-0 left-0 w-full overflow-hidden leading-none">
         <svg
@@ -71,7 +72,7 @@ const Footer = () => {
         >
           <path
             d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"
-            className="fill-current text-gray-900"
+            className={cn("fill-current transition-colors duration-300", "text-background")}
           ></path>
         </svg>
       </div>
@@ -79,18 +80,30 @@ const Footer = () => {
       <div className="container mx-auto px-6 pb-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start mb-12">
           {/* Brand Section */}
-          <div className="text-center md:text-left">
-            <h1 className="text-3xl font-bold text-gray-100 mb-2">
+          <motion.div
+            className="text-center md:text-left"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            viewport={{ once: true }}
+          >
+            <h1 className={cn("text-3xl font-bold mb-2 transition-colors duration-300", "text-foreground")}>
               Ali Abdullah
             </h1>
-            <span className="text-sm text-gray-400 block mb-4">
+            <span className={cn("text-sm block mb-4 transition-colors duration-300", "text-muted-foreground")}>
               Full Stack Developer
             </span>
-          </div>
+          </motion.div>
 
           {/* Quick Links */}
-          <div className="text-center">
-            <h3 className="text-lg font-semibold text-gray-100 mb-4">
+          <motion.div
+            className="text-center"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            viewport={{ once: true }}
+          >
+            <h3 className={cn("text-lg font-semibold mb-4 transition-colors duration-300", "text-foreground")}>
               Quick Links
             </h3>
             <ul className="space-y-2">
@@ -98,43 +111,57 @@ const Footer = () => {
                 <li key={link.href}>
                   <a
                     href={link.href}
-                    className="text-sm text-gray-400 hover:text-rose-500 transition-colors duration-300"
+                    className={cn("text-sm transition-colors duration-300", "text-muted-foreground hover:text-primary")}
                   >
                     {link.label}
                   </a>
                 </li>
               ))}
             </ul>
-          </div>
+          </motion.div>
 
           {/* Social Links */}
-          <div className="text-center md:text-right">
-            <h3 className="text-lg font-semibold text-gray-100 mb-4">
+          <motion.div
+            className="text-center md:text-right"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            viewport={{ once: true }}
+          >
+            <h3 className={cn("text-lg font-semibold mb-4 transition-colors duration-300", "text-foreground")}>
               Connect
             </h3>
             <div className="flex justify-center md:justify-end gap-4">
               {socialLinks.map((social) => (
-                <a
+                <motion.a
                   key={social.href}
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center transition-all duration-300 hover:bg-rose-600 hover:scale-110"
+                  className={cn("group w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300", "bg-secondary hover:bg-primary")}
                   aria-label={social.label}
+                  whileHover={{ scale: 1.1, rotate: 5 }}
+                  whileTap={{ scale: 0.95 }}
                 >
-                  <div className="text-gray-400 group-hover:text-white transition-colors duration-300">
+                  <div className={cn("transition-colors duration-300", "text-muted-foreground group-hover:text-primary-foreground")}>
                     {social.icon}
                   </div>
-                </a>
+                </motion.a>
               ))}
             </div>
-          </div>
+          </motion.div>
         </div>
 
         {/* Divider & Copyright */}
-        <div className="border-t border-gray-800 pt-8 text-center text-xs text-gray-500">
+        <motion.div
+          className={cn("border-t pt-8 text-center text-xs transition-colors duration-300", "border-border text-muted-foreground")}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+          viewport={{ once: true }}
+        >
           <p>© {currentYear} Ali Abdullah. All rights reserved.</p>
-        </div>
+        </motion.div>
       </div>
 
       {/* Back to Top Button */}
@@ -146,8 +173,10 @@ const Footer = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
             transition={{ duration: 0.3 }}
-            className="fixed bottom-6 right-6 w-12 h-12 bg-rose-600 rounded-full flex items-center justify-center text-white shadow-lg transition-all duration-300 hover:bg-rose-700 hover:scale-110 z-50"
+            className={cn("fixed bottom-6 right-6 w-12 h-12 rounded-full flex items-center justify-center shadow-lg transition-all duration-300 z-50", "bg-primary text-primary-foreground hover:opacity-90")}
             aria-label="Back to top"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
           >
             <ArrowUp size={24} />
           </motion.button>

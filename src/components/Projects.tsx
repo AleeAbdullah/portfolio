@@ -1,7 +1,15 @@
 "use client";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { CircleX, MonitorDot, TabletSmartphone } from "lucide-react";
+import {
+  CircleX,
+  MonitorDot,
+  TabletSmartphone,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
+import Image from "next/image";
+import { cn } from "../lib/utils";
 
 const projects = [
   {
@@ -22,6 +30,7 @@ const projects = [
       "Integrated SEO Blog Engine",
       "User & Role Management",
     ],
+    images: ["/mockups/seasons.webp"],
     github: null,
     live: "https://seasonseateryhi.com",
   },
@@ -48,8 +57,9 @@ const projects = [
       "Robust cart total verification via Cloud Functions",
       "Seamless multi-seller split payments",
     ],
+    images: ["/mockups/safe buy.webp"],
     github: null,
-    live: null,
+    live: "dashboard.safebuy.africa",
   },
   {
     title: "FitKraft",
@@ -74,7 +84,8 @@ const projects = [
       "Secure data encryption and session management",
       "Seamless API integration for content delivery",
     ],
-    github: "https://github.com/ye-bhee-theek-ha/fitkraft",
+    images: ["/mockups/fitkraft.webp"],
+    github: "https://github.com/AleeAbdullah/fitkraft",
     live: null,
   },
   {
@@ -93,7 +104,12 @@ const projects = [
       "Account management and progress tracking",
       "Interactive online learning sessions",
     ],
-    github: "https://github.com/ye-bhee-theek-ha/knowlegequran-Expo-App",
+    images: [
+      "/mockups/Knowlegge Quran.webp",
+      "/mockups/Knowlegge Quran 2.webp",
+      "/mockups/Knowlegge Quran 3.webp",
+    ],
+    github: "https://github.com/AleeAbdullah/knowlegequran-Expo-App",
     live: null,
   },
   {
@@ -112,8 +128,48 @@ const projects = [
       "Automated email notifications",
       "Comprehensive admin dashboard for sellers",
     ],
+    images: [
+      "/mockups/simplfly.webp",
+      "/mockups/simplfly 1.webp",
+      "/mockups/simplfly 2.webp",
+      "/mockups/simplfly 3.webp",
+    ],
     github: "https://github.com/ye-bhee-theek-ha/Simplify",
-    live: null,
+    live: "https://simplifly.scoopcodes.com/",
+  },
+  {
+    title: "Healing Hands CPR Training Platform",
+    category: "web",
+    description:
+      "A comprehensive CPR certification training platform that enables students to browse AHA-certified courses, complete multi-step registration, and securely process payments. Features include course management, Stripe payment integration, admin transaction dashboard, contact forms with email notifications, and a static-export compatible architecture for easy deployment.",
+    details: [
+      { label: "Platform", value: "Web" },
+      { label: "Role", value: "sole Full Stack Developer" },
+    ],
+    techStack: [
+      "Next.js",
+      "React",
+      "TypeScript",
+      "Tailwind CSS",
+      "Stripe",
+      "Supabase",
+      "Lucide React",
+    ],
+    features: [
+      "Multi-step course registration flow with progress tracking",
+      "Stripe payment processing with secure checkout sessions",
+      "Admin dashboard for transaction and order management",
+      "Course catalog with detailed course information",
+      "Contact form with Supabase Edge Function email integration",
+      "Authentication system with protected admin routes",
+      "Static site export compatible architecture",
+      "Responsive design with modern UI components",
+      "Real-time transaction status updates via webhooks",
+      "Digital business card and book showcase sections",
+    ],
+    images: ["/mockups/cpr.webp"],
+    github: null,
+    live: "https://healinghandusa.com/",
   },
 ];
 
@@ -122,6 +178,7 @@ const categories = ["all", "app", "web"];
 const Projects = () => {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedProject, setSelectedProject] = useState<any>(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const filteredProjects =
     selectedCategory === "all"
@@ -130,75 +187,167 @@ const Projects = () => {
 
   const openModal = (project: any) => {
     setSelectedProject(project);
+    setCurrentImageIndex(0);
   };
-  const closeModal = () => setSelectedProject(null);
+  const closeModal = () => {
+    setSelectedProject(null);
+    setCurrentImageIndex(0);
+  };
+
+  const nextImage = () => {
+    if (selectedProject?.images) {
+      setCurrentImageIndex(
+        (prev) => (prev + 1) % selectedProject.images.length
+      );
+    }
+  };
+
+  const prevImage = () => {
+    if (selectedProject?.images) {
+      setCurrentImageIndex(
+        (prev) =>
+          (prev - 1 + selectedProject.images.length) %
+          selectedProject.images.length
+      );
+    }
+  };
 
   return (
-    <section className="py-24 bg-gray-950" id="work">
+    <section
+      className={cn("py-24 transition-colors duration-300", "bg-background")}
+      id="work"
+    >
       <div className="container mx-auto px-6">
-        <div className="relative mb-16 text-center">
-          <h2 className="text-4xl font-bold text-gray-100">Recent Works</h2>
-          <p className="text-center text-rose-500 mt-2">My Portfolio</p>
-        </div>
+        <motion.div
+          className="relative mb-16 text-center"
+          initial={{ opacity: 0, y: -20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, type: "spring" }}
+          viewport={{ once: true }}
+        >
+          <h2
+            className={cn(
+              "text-4xl font-bold transition-colors duration-300",
+              "text-foreground"
+            )}
+          >
+            Recent Works
+          </h2>
+          <p
+            className={cn(
+              "text-center mt-2 transition-colors duration-300",
+              "text-primary"
+            )}
+          >
+            My Portfolio
+          </p>
+        </motion.div>
 
-        <div className="flex justify-center mb-12 gap-4">
+        <motion.div
+          className="flex justify-center mb-12 gap-4"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.1 }}
+          viewport={{ once: true }}
+        >
           {categories.map((category) => (
-            <button
+            <motion.button
               key={category}
               onClick={() => setSelectedCategory(category)}
-              className={`px-6 py-2 rounded-full text-sm font-semibold transition-all duration-300 ${
+              className={cn(
+                "px-6 py-2 rounded-full text-sm font-semibold transition-all duration-300",
                 selectedCategory === category
-                  ? "bg-rose-600 text-white shadow-md shadow-rose-600/30"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
-              }`}
+                  ? "bg-primary text-primary-foreground shadow-md shadow-primary/30"
+                  : "bg-card text-muted-foreground hover:bg-accent border border-border"
+              )}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
               {category.charAt(0).toUpperCase() + category.slice(1)}
-            </button>
+            </motion.button>
           ))}
-        </div>
+        </motion.div>
 
         <motion.div
           layout
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
         >
-          <AnimatePresence>
-            {filteredProjects.map((project, index) => (
-              <motion.div
-                key={project.title}
-                layout
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 50 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="group relative bg-gray-900 rounded-xl overflow-hidden cursor-pointer shadow-lg hover:shadow-rose-600/20 transition-shadow duration-300 flex flex-col"
-                onClick={() => openModal(project)}
+          {filteredProjects.map((project, index) => (
+            <motion.div
+              key={project.title}
+              layout
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{
+                duration: 0.2,
+                delay: index * 0.02,
+              }}
+              className={cn(
+                "group relative rounded-xl overflow-hidden cursor-pointer shadow-lg transition-all duration-300 flex flex-col",
+                "bg-card border border-border hover:shadow-primary/20"
+              )}
+              onClick={() => openModal(project)}
+              whileHover={{ y: -5, scale: 1.02 }}
+            >
+              <div
+                className={cn(
+                  "relative flex items-center justify-center h-48 overflow-hidden transition-colors duration-300",
+                  "bg-muted group-hover:bg-primary/10"
+                )}
               >
-                <div className="relative flex items-center justify-center h-48 bg-gray-800/50 group-hover:bg-rose-900/20 transition-colors duration-300">
-                  {project.category === "app" ? (
-                    <TabletSmartphone
-                      className={`text-7xl text-gray-700 group-hover:text-rose-500 group-hover:scale-110 transition-all duration-300`}
-                    />
-                  ) : (
-                    <MonitorDot
-                      className={`text-7xl text-gray-700 group-hover:text-rose-500 group-hover:scale-110 transition-all duration-300`}
-                    />
+                {project.images && project.images[0] ? (
+                  <Image
+                    src={project.images[0]}
+                    alt={project.title}
+                    fill
+                    className="object-cover group-hover:scale-110 transition-transform duration-300"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  />
+                ) : project.category === "app" ? (
+                  <TabletSmartphone
+                    className={cn(
+                      "text-7xl group-hover:scale-110 transition-all duration-300",
+                      "text-muted-foreground group-hover:text-primary"
+                    )}
+                  />
+                ) : (
+                  <MonitorDot
+                    className={cn(
+                      "text-7xl group-hover:scale-110 transition-all duration-300",
+                      "text-muted-foreground group-hover:text-primary"
+                    )}
+                  />
+                )}
+              </div>
+              <div className="p-6 grow flex flex-col">
+                <h3
+                  className={cn(
+                    "text-xl font-bold mb-2 truncate transition-colors duration-300",
+                    "text-card-foreground"
                   )}
-                </div>
-                <div className="p-6 flex-grow flex flex-col">
-                  <h3 className="text-xl font-bold text-gray-100 mb-2 truncate">
-                    {project.title}
-                  </h3>
-                  <p className="text-gray-400 text-sm mb-4 line-clamp-3 flex-grow">
-                    {project.description}
-                  </p>
-                  <span className="text-rose-500 text-sm font-semibold mt-auto group-hover:underline">
-                    View Details
-                    <i className="uil uil-arrow-right transform transition-transform duration-300 group-hover:translate-x-1"></i>
-                  </span>
-                </div>
-              </motion.div>
-            ))}
-          </AnimatePresence>
+                >
+                  {project.title}
+                </h3>
+                <p
+                  className={cn(
+                    "text-sm mb-4 line-clamp-3 grow transition-colors duration-300",
+                    "text-muted-foreground"
+                  )}
+                >
+                  {project.description}
+                </p>
+                <span
+                  className={cn(
+                    "text-sm font-semibold mt-auto group-hover:underline transition-colors duration-300",
+                    "text-primary"
+                  )}
+                >
+                  View Details
+                  <i className="uil uil-arrow-right transform transition-transform duration-300 group-hover:translate-x-1"></i>
+                </span>
+              </div>
+            </motion.div>
+          ))}
         </motion.div>
       </div>
 
@@ -216,55 +365,164 @@ const Projects = () => {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
               transition={{ type: "spring", stiffness: 200, damping: 25 }}
-              className="w-full max-w-2xl bg-gray-900 rounded-2xl shadow-2xl overflow-hidden"
+              className={cn(
+                "w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden transition-colors duration-300",
+                "bg-card border border-border"
+              )}
               onClick={(e) => e.stopPropagation()}
             >
               <div className="p-8 relative overflow-y-auto max-h-[90vh]">
                 <button
                   onClick={closeModal}
-                  className="absolute top-4 right-4 w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-rose-600 transition-colors z-20"
+                  className={cn(
+                    "absolute top-4 right-4 w-10 h-10 rounded-full flex items-center justify-center transition-colors z-20",
+                    "bg-secondary text-secondary-foreground hover:bg-primary hover:text-primary-foreground"
+                  )}
                 >
-                  <CircleX />
+                  <CircleX size={20} />
                 </button>
-                <h2 className="text-3xl font-bold text-white mb-2">
+
+                {/* Image Gallery */}
+                {selectedProject.images &&
+                  selectedProject.images.length > 0 && (
+                    <div className="relative mb-6 rounded-lg overflow-hidden bg-muted aspect-video">
+                      <Image
+                        src={selectedProject.images[currentImageIndex]}
+                        alt={`${selectedProject.title} - Image ${
+                          currentImageIndex + 1
+                        }`}
+                        fill
+                        className="object-contain"
+                        sizes="(max-width: 768px) 100vw, 768px"
+                      />
+                      {selectedProject.images.length > 1 && (
+                        <>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              prevImage();
+                            }}
+                            className={cn(
+                              "absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center transition-colors z-10",
+                              "bg-black/50 text-white hover:bg-black/70 backdrop-blur-sm"
+                            )}
+                            aria-label="Previous image"
+                          >
+                            <ChevronLeft size={20} />
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              nextImage();
+                            }}
+                            className={cn(
+                              "absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center transition-colors z-10",
+                              "bg-black/50 text-white hover:bg-black/70 backdrop-blur-sm"
+                            )}
+                            aria-label="Next image"
+                          >
+                            <ChevronRight size={20} />
+                          </button>
+                          <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+                            {selectedProject.images.map(
+                              (_: string, index: number) => (
+                                <button
+                                  key={index}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setCurrentImageIndex(index);
+                                  }}
+                                  className={cn(
+                                    "w-2 h-2 rounded-full transition-all",
+                                    currentImageIndex === index
+                                      ? "bg-primary w-6"
+                                      : "bg-white/50 hover:bg-white/70"
+                                  )}
+                                  aria-label={`Go to image ${index + 1}`}
+                                />
+                              )
+                            )}
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  )}
+
+                <h2
+                  className={cn(
+                    "text-3xl font-bold mb-2 transition-colors duration-300",
+                    "text-card-foreground"
+                  )}
+                >
                   {selectedProject.title}
                 </h2>
-                <p className="text-gray-400 mb-6 text-sm">
+                <p
+                  className={cn(
+                    "mb-6 text-sm transition-colors duration-300",
+                    "text-muted-foreground"
+                  )}
+                >
                   {selectedProject.description}
                 </p>
 
                 <div className="space-y-6">
                   <div>
-                    <h4 className="font-semibold text-white mb-3 border-b border-gray-800 pb-2">
+                    <h4
+                      className={cn(
+                        "font-semibold mb-3 border-b pb-2 transition-colors duration-300",
+                        "text-card-foreground border-border"
+                      )}
+                    >
                       Key Features
                     </h4>
                     <ul className="space-y-2">
                       {selectedProject.features.map((feature: string) => (
                         <li
                           key={feature}
-                          className="flex items-start gap-3 text-sm text-gray-300"
+                          className={cn(
+                            "flex items-start gap-3 text-sm transition-colors duration-300",
+                            "text-muted-foreground"
+                          )}
                         >
-                          <i className="uil uil-check-circle text-rose-500 mt-1"></i>
+                          <i
+                            className={cn(
+                              "uil uil-check-circle mt-1",
+                              "text-primary"
+                            )}
+                          ></i>
                           <span>{feature}</span>
                         </li>
                       ))}
                     </ul>
                   </div>
                   <div>
-                    <h4 className="font-semibold text-white mb-3 border-b border-gray-800 pb-2">
+                    <h4
+                      className={cn(
+                        "font-semibold mb-3 border-b pb-2 transition-colors duration-300",
+                        "text-card-foreground border-border"
+                      )}
+                    >
                       Tech Stack
                     </h4>
                     <div className="flex flex-wrap gap-2">
                       {selectedProject.techStack.map((tech: string) => (
                         <span
                           key={tech}
-                          className="bg-gray-800 text-gray-300 text-xs font-medium px-3 py-1 rounded-full"
+                          className={cn(
+                            "text-xs font-medium px-3 py-1 rounded-full border transition-colors duration-300",
+                            "bg-secondary text-secondary-foreground border-border"
+                          )}
                         >
                           {tech}
                         </span>
                       ))}
                     </div>
-                    <h4 className="font-semibold text-white mt-6 mb-3 border-b border-gray-800 pb-2">
+                    <h4
+                      className={cn(
+                        "font-semibold mt-6 mb-3 border-b pb-2 transition-colors duration-300",
+                        "text-card-foreground border-border"
+                      )}
+                    >
                       Role & Platform
                     </h4>
                     <div className="space-y-2 text-sm">
@@ -273,8 +531,20 @@ const Projects = () => {
                           key={detail.label}
                           className="flex justify-between"
                         >
-                          <span className="text-gray-500">{detail.label}:</span>
-                          <span className="text-gray-300 font-medium">
+                          <span
+                            className={cn(
+                              "transition-colors duration-300",
+                              "text-muted-foreground"
+                            )}
+                          >
+                            {detail.label}:
+                          </span>
+                          <span
+                            className={cn(
+                              "font-medium transition-colors duration-300",
+                              "text-card-foreground"
+                            )}
+                          >
                             {detail.value}
                           </span>
                         </div>
@@ -283,16 +553,24 @@ const Projects = () => {
                   </div>
                 </div>
 
-                <div className="flex gap-4 pt-6 mt-6 border-t border-gray-800">
+                <div
+                  className={cn(
+                    "flex flex-col sm:flex-row gap-3 pt-6 mt-6 border-t transition-colors duration-300",
+                    "border-border"
+                  )}
+                >
                   {selectedProject.live && (
                     <a
                       href={selectedProject.live}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex-1 py-3 bg-rose-600 text-white rounded-lg hover:bg-rose-700 transition-colors font-medium flex items-center justify-center gap-2"
+                      className={cn(
+                        "flex-1 py-3 px-6 rounded-lg transition-all font-semibold flex items-center justify-center gap-2 hover:scale-105 active:scale-95 shadow-md",
+                        "bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-lg"
+                      )}
                     >
                       <i className="uil uil-external-link-alt"></i>
-                      Live Demo
+                      Go to Project
                     </a>
                   )}
 
@@ -301,11 +579,25 @@ const Projects = () => {
                       href={selectedProject.github}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex-1 py-3 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors font-medium flex items-center justify-center gap-2"
+                      className={cn(
+                        "flex-1 py-3 px-6 rounded-lg transition-all font-semibold flex items-center justify-center gap-2 hover:scale-105 active:scale-95",
+                        "bg-secondary text-secondary-foreground hover:bg-accent border border-border"
+                      )}
                     >
                       <i className="uil uil-github"></i>
-                      Source Code
+                      View on GitHub
                     </a>
+                  )}
+
+                  {!selectedProject.live && !selectedProject.github && (
+                    <div
+                      className={cn(
+                        "flex-1 py-3 px-6 rounded-lg text-center text-sm",
+                        "text-muted-foreground bg-muted/50"
+                      )}
+                    >
+                      Links coming soon
+                    </div>
                   )}
                 </div>
               </div>
