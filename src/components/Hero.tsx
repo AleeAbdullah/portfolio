@@ -1,78 +1,87 @@
 //src/Components/Hero.ts
+import localFont from "next/font/local";
+import { Badge } from "@/components/ui/badge";
+import { ShaderAnimation } from "../../components/ui/shader-animation";
+import { ArrowDown } from "lucide-react";
 
-import { Building2, Facebook, Instagram, Linkedin } from "lucide-react";
-import Image from "next/image";
+const preahvihear = localFont({
+  src: "../../public/fonts/Preahvihear-Regular.ttf",
+  display: "swap",
+});
+
+const HERO_EMOJI_ASSET = "/Hero/person-emoji.svg";
+const HERO_ARROW_ASSET = "/Hero/hero-arrow.svg";
 
 const Hero = () => {
   return (
     <section
-      className="bg-gray-950 h-screen relative overflow-hidden pt-[100px] lg:pt-0"
+      className={`relative h-screen overflow-hidden ${preahvihear.className}`}
       id="home"
     >
-      <div className="container mx-auto px-6 relative h-full flex items-center">
-        <div className="absolute top-12 left-6 flex items-center gap-x-18">
-          <span className="font-medium text-gray-400 relative after:content-[''] after:absolute after:w-12 after:h-0.5 after:bg-gray-600 after:right-[-4rem] after:top-1/2">
-            Follow Me
-          </span>
-          <div className="inline-flex gap-x-4">
-            <a
-              href="https://www.instagram.com/aliabdullah82"
-              target="_blank"
-              className="text-lg text-gray-400 transition-all duration-300 hover:text-rose-600 hover:-translate-y-1"
-            >
-              <Instagram />
-            </a>
-            <a
-              href="https://www.linkedin.com/in/ali-abdullah-854716224"
-              target="_blank"
-              className="text-lg text-gray-400 transition-all duration-300 hover:text-rose-600 hover:-translate-y-1"
-            >
-              <Linkedin />
-            </a>
-            <a
-              href="https://scoopcodes.com/"
-              target="_blank"
-              className="text-lg text-gray-400 transition-all duration-300 hover:text-rose-600 hover:-translate-y-1"
-            >
-              <Building2 />
-            </a>
-            <a
-              href="https://www.facebook.com/share/19c1qtHp9v/"
-              target="_blank"
-              className="text-lg text-gray-400 transition-all duration-300 hover:text-rose-600 hover:-translate-y-1"
-            >
-              <Facebook />
-            </a>
+      <div className="absolute inset-0 z-0">
+        <ShaderAnimation />
+      </div>
+      <div className="absolute inset-0 z-10" />
+
+      <div className="relative z-20 container mx-auto flex h-full items-center justify-center px-6">
+        <div className="max-w-5xl text-center">
+          <div className="flex flex-col items-center gap-6 md:mb-12 md:flex-row md:items-end md:justify-center md:gap-10 mb-28">
+            <div className="relative">
+              <div className="absolute inset-0 scale-125 rounded-full bg-rose-500/20 blur-2xl" />
+              <div className="relative flex size-36 items-center justify-center rounded-full border border-rose-400/40 bg-gray-900/70 shadow-lg shadow-rose-500/20 md:size-44">
+                <img
+                  src={HERO_EMOJI_ASSET}
+                  alt="Ali illustration"
+                  className="h-28 w-28 object-contain md:h-36 md:w-36"
+                />
+              </div>
+            </div>
+
+            <div className="relative text-center md:text-left">
+              <img
+                src={HERO_ARROW_ASSET}
+                alt=""
+                aria-hidden="true"
+                className="absolute -left-24 -top-26 hidden w-48 opacity-80 md:block"
+              />
+              <p className="mb-2 text-sm text-gray-200 md:text-base absolute left-18 -top-14 ">
+                Hello! I Am <span className="text-rose-400">Ali Abdullah</span>
+              </p>
+              <p className="mb-2 text-sm text-gray-300 decoration-gray-300/70 underline-offset-4 md:text-base mt-4">
+                A Designer who
+              </p>
+              <h2 className="mb-2 text-3xl leading-tight text-gray-100 md:text-5xl">
+                Judges a book
+                <br />
+                by its <span className="text-rose-400">cover</span>...
+              </h2>
+              <p className="text-xs text-gray-400 md:text-sm">
+                Because if the cover does not impress you what else can?
+              </p>
+            </div>
           </div>
-        </div>
+          <div className="h-8" />
 
-        <Image
-          src="/22.jpg"
-          width={500}
-          height={800}
-          alt="Ali"
-          className="hidden lg:block absolute right-20 bottom-0 object-cover rounded-t-full"
-        />
-
-        <div className="z-10">
-          <h1 className="text-5xl md:text-6xl font-bold text-gray-100 mb-4">
-            Hi, I'm Ali Abdullah
-          </h1>
-          <h3 className="text-xl md:text-2xl font-medium mb-4 text-rose-600">
-            Full Stack Developer
-          </h3>
-          <p className="max-w-md text-gray-300 mb-8">
-            I'm a full stack software developer, with extensive knowledge and
-            years of experience, working with quality work in web and app
-            technologies.
-          </p>
-          <a
-            href="#about"
-            className="inline-flex items-center gap-2 bg-rose-600 text-gray-100 px-6 py-3 rounded-md font-medium relative z-10 transition-all duration-300 hover:bg-rose-700"
-          >
-            <i className="uil uil-user"></i>
-            More About me!
-          </a>
+          <div className="items-left text-left">
+            <h1 className="mb-4 text-7xl font-bold text-gray-100">
+              Ali Abdullah
+            </h1>
+            <h1 className="mb-6 text-xl font-medium text-rose-400 md:text-2xl">
+              Graphic Designer
+            </h1>
+            <p className="mx-auto max-w-2xl text-base leading-relaxed text-gray-300 md:text-lg">
+              I design visual identities, social media campaigns, stream overlays,
+              and digital assets that help brands stay consistent, memorable, and
+              audience-focused.
+            </p>
+            <Badge
+              variant="outline"
+              className="mt-10 inline-flex items-center gap-2 rounded-full border-gray-500/60 bg-gray-900/40 px-4 py-2 text-sm font-medium uppercase tracking-[0.18em] text-gray-300"
+            >
+              <ArrowDown className="size-4" />
+              Scroll to explore
+            </Badge>
+          </div>
         </div>
       </div>
     </section>

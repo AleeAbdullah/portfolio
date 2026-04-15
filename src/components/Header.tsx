@@ -39,7 +39,7 @@ const Header = () => {
   return (
     <>
       {/* Top Navigation Bar for screens smaller than lg */}
-      <nav className="fixed top-0 left-0 w-full h-16 bg-gray-950 border-b border-gray-900 z-50 lg:hidden">
+      <nav className="fixed top-0 left-0 w-full h-16 border-b border-gray-900 z-50 lg:hidden">
         <div className="h-full flex items-center justify-between px-4">
           {/* Logo */}
           <div className="w-10 h-10 rounded-full bg-rose-600 flex items-center justify-center">
@@ -55,9 +55,8 @@ const Header = () => {
                 <a
                   href={`#${link}`}
                   onClick={() => handleLinkClick(link)}
-                  className={`text-sm font-medium transition-colors duration-300 hover:text-rose-600 ${
-                    activeLink === link ? "text-rose-600" : "text-gray-100"
-                  }`}
+                  className={`text-sm font-medium transition-colors duration-300 hover:text-rose-600 ${activeLink === link ? "text-rose-600" : "text-gray-100"
+                    }`}
                 >
                   {link.charAt(0).toUpperCase() + link.slice(1)}
                 </a>
@@ -76,9 +75,8 @@ const Header = () => {
 
         {/* Mobile dropdown menu (only for very small screens) */}
         <div
-          className={`absolute top-16 left-0 w-full bg-gray-950 border-b border-gray-900 transition-all duration-300 sm:hidden ${
-            isOpen ? "opacity-100 visible" : "opacity-0 invisible"
-          }`}
+          className={`absolute top-16 left-0 w-full bg-gray-950 border-b border-gray-900 transition-all duration-300 sm:hidden ${isOpen ? "opacity-100 visible" : "opacity-0 invisible"
+            }`}
         >
           <ul className="py-4">
             {navLinks.map((link) => (
@@ -86,9 +84,8 @@ const Header = () => {
                 <a
                   href={`#${link}`}
                   onClick={() => handleLinkClick(link)}
-                  className={`block px-4 py-2 text-sm font-medium transition-colors duration-300 hover:bg-gray-900 ${
-                    activeLink === link ? "text-rose-600" : "text-gray-100"
-                  }`}
+                  className={`block px-4 py-2 text-sm font-medium transition-colors duration-300 hover:bg-gray-900 ${activeLink === link ? "text-rose-600" : "text-gray-100"
+                    }`}
                 >
                   {link.charAt(0).toUpperCase() + link.slice(1)}
                 </a>
@@ -118,9 +115,8 @@ const Header = () => {
                   <a
                     href={`#${link}`}
                     onClick={() => handleLinkClick(link)}
-                    className={`block text-sm font-medium transition-colors duration-300 hover:text-rose-600 transform -rotate-90 whitespace-nowrap ${
-                      activeLink === link ? "text-rose-600" : "text-gray-100"
-                    }`}
+                    className={`block text-sm font-medium transition-colors duration-300 hover:text-rose-600 transform -rotate-90 whitespace-nowrap ${activeLink === link ? "text-rose-600" : "text-gray-100"
+                      }`}
                   >
                     {link.charAt(0).toUpperCase() + link.slice(1)}
                   </a>

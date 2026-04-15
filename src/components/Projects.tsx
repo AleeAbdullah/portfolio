@@ -1,318 +1,129 @@
 "use client";
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { CircleX, MonitorDot, TabletSmartphone } from "lucide-react";
 
-const projects = [
+import Image from "next/image";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
+
+const featuredWork = [
   {
-    title: "Seasons Reastaurant Site",
-    category: "web",
-    description:
-      "a comprehensive, end-to-end web platform designed to empower restaurant owners to build a powerful online presence, streamline operations, and foster customer loyalty. This bespoke solution provides a feature-rich admin dashboard for restaurant management and a seamless, modern storefront for customers to engage with the brand.",
-    details: [
-      { label: "Platform", value: "Web" },
-      { label: "Role", value: "sole Full Stack Developer" },
-    ],
-    techStack: ["Next.js", "Tailwind CSS", "TypeScript", "Firebase", "Rive"],
-    features: [
-      "PWA with offline support",
-      "Push notifications for customer engagement",
-      "Dynamic Site & Content Management",
-      "Advanced Menu Creator",
-      "Integrated SEO Blog Engine",
-      "User & Role Management",
-    ],
-    github: null,
-    live: "https://seasonseateryhi.com",
+    id: "seasons-restaurant-showcase",
+    title: "Seasons Restaurant Web Showcase",
+    image: "/portfolio-images/mockups/seasons.webp",
+    badge: ["Web", "Branding", "Showcase"],
+    summary:
+      "Designed this Seasons Restaurant showcase visual to present the website with a premium, on-brand feel. I shaped the composition to highlight both interface quality and brand personality, so the first impression feels polished, appetizing, and confidently digital.",
   },
   {
-    title: "Safe Buy Africa",
-    category: "app",
-    description:
-      "A production-grade, multi-vendor marketplace mobile app for Android & iOS with distinct customer and seller portals.",
-    details: [
-      { label: "Platform", value: "Android & iOS" },
-      { label: "Role", value: "Full Stack Developer" },
-    ],
-    techStack: [
-      "React Native",
-      "Expo",
-      "TypeScript",
-      "Firebase",
-      "Supabase",
-      "Paystack",
-    ],
-    features: [
-      "Secure user identity and real-time data sync",
-      "Efficient full-text search and product catalog",
-      "Robust cart total verification via Cloud Functions",
-      "Seamless multi-seller split payments",
-    ],
-    github: null,
-    live: null,
+    id: "greattemplatesart-layout-one",
+    title: "Twitch Stream Package Design",
+    image: "/portfolio-images/great-templates-art/twitch-overlay/layout-1.png",
+    badge: ["Illustrator", "Canva", "Branding"],
+    summary:
+      "Built this stream package from scratch in Adobe Illustrator, including every frame and visual element. I then prepared the listing in Canva so the marketplace presentation felt polished, clear, and conversion-focused while keeping the style personality-forward.",
   },
   {
-    title: "FitKraft",
-    category: "app",
-    description:
-      "A health and fitness mobile app that uses AI to generate personalized workout and meal plans based on user BMI.",
-    details: [
-      { label: "Platform", value: "Android" },
-      { label: "Role", value: "Frontend Developer" },
-    ],
-    techStack: [
-      "React Native",
-      "Expo",
-      "Node.js",
-      "Express.js",
-      "MongoDB",
-      "React Native Reanimated",
-    ],
-    features: [
-      "AI-driven personalized workout & meal plans",
-      "Engaging UI with fluid animations",
-      "Secure data encryption and session management",
-      "Seamless API integration for content delivery",
-    ],
-    github: "https://github.com/ye-bhee-theek-ha/fitkraft",
-    live: null,
+    id: "safebuy-app-branding",
+    title: "SafeBuy App Branding Showcase",
+    image: "/portfolio-images/mockups/safe buy.webp",
+    badge: ["Mobile", "Branding", "App"],
+    summary:
+      "Created this SafeBuy branding visual to showcase the mobile app with clarity and confidence. The goal was to make the app feel reliable, modern, and easy to trust, while keeping the design language consistent with the product’s identity and communication style.",
   },
   {
-    title: "Knowledge Quran",
-    category: "app",
-    description:
-      "A comprehensive cross-platform Learning Management Portal for students, teachers, and admins.",
-    details: [
-      { label: "Platform", value: "Android & iOS" },
-      { label: "Role", value: "Frontend Developer" },
-    ],
-    techStack: ["React Native", "Expo", "WebRTC", "Firebase", "Jitsi SDK"],
-    features: [
-      "Real-time peer-to-peer video conferencing",
-      "Role-based access for students, teachers, & admins",
-      "Account management and progress tracking",
-      "Interactive online learning sessions",
-    ],
-    github: "https://github.com/ye-bhee-theek-ha/knowlegequran-Expo-App",
-    live: null,
+    id: "scoopcodes-post-one",
+    title: "Campaign Social Creative",
+    image: "/portfolio-images/scoopcodes/1.png",
+    badge: ["Social", "Identity", "Engagement"],
+    summary:
+      "Created this Scoopcodes social creative to strengthen recognition and keep campaign messaging visually aligned with the brand system. I focused on strong contrast, disciplined spacing, and clear focal points so the design grabs attention and stays easy to understand.",
   },
   {
-    title: "Simplifly",
-    category: "web",
-    description:
-      "A dual-portal web platform designed to simplify booking and managing flights for travelers and flight sellers.",
-    details: [
-      { label: "Platform", value: "Web" },
-      { label: "Role", value: "Full Stack Developer" },
-    ],
-    techStack: ["React.js", "Node.js", "Express.js", "MongoDB", "TypeScript"],
-    features: [
-      "Real-time flight search and price comparison",
-      "Secure booking and payment management",
-      "Automated email notifications",
-      "Comprehensive admin dashboard for sellers",
-    ],
-    github: "https://github.com/ye-bhee-theek-ha/Simplify",
-    live: null,
+    id: "ripeseed-drive-sheet",
+    title: "Brand Awareness Post Design",
+    image: "/portfolio-images/ripeseed/1.1.jpeg",
+    badge: ["LinkedIn", "Marketing", "Awareness"],
+    summary:
+      "Designed this social post to increase brand awareness and communicate visual direction with clarity. The goal was to make the message feel informative without losing style, so the composition balances readable hierarchy, brand consistency, and a clean, professional finish.",
   },
 ];
 
-const categories = ["all", "app", "web"];
-
 const Projects = () => {
-  const [selectedCategory, setSelectedCategory] = useState("all");
-  const [selectedProject, setSelectedProject] = useState<any>(null);
-
-  const filteredProjects =
-    selectedCategory === "all"
-      ? projects
-      : projects.filter((p) => p.category === selectedCategory);
-
-  const openModal = (project: any) => {
-    setSelectedProject(project);
-  };
-  const closeModal = () => setSelectedProject(null);
-
   return (
-    <section className="py-24 bg-gray-950" id="work">
-      <div className="container mx-auto px-6">
-        <div className="relative mb-16 text-center">
-          <h2 className="text-4xl font-bold text-gray-100">Recent Works</h2>
-          <p className="text-center text-rose-500 mt-2">My Portfolio</p>
-        </div>
-
-        <div className="flex justify-center mb-12 gap-4">
-          {categories.map((category) => (
-            <button
-              key={category}
-              onClick={() => setSelectedCategory(category)}
-              className={`px-6 py-2 rounded-full text-sm font-semibold transition-all duration-300 ${
-                selectedCategory === category
-                  ? "bg-rose-600 text-white shadow-md shadow-rose-600/30"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
-              }`}
-            >
-              {category.charAt(0).toUpperCase() + category.slice(1)}
-            </button>
-          ))}
-        </div>
-
-        <motion.div
-          layout
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
-        >
-          <AnimatePresence>
-            {filteredProjects.map((project, index) => (
-              <motion.div
-                key={project.title}
-                layout
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 50 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="group relative bg-gray-900 rounded-xl overflow-hidden cursor-pointer shadow-lg hover:shadow-rose-600/20 transition-shadow duration-300 flex flex-col"
-                onClick={() => openModal(project)}
-              >
-                <div className="relative flex items-center justify-center h-48 bg-gray-800/50 group-hover:bg-rose-900/20 transition-colors duration-300">
-                  {project.category === "app" ? (
-                    <TabletSmartphone
-                      className={`text-7xl text-gray-700 group-hover:text-rose-500 group-hover:scale-110 transition-all duration-300`}
-                    />
-                  ) : (
-                    <MonitorDot
-                      className={`text-7xl text-gray-700 group-hover:text-rose-500 group-hover:scale-110 transition-all duration-300`}
-                    />
-                  )}
-                </div>
-                <div className="p-6 flex-grow flex flex-col">
-                  <h3 className="text-xl font-bold text-gray-100 mb-2 truncate">
-                    {project.title}
-                  </h3>
-                  <p className="text-gray-400 text-sm mb-4 line-clamp-3 flex-grow">
-                    {project.description}
-                  </p>
-                  <span className="text-rose-500 text-sm font-semibold mt-auto group-hover:underline">
-                    View Details
-                    <i className="uil uil-arrow-right transform transition-transform duration-300 group-hover:translate-x-1"></i>
-                  </span>
-                </div>
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        </motion.div>
+    <section className="relative overflow-hidden py-24" id="work">
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute left-1/2 top-34 h-50 w-50 -translate-x-1/2 rounded-full bg-rose-500/30 blur-[110px]" />
+        <div className="absolute -left-16 top-[45%] h-72 w-72 rounded-full bg-rose-400/20 blur-[110px]" />
+        <div className="absolute right-0 top-[70%] h-72 w-72 rounded-full bg-pink-400/20 blur-[120px]" />
       </div>
 
-      <AnimatePresence>
-        {selectedProject && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/80 backdrop-blur-sm flex justify-center items-center z-50 p-4"
-            onClick={closeModal}
+      <div className="container relative z-10 mx-auto px-6">
+        <div className="relative mb-16 flex flex-col items-center gap-4">
+          <div className="text-center">
+            <h2 className="text-4xl font-bold text-gray-100">Featured Projects</h2>
+            <p className="mt-2 text-rose-500">Selected Work</p>
+          </div>
+          <Link
+            href="/work"
+            className="inline-flex items-center justify-center self-center rounded-full border border-white/20 bg-gradient-to-r from-rose-200/20 via-pink-200/15 to-slate-100/20 px-6 py-2.5 text-sm font-medium text-gray-100 backdrop-blur-2xl shadow-[0_18px_50px_-26px_rgba(244,114,182,0.8)] transition hover:border-white/35 hover:text-white md:absolute md:right-0 md:top-1/2 md:-translate-y-1/2"
           >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              transition={{ type: "spring", stiffness: 200, damping: 25 }}
-              className="w-full max-w-2xl bg-gray-900 rounded-2xl shadow-2xl overflow-hidden"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="p-8 relative overflow-y-auto max-h-[90vh]">
-                <button
-                  onClick={closeModal}
-                  className="absolute top-4 right-4 w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-rose-600 transition-colors z-20"
+            Show all projects
+            <ArrowRight className="ml-2 h-4 w-4" />
+          </Link>
+        </div>
+
+        <div className="mx-auto flex max-w-7xl flex-col gap-15">
+          {featuredWork.map((item, index) => {
+            const isReversed = index % 2 === 1;
+
+            return (
+              <article key={item.id} className="relative py-2">
+                <div
+                  className={`relative ${isReversed ? "ml-0 mr-auto" : "ml-auto mr-0"
+                    } w-full max-w-[568px]`}
                 >
-                  <CircleX />
-                </button>
-                <h2 className="text-3xl font-bold text-white mb-2">
-                  {selectedProject.title}
-                </h2>
-                <p className="text-gray-400 mb-6 text-sm">
-                  {selectedProject.description}
-                </p>
-
-                <div className="space-y-6">
-                  <div>
-                    <h4 className="font-semibold text-white mb-3 border-b border-gray-800 pb-2">
-                      Key Features
-                    </h4>
-                    <ul className="space-y-2">
-                      {selectedProject.features.map((feature: string) => (
-                        <li
-                          key={feature}
-                          className="flex items-start gap-3 text-sm text-gray-300"
-                        >
-                          <i className="uil uil-check-circle text-rose-500 mt-1"></i>
-                          <span>{feature}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-white mb-3 border-b border-gray-800 pb-2">
-                      Tech Stack
-                    </h4>
-                    <div className="flex flex-wrap gap-2">
-                      {selectedProject.techStack.map((tech: string) => (
-                        <span
-                          key={tech}
-                          className="bg-gray-800 text-gray-300 text-xs font-medium px-3 py-1 rounded-full"
-                        >
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
-                    <h4 className="font-semibold text-white mt-6 mb-3 border-b border-gray-800 pb-2">
-                      Role & Platform
-                    </h4>
-                    <div className="space-y-2 text-sm">
-                      {selectedProject.details.map((detail: any) => (
-                        <div
-                          key={detail.label}
-                          className="flex justify-between"
-                        >
-                          <span className="text-gray-500">{detail.label}:</span>
-                          <span className="text-gray-300 font-medium">
-                            {detail.value}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
+                  <div className="absolute inset-0 rounded-2xl bg-rose-500/20 blur-2xl" />
+                  <div className="relative inline-block w-full overflow-hidden rounded-2xl border border-rose-300/20 bg-gray-900/70 shadow-[0_20px_50px_-20px_rgba(244,63,94,0.45)]">
+                    <Image
+                      src={item.image}
+                      alt="Featured work preview"
+                      width={568}
+                      height={354}
+                      className="h-auto w-full object-contain opacity-95"
+                    />
                   </div>
                 </div>
 
-                <div className="flex gap-4 pt-6 mt-6 border-t border-gray-800">
-                  {selectedProject.live && (
-                    <a
-                      href={selectedProject.live}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex-1 py-3 bg-rose-600 text-white rounded-lg hover:bg-rose-700 transition-colors font-medium flex items-center justify-center gap-2"
-                    >
-                      <i className="uil uil-external-link-alt"></i>
-                      Live Demo
-                    </a>
-                  )}
-
-                  {selectedProject.github && (
-                    <a
-                      href={selectedProject.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex-1 py-3 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors font-medium flex items-center justify-center gap-2"
-                    >
-                      <i className="uil uil-github"></i>
-                      Source Code
-                    </a>
-                  )}
+                <div
+                  className={`relative z-20 mt-[-170px] w-full max-w-[669px] rounded-2xl border border-white/20 bg-gradient-to-r from-rose-200/20 via-pink-200/15 to-slate-100/20 p-6 text-gray-100 backdrop-blur-2xl shadow-[0_18px_50px_-26px_rgba(244,114,182,0.8)] md:p-8 ${isReversed
+                    ? "ml-auto mr-0 text-left lg:mr-[72px]"
+                    : "ml-0 mr-auto text-left lg:ml-[72px]"
+                    }`}
+                >
+                  <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-rose-300/90">
+                    Featured Project
+                  </p>
+                  <h3 className="mb-4 text-3xl font-semibold text-rose-100 md:text-4xl">
+                    {item.title}
+                  </h3>
+                  <div className="mb-4 flex flex-wrap gap-2">
+                    {item.badge.map((token) => (
+                      <span
+                        key={token}
+                        className="rounded-full border border-white/25 bg-white/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-rose-100"
+                      >
+                        {token}
+                      </span>
+                    ))}
+                  </div>
+                  <p className="text-base leading-relaxed text-slate-100/90 md:text-lg">
+                    {item.summary}
+                  </p>
                 </div>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+              </article>
+            );
+          })}
+        </div>
+      </div>
     </section>
   );
 };

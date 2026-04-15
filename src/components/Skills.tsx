@@ -1,52 +1,53 @@
 "use client";
-import { Braces, Database, MonitorCog } from "lucide-react";
+import { Brush, Megaphone } from "lucide-react";
 import { useState } from "react";
 
 // Skills Component
 const Skills = () => {
-  const [activeTab, setActiveTab] = useState("frontend");
+  const [activeTab, setActiveTab] = useState("design-tools");
 
   const skillsData = {
-    frontend: [
-      { name: "HTML", percentage: 90 },
-      { name: "CSS", percentage: 80 },
-      { name: "Javascript", percentage: 90 },
-      { name: "React", percentage: 75 },
-      { name: "Next.js", percentage: 80 },
-      { name: "Tailwind CSS", percentage: 90 },
+    "design-tools": [
+      { name: "Adobe Illustrator", percentage: 95 },
+      { name: "Adobe Photoshop", percentage: 90 },
+      { name: "Canva", percentage: 92 },
+      { name: "Brand Identity Design", percentage: 88 },
+      { name: "Stream Overlay Design", percentage: 94 },
+      { name: "Etsy Product Listing Design", percentage: 86 },
     ],
-    "backend-and-database": [
-      { name: "Express.js", percentage: 70 },
-      { name: "Python", percentage: 40 },
-      { name: "Firebase", percentage: 95 },
-      { name: "Supabase", percentage: 80 },
-      { name: "MongoDB", percentage: 70 },
-      { name: "MySQL", percentage: 60 },
+    "creative-strategy": [
+      { name: "Pitch Deck Design", percentage: 87 },
+      { name: "Social Media Graphics", percentage: 93 },
+      { name: "Merchandise Design", percentage: 82 },
+      { name: "Content Strategy & Planning", percentage: 85 },
+      { name: "Creativity & Storytelling", percentage: 90 },
+      { name: "Communication & Collaboration", percentage: 88 },
     ],
   };
 
   const tabData = [
     {
-      id: "frontend",
-      icon: <Braces />,
-      title: "Frontend",
-      experience: "More than 2 years",
+      id: "design-tools",
+      icon: <Brush />,
+      title: "Design Tools",
+      experience: "3+ years",
     },
     {
-      id: "backend-and-database",
-      icon: <MonitorCog />,
-      title: "Backend & Database",
-      experience: "More than an year",
+      id: "creative-strategy",
+      icon: <Megaphone />,
+      title: "Creative Strategy",
+      experience: "Campaigns, branding, and content planning",
     },
   ];
 
   return (
-    <section className="py-16 md:py-20 lg:py-24 bg-gray-950" id="skills">
+    <section className="py-16 md:py-20 lg:py-24 " id="skills">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="relative mb-12 md:mb-16 text-center">
-          <h2 className="text-2xl sm:text-3xl font-bold text-gray-100 border-b-2 border-gray-800 pb-2 inline-block">
-            My Experience
-          </h2>
+          <h2 className="mt-3 text-4xl font-bold text-gray-100">My Experience</h2>
+          <p className="mt-2 text-center text-rose-500">
+            Design Skills & Creative Focus
+          </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 max-w-6xl mx-auto">
@@ -54,25 +55,22 @@ const Skills = () => {
             {tabData.map((tab) => (
               <div
                 key={tab.id}
-                className={`group flex items-center p-4 sm:p-6 rounded-lg cursor-pointer transition-all duration-300 hover:bg-gray-900 ${
-                  activeTab === tab.id ? "bg-gray-900 shadow-lg" : ""
-                }`}
+                className={`group flex items-center p-4 sm:p-6 rounded-lg cursor-pointer transition-all duration-300 hover:bg-gray-900 ${activeTab === tab.id ? "bg-gray-900 shadow-lg" : ""
+                  }`}
                 onClick={() => setActiveTab(tab.id)}
               >
                 <div
-                  className={` text-2xl sm:text-3xl mr-3 sm:mr-4 transition-colors duration-300 ${
-                    activeTab === tab.id
+                  className={` text-2xl sm:text-3xl mr-3 sm:mr-4 transition-colors duration-300 ${activeTab === tab.id
                       ? "text-rose-600"
                       : "text-gray-400 group-hover:text-rose-600"
-                  }`}
+                    }`}
                 >
                   {tab.icon}
                 </div>
                 <div className="flex-1">
                   <h1
-                    className={`text-lg sm:text-xl font-medium transition-colors duration-300 ${
-                      activeTab === tab.id ? "text-rose-600" : "text-gray-100"
-                    }`}
+                    className={`text-lg sm:text-xl font-medium transition-colors duration-300 ${activeTab === tab.id ? "text-rose-600" : "text-gray-100"
+                      }`}
                   >
                     {tab.title}
                   </h1>
@@ -81,11 +79,10 @@ const Skills = () => {
                   </span>
                 </div>
                 <i
-                  className={`uil uil-angle-down text-2xl sm:text-3xl transition-all duration-300 ${
-                    activeTab === tab.id
+                  className={`uil uil-angle-down text-2xl sm:text-3xl transition-all duration-300 ${activeTab === tab.id
                       ? "transform -rotate-180 text-rose-600"
                       : "text-gray-400"
-                  }`}
+                    }`}
                 ></i>
               </div>
             ))}

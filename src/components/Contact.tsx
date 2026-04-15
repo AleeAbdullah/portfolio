@@ -4,8 +4,6 @@ import { motion } from "framer-motion";
 import {
   Mail,
   Phone,
-  Linkedin,
-  Github,
   Send,
   LoaderCircle,
   CheckCircle,
@@ -43,18 +41,6 @@ const Contact = () => {
       title: "WhatsApp",
       value: "+92-321-4614610",
       link: "https://wa.me/923214614610",
-    },
-    {
-      icon: <Linkedin size={28} className="text-blue-600" />,
-      title: "LinkedIn",
-      value: "Connect on LinkedIn",
-      link: "https://www.linkedin.com/in/ali-abdullah-854716224/",
-    },
-    {
-      icon: <Github size={28} className="text-gray-100" />,
-      title: "GitHub",
-      value: "View Projects",
-      link: "https://github.com/ali-abdullah1",
     },
   ];
 
@@ -112,7 +98,7 @@ const Contact = () => {
   };
 
   return (
-    <section className="py-24 bg-gray-950" id="contact">
+    <section className="py-24 " id="contact">
       <div className="container mx-auto px-6">
         <div className="relative mb-16 text-center">
           <h2 className="text-4xl font-bold text-gray-100">Contact Me</h2>
@@ -192,11 +178,10 @@ const Contact = () => {
                 required
               />
               <label
-                className={`absolute left-4 px-1 text-gray-400 pointer-events-none transition-all duration-300 ${
-                  focused.username || formData.username
+                className={`absolute left-4 px-1 text-gray-400 pointer-events-none transition-all duration-300 ${focused.username || formData.username
                     ? "-top-2.5 text-xs bg-gray-900 text-rose-500"
                     : "top-3.5"
-                }`}
+                  }`}
               >
                 Your Name
               </label>
@@ -214,11 +199,10 @@ const Contact = () => {
                 required
               />
               <label
-                className={`absolute left-4 px-1 text-gray-400 pointer-events-none transition-all duration-300 ${
-                  focused.email || formData.email
+                className={`absolute left-4 px-1 text-gray-400 pointer-events-none transition-all duration-300 ${focused.email || formData.email
                     ? "-top-2.5 text-xs bg-gray-900 text-rose-500"
                     : "top-3.5"
-                }`}
+                  }`}
               >
                 Your Email
               </label>
@@ -235,11 +219,10 @@ const Contact = () => {
                 required
               ></textarea>
               <label
-                className={`absolute left-4 px-1 text-gray-400 pointer-events-none transition-all duration-300 ${
-                  focused.message || formData.message
+                className={`absolute left-4 px-1 text-gray-400 pointer-events-none transition-all duration-300 ${focused.message || formData.message
                     ? "-top-2.5 text-xs bg-gray-900 text-rose-500"
                     : "top-3.5"
-                }`}
+                  }`}
               >
                 Your Message
               </label>
