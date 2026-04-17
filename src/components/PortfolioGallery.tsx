@@ -146,22 +146,58 @@ export default function PortfolioGallery() {
 
   return (
     <section className="text-gray-100">
-      <div className="relative min-h-screen overflow-hidden px-6 pb-10 pt-12">
-        <HeroPortfolioGallery
-          title="Portfolio Gallery"
-          archiveButton={{ text: "Browse Categories", href: "#app-web-design" }}
-          images={heroPreview}
-          className="!px-0 !py-0"
-          maxHeight={140}
-          spacing="-space-x-48 md:-space-x-64"
-          onImageClick={(index) => {
-            const target = heroPreview[index];
-            if (target) scrollToCategory(target.categoryId);
-          }}
-        />
+      <div className="relative overflow-hidden px-4 pb-8 pt-8 sm:px-6 sm:pb-10 sm:pt-12">
+        <div className="md:hidden">
+          <div className="mx-auto max-w-3xl rounded-2xl border border-rose-300/20 bg-gray-900/50 p-6 text-center backdrop-blur-sm">
+            <h1 className="text-3xl font-bold text-gray-100 sm:text-4xl">Portfolio Gallery</h1>
+            <a
+              href="#app-web-design"
+              className="mt-4 inline-flex items-center rounded-full bg-foreground px-5 py-2.5 text-sm font-medium text-background transition hover:bg-foreground/90"
+            >
+              Browse Categories
+            </a>
+
+            <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
+              {heroPreview.slice(0, 2).map((image, index) => (
+                <button
+                  key={`${image.src}-mobile-preview`}
+                  onClick={() => scrollToCategory(image.categoryId)}
+                  className="relative overflow-hidden rounded-xl border border-rose-300/20 bg-gray-900/60"
+                >
+                  <Image
+                    src={image.src}
+                    alt={image.alt}
+                    width={640}
+                    height={360}
+                    sizes="(max-width: 640px) 92vw, 45vw"
+                    className="h-auto w-full object-cover"
+                  />
+                  <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/65 to-transparent px-3 py-2 text-left text-xs font-medium text-gray-100">
+                    Tap to jump to category
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="hidden md:block">
+          <HeroPortfolioGallery
+            title="Portfolio Gallery"
+            archiveButton={{ text: "Browse Categories", href: "#app-web-design" }}
+            images={heroPreview}
+            className="!px-0 !py-0"
+            maxHeight={140}
+            spacing="-space-x-48 md:-space-x-64"
+            onImageClick={(index) => {
+              const target = heroPreview[index];
+              if (target) scrollToCategory(target.categoryId);
+            }}
+          />
+        </div>
       </div>
 
-      <div className="mx-auto w-full max-w-7xl space-y-16 px-6 pb-24">
+      <div className="mx-auto w-full max-w-7xl space-y-12 px-4 pb-16 sm:space-y-16 sm:px-6 sm:pb-24">
         {categories.map((category) => (
           <section
             key={category.id}
@@ -172,8 +208,8 @@ export default function PortfolioGallery() {
             className="scroll-mt-24"
           >
             <div className="mb-6">
-              <h2 className="text-3xl font-semibold">{category.title}</h2>
-              <p className="mt-1 text-gray-400">{category.subtitle}</p>
+              <h2 className="text-2xl font-semibold sm:text-3xl">{category.title}</h2>
+              <p className="mt-1 text-sm text-gray-400 sm:text-base">{category.subtitle}</p>
             </div>
 
             <div className="flex gap-4 overflow-x-auto pb-2">
@@ -181,13 +217,13 @@ export default function PortfolioGallery() {
                 <button
                   key={src}
                   onClick={() => openPreview(category.images, index)}
-                  className="relative h-64 min-w-[320px] flex-none overflow-hidden rounded-xl border border-rose-300/20 bg-gray-900/60"
+                  className="relative h-52 min-w-[240px] flex-none overflow-hidden rounded-xl border border-rose-300/20 bg-gray-900/60 sm:h-64 sm:min-w-[320px]"
                 >
                   <Image
                     src={src}
                     alt={`${category.title} image ${index + 1}`}
                     fill
-                    sizes="320px"
+                    sizes="(max-width: 640px) 240px, 320px"
                     className="object-cover"
                   />
                 </button>

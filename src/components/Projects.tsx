@@ -49,17 +49,17 @@ const featuredWork = [
 
 const Projects = () => {
   return (
-    <section className="relative overflow-hidden py-24" id="work">
+    <section className="relative overflow-hidden py-16 md:py-24" id="work">
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute left-1/2 top-34 h-50 w-50 -translate-x-1/2 rounded-full bg-rose-500/30 blur-[110px]" />
         <div className="absolute -left-16 top-[45%] h-72 w-72 rounded-full bg-rose-400/20 blur-[110px]" />
         <div className="absolute right-0 top-[70%] h-72 w-72 rounded-full bg-pink-400/20 blur-[120px]" />
       </div>
 
-      <div className="container relative z-10 mx-auto px-6">
-        <div className="relative mb-16 flex flex-col items-center gap-4">
+      <div className="container relative z-10 mx-auto px-4 sm:px-6">
+        <div className="relative mb-10 flex flex-col items-center gap-4 md:mb-16">
           <div className="text-center">
-            <h2 className="text-4xl font-bold text-gray-100">Featured Projects</h2>
+            <h2 className="text-3xl font-bold text-gray-100 md:text-4xl">Featured Projects</h2>
             <p className="mt-2 text-rose-500">Selected Work</p>
           </div>
           <Link
@@ -71,9 +71,10 @@ const Projects = () => {
           </Link>
         </div>
 
-        <div className="mx-auto flex max-w-7xl flex-col gap-15">
+        <div className="mx-auto flex max-w-7xl flex-col gap-10 md:gap-15">
           {featuredWork.map((item, index) => {
             const isReversed = index % 2 === 1;
+            const isLast = index === featuredWork.length - 1;
 
             return (
               <article key={item.id} className="relative py-2">
@@ -88,13 +89,13 @@ const Projects = () => {
                       alt="Featured work preview"
                       width={568}
                       height={354}
-                      className="h-auto w-full object-contain opacity-95"
+                      className="h-auto w-full object-cover opacity-95"
                     />
                   </div>
                 </div>
 
                 <div
-                  className={`relative z-20 mt-[-170px] w-full max-w-[669px] rounded-2xl border border-white/20 bg-gradient-to-r from-rose-200/20 via-pink-200/15 to-slate-100/20 p-6 text-gray-100 backdrop-blur-2xl shadow-[0_18px_50px_-26px_rgba(244,114,182,0.8)] md:p-8 ${isReversed
+                  className={`relative z-20 mt-4 w-full max-w-[669px] rounded-2xl border border-white/20 bg-gradient-to-r from-rose-200/20 via-pink-200/15 to-slate-100/20 p-5 text-gray-100 backdrop-blur-2xl shadow-[0_18px_50px_-26px_rgba(244,114,182,0.8)] md:mt-[-170px] md:p-8 ${isReversed
                     ? "ml-auto mr-0 text-left lg:mr-[72px]"
                     : "ml-0 mr-auto text-left lg:ml-[72px]"
                     }`}
@@ -102,7 +103,7 @@ const Projects = () => {
                   <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-rose-300/90">
                     Featured Project
                   </p>
-                  <h3 className="mb-4 text-3xl font-semibold text-rose-100 md:text-4xl">
+                  <h3 className="mb-4 text-2xl font-semibold text-rose-100 md:text-4xl">
                     {item.title}
                   </h3>
                   <div className="mb-4 flex flex-wrap gap-2">
@@ -115,10 +116,14 @@ const Projects = () => {
                       </span>
                     ))}
                   </div>
-                  <p className="text-base leading-relaxed text-slate-100/90 md:text-lg">
+                  <p className="text-sm leading-relaxed text-slate-100/90 md:text-lg">
                     {item.summary}
                   </p>
                 </div>
+
+                {!isLast && (
+                  <div className="mt-8 border-t border-white/15 md:hidden" aria-hidden="true" />
+                )}
               </article>
             );
           })}
