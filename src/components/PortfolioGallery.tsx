@@ -39,15 +39,15 @@ const categories: GalleryCategory[] = [
     title: "The Great Templates Art",
     subtitle: "Stream overlays and listing creatives",
     images: [
-      "/portfolio-images/great-templates-art/twitch-overlay/layout-1.png",
-      "/portfolio-images/great-templates-art/twitch-overlay/layout-2.png",
-      "/portfolio-images/great-templates-art/twitch-overlay/layout-3.png",
-      "/portfolio-images/great-templates-art/twitch-overlay/layout-4.png",
-      "/portfolio-images/great-templates-art/twitch-overlay/layout-5.png",
-      "/portfolio-images/great-templates-art/twitch-overlay/layout-6.png",
-      "/portfolio-images/great-templates-art/twitch-overlay/layout-8.png",
-      "/portfolio-images/great-templates-art/twitch-overlay/layout-9.png",
-      "/portfolio-images/great-templates-art/twitch-overlay/layout-10.png",
+      "/portfolio-images/great-templates-art/twitch-overlay/layout-1.webp",
+      "/portfolio-images/great-templates-art/twitch-overlay/layout-2.webp",
+      "/portfolio-images/great-templates-art/twitch-overlay/layout-3.webp",
+      "/portfolio-images/great-templates-art/twitch-overlay/layout-4.webp",
+      "/portfolio-images/great-templates-art/twitch-overlay/layout-5.webp",
+      "/portfolio-images/great-templates-art/twitch-overlay/layout-6.webp",
+      "/portfolio-images/great-templates-art/twitch-overlay/layout-8.webp",
+      "/portfolio-images/great-templates-art/twitch-overlay/layout-9.webp",
+      "/portfolio-images/great-templates-art/twitch-overlay/layout-10.webp",
     ],
   },
   {
@@ -55,14 +55,14 @@ const categories: GalleryCategory[] = [
     title: "Ripe Seed",
     subtitle: "Brand communication and campaign creatives",
     images: [
-      "/portfolio-images/ripeseed/1.1.jpeg",
-      "/portfolio-images/ripeseed/1.2.jpeg",
-      "/portfolio-images/ripeseed/1.3.jpeg",
-      "/portfolio-images/ripeseed/1.4.jpeg",
-      "/portfolio-images/ripeseed/2.1.jpeg",
-      "/portfolio-images/ripeseed/2.2.jpeg",
-      "/portfolio-images/ripeseed/2.3.jpeg",
-      "/portfolio-images/ripeseed/3.1.jpeg",
+      "/portfolio-images/ripeseed/1.1.webp",
+      "/portfolio-images/ripeseed/1.2.webp",
+      "/portfolio-images/ripeseed/1.3.webp",
+      "/portfolio-images/ripeseed/1.4.webp",
+      "/portfolio-images/ripeseed/2.1.webp",
+      "/portfolio-images/ripeseed/2.2.webp",
+      "/portfolio-images/ripeseed/2.3.webp",
+      "/portfolio-images/ripeseed/3.1.webp",
     ],
   },
   {
@@ -70,16 +70,16 @@ const categories: GalleryCategory[] = [
     title: "Scoop Codes",
     subtitle: "Social content direction and brand consistency",
     images: [
-      "/portfolio-images/scoopcodes/carousal-1.png",
-      "/portfolio-images/scoopcodes/carousal-2.png",
-      "/portfolio-images/scoopcodes/carousal-3.png",
-      "/portfolio-images/scoopcodes/carousal-4.png",
-      "/portfolio-images/scoopcodes/carousal-5.png",
-      "/portfolio-images/scoopcodes/carousal-6.png",
-      "/portfolio-images/scoopcodes/1.png",
-      "/portfolio-images/scoopcodes/2.png",
-      "/portfolio-images/scoopcodes/3.png",
-      "/portfolio-images/scoopcodes/4.png",
+      "/portfolio-images/scoopcodes/carousal-1.webp",
+      "/portfolio-images/scoopcodes/carousal-2.webp",
+      "/portfolio-images/scoopcodes/carousal-3.webp",
+      "/portfolio-images/scoopcodes/carousal-4.webp",
+      "/portfolio-images/scoopcodes/carousal-5.webp",
+      "/portfolio-images/scoopcodes/carousal-6.webp",
+      "/portfolio-images/scoopcodes/1.webp",
+      "/portfolio-images/scoopcodes/2.webp",
+      "/portfolio-images/scoopcodes/3.webp",
+      "/portfolio-images/scoopcodes/4.webp",
     ],
   },
 ];
@@ -101,27 +101,27 @@ const heroPreview = [
     categoryId: "app-web-design",
   },
   {
-    src: "/portfolio-images/great-templates-art/twitch-overlay/layout-1.png",
+    src: "/portfolio-images/great-templates-art/twitch-overlay/layout-1.webp",
     alt: "The Great Templates Art preview",
     categoryId: "great-templates-art",
   },
   {
-    src: "/portfolio-images/great-templates-art/twitch-overlay/layout-8.png",
+    src: "/portfolio-images/great-templates-art/twitch-overlay/layout-8.webp",
     alt: "The Great Templates Art preview",
     categoryId: "great-templates-art",
   },
   {
-    src: "/portfolio-images/ripeseed/1.1.jpeg",
+    src: "/portfolio-images/ripeseed/1.1.webp",
     alt: "Ripe Seed preview",
     categoryId: "ripe-seed",
   },
   {
-    src: "/portfolio-images/ripeseed/2.3.jpeg",
+    src: "/portfolio-images/ripeseed/2.3.webp",
     alt: "Ripe Seed preview",
     categoryId: "ripe-seed",
   },
   {
-    src: "/portfolio-images/scoopcodes/1.png",
+    src: "/portfolio-images/scoopcodes/1.webp",
     alt: "Scoop Codes preview",
     categoryId: "scoop-codes",
   },
@@ -170,6 +170,7 @@ export default function PortfolioGallery() {
                     width={640}
                     height={360}
                     sizes="(max-width: 640px) 92vw, 45vw"
+                    priority={index === 0}
                     className="h-auto w-full object-cover"
                   />
                   <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/65 to-transparent px-3 py-2 text-left text-xs font-medium text-gray-100">
@@ -224,6 +225,7 @@ export default function PortfolioGallery() {
                     alt={`${category.title} image ${index + 1}`}
                     fill
                     sizes="(max-width: 640px) 240px, 320px"
+                    priority={index === 0}
                     className="object-cover"
                   />
                 </button>

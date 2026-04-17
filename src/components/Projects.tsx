@@ -16,7 +16,7 @@ const featuredWork = [
   {
     id: "greattemplatesart-layout-one",
     title: "Twitch Stream Package Design",
-    image: "/portfolio-images/great-templates-art/twitch-overlay/layout-1.png",
+    image: "/portfolio-images/great-templates-art/twitch-overlay/layout-1.webp",
     badge: ["Illustrator", "Canva", "Branding"],
     summary:
       "Built this stream package from scratch in Adobe Illustrator, including every frame and visual element. I then prepared the listing in Canva so the marketplace presentation felt polished, clear, and conversion-focused while keeping the style personality-forward.",
@@ -32,7 +32,7 @@ const featuredWork = [
   {
     id: "scoopcodes-post-one",
     title: "Campaign Social Creative",
-    image: "/portfolio-images/scoopcodes/1.png",
+    image: "/portfolio-images/scoopcodes/1.webp",
     badge: ["Social", "Identity", "Engagement"],
     summary:
       "Created this Scoopcodes social creative to strengthen recognition and keep campaign messaging visually aligned with the brand system. I focused on strong contrast, disciplined spacing, and clear focal points so the design grabs attention and stays easy to understand.",
@@ -40,7 +40,7 @@ const featuredWork = [
   {
     id: "ripeseed-drive-sheet",
     title: "Brand Awareness Post Design",
-    image: "/portfolio-images/ripeseed/1.1.jpeg",
+    image: "/portfolio-images/ripeseed/1.1.webp",
     badge: ["LinkedIn", "Marketing", "Awareness"],
     summary:
       "Designed this social post to increase brand awareness and communicate visual direction with clarity. The goal was to make the message feel informative without losing style, so the composition balances readable hierarchy, brand consistency, and a clean, professional finish.",
@@ -89,6 +89,8 @@ const Projects = () => {
                       alt="Featured work preview"
                       width={568}
                       height={354}
+                      sizes="(max-width: 768px) 100vw, 568px"
+                      priority={index === 0}
                       className="h-auto w-full object-cover opacity-95"
                     />
                   </div>

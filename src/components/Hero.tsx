@@ -2,15 +2,16 @@
 import localFont from "next/font/local";
 import { Badge } from "@/components/ui/badge";
 import { ShaderAnimation } from "../../components/ui/shader-animation";
-import { ArrowDown } from "lucide-react";
+import { ArrowDown, ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 const preahvihear = localFont({
   src: "../../public/fonts/Preahvihear-Regular.ttf",
   display: "swap",
 });
 
-const HERO_EMOJI_ASSET = "/Hero/person-emoji.svg";
-const HERO_ARROW_ASSET = "/Hero/hero-arrow.svg";
+const HERO_EMOJI_ASSET = "/hero/person-emoji.svg";
+const HERO_ARROW_ASSET = "/hero/hero-arrow.svg";
 
 const Hero = () => {
   return (
@@ -33,6 +34,8 @@ const Hero = () => {
                   src={HERO_EMOJI_ASSET}
                   alt="Ali illustration"
                   className="h-24 w-24 object-contain sm:h-28 sm:w-28 md:h-36 md:w-36"
+                  loading="eager"
+                  decoding="async"
                 />
               </div>
             </div>
@@ -74,13 +77,22 @@ const Hero = () => {
               and digital assets that help brands stay consistent, memorable, and
               audience-focused.
             </p>
-            <Badge
-              variant="outline"
-              className="mt-10 inline-flex items-center gap-2 rounded-full border-gray-500/60 bg-gray-900/40 px-4 py-2 text-sm font-medium uppercase tracking-[0.18em] text-gray-300"
-            >
-              <ArrowDown className="size-4" />
-              Scroll to explore
-            </Badge>
+            <div className="mt-10 flex flex-wrap items-center gap-3">
+              <Badge
+                variant="outline"
+                className="inline-flex items-center gap-2 rounded-full border-gray-500/60 bg-gray-900/40 px-4 py-2 text-sm font-medium uppercase tracking-[0.18em] text-gray-300"
+              >
+                <ArrowDown className="size-4" />
+                Scroll to explore
+              </Badge>
+              <Link
+                href="/work"
+                className="inline-flex items-center gap-2 rounded-full border border-gray-500/60 bg-gray-900/40 px-4 py-2 text-sm font-medium uppercase tracking-[0.18em] text-gray-300 transition-colors hover:border-gray-300/60 hover:text-gray-100"
+              >
+                Show all
+                <ArrowRight className="size-4" />
+              </Link>
+            </div>
           </div>
         </div>
       </div>
