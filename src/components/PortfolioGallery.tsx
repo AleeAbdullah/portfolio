@@ -16,6 +16,8 @@ type GalleryCategory = {
   id: string;
   title: string;
   subtitle: string;
+  summaryHeading: string;
+  summary: string;
   images: string[];
 };
 
@@ -24,6 +26,9 @@ const categories: GalleryCategory[] = [
     id: "app-web-design",
     title: "App and Web Design",
     subtitle: "Product, UI, and branding visuals across web and mobile",
+    summaryHeading: "Product showcase and UI direction",
+    summary:
+      "I created web and app visuals that make digital products feel clear, trustworthy, and launch-ready through polished UI mockups, brand-led compositions, and focused product storytelling.",
     images: [
       "/portfolio-images/mockups/seasons.webp",
       "/portfolio-images/mockups/seasons2.png",
@@ -44,6 +49,9 @@ const categories: GalleryCategory[] = [
     id: "great-templates-art",
     title: "The Great Templates Art",
     subtitle: "Stream overlays and listing creatives",
+    summaryHeading: "Stream package and marketplace presentation",
+    summary:
+      "I built stream overlay layouts and listing visuals with a creator-focused identity, balancing expressive illustration, readable frames, and polished marketplace presentation.",
     images: [
       "/portfolio-images/great-templates-art/twitch-overlay/layout-1.webp",
       "/portfolio-images/great-templates-art/twitch-overlay/layout-2.webp",
@@ -60,6 +68,9 @@ const categories: GalleryCategory[] = [
     id: "ripe-seed",
     title: "Ripe Seed",
     subtitle: "Brand communication and campaign creatives",
+    summaryHeading: "Professional brand communication",
+    summary:
+      "I designed campaign creatives with a clean, business-focused visual language so each post feels credible, informative, modern, and aligned with the brand's communication style.",
     images: [
       "/portfolio-images/ripeseed/1.1.webp",
       "/portfolio-images/ripeseed/1.2.webp",
@@ -75,6 +86,9 @@ const categories: GalleryCategory[] = [
     id: "scoop-codes",
     title: "Scoop Codes",
     subtitle: "Social content direction and brand consistency",
+    summaryHeading: "Social identity and campaign consistency",
+    summary:
+      "I created social visuals that keep campaign messaging sharp and recognizable, using disciplined spacing, strong contrast, and consistent brand cues across each post.",
     images: [
       "/portfolio-images/scoopcodes/carousal-1.webp",
       "/portfolio-images/scoopcodes/carousal-2.webp",
@@ -92,6 +106,9 @@ const categories: GalleryCategory[] = [
     id: "coffee-shop",
     title: "Coffee Shop",
     subtitle: "Cafe campaign posts and warm product-led social creatives",
+    summaryHeading: "Warm cafe campaign visuals",
+    summary:
+      "I designed a coffee campaign set with warm product imagery, direct offer messaging, and clean social layouts that feel inviting, premium, and easy to scan.",
     images: [
       "/portfolio-images/coffee%20shop/1.png",
       "/portfolio-images/coffee%20shop/2.png",
@@ -104,6 +121,9 @@ const categories: GalleryCategory[] = [
     id: "creative-company",
     title: "Creative Company",
     subtitle: "Brand campaign visuals for a modern creative studio",
+    summaryHeading: "Modern creative studio campaign",
+    summary:
+      "I created a campaign system with confident typography, structured shapes, and editorial imagery to give the creative studio a clear, energetic, professional presence.",
     images: [
       "/portfolio-images/creative%20company/1.png",
       "/portfolio-images/creative%20company/2.png",
@@ -268,6 +288,20 @@ export default function PortfolioGallery() {
             </div>
 
             <div className="flex gap-4 overflow-x-auto pb-2">
+              <article className="flex h-52 w-[280px] flex-none flex-col justify-between rounded-xl border border-white/15 bg-gradient-to-br from-rose-200/10 via-pink-200/[0.06] to-slate-100/[0.04] p-5 shadow-[0_16px_44px_-32px_rgba(244,114,182,0.75)] backdrop-blur-xl sm:h-64 sm:min-w-[320px] sm:p-6">
+                <div>
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-rose-300/90">
+                    Project Summary
+                  </p>
+                  <h3 className="mt-3 text-lg font-semibold leading-snug text-rose-100 sm:text-xl">
+                    {category.summaryHeading}
+                  </h3>
+                  <p className="mt-3 text-sm leading-relaxed text-slate-100/80">
+                    {category.summary}
+                  </p>
+                </div>
+                <div className="mt-4 h-px w-16 bg-gradient-to-r from-rose-300/60 to-transparent" />
+              </article>
               {category.images.map((src, index) => (
                 <button
                   key={src}
