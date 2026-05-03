@@ -11,6 +11,12 @@ import {
 } from "lucide-react";
 import emailjs from "@emailjs/browser";
 
+const contactRecipient =
+  process.env.NEXT_PUBLIC_CONTACT_TO_EMAIL ?? "spam.alee.abd@gmail.com";
+const emailjsServiceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID;
+const emailjsTemplateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID;
+const emailjsPublicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY;
+
 const Contact = () => {
   const [formData, setFormData] = useState({
     username: "",
@@ -31,13 +37,13 @@ const Contact = () => {
 
   const contactInfo = [
     {
-      icon: <Mail size={28} className="text-blue-500" />,
+      icon: <Mail size={24} className="text-rose-200" />,
       title: "Email",
       value: "ali.37803990@gmail.com",
       link: "mailto:ali.37803990@gmail.com",
     },
     {
-      icon: <Phone size={28} className="text-green-500" />,
+      icon: <Phone size={24} className="text-rose-200" />,
       title: "WhatsApp",
       value: "+92-321-4614610",
       link: "https://wa.me/923214614610",
@@ -66,35 +72,36 @@ const Contact = () => {
     setIsSubmitting(true);
     setSubmitStatus("idle");
 
-    // --- EmailJS Integration ---
-    // 1. Go to https://www.emailjs.com/ and create a free account.
-    // 2. Add a new service (e.g., Gmail).
-    // 3. Create a new email template. You can use variables like {{username}}, {{email}}, {{message}}.
-    // 4. Find your Service ID, Template ID, and Public Key in your account settings.
-    // 5. Replace the placeholder values below.
+    try {
+      if (!emailjsServiceId || !emailjsTemplateId || !emailjsPublicKey) {
+        throw new Error("Missing EmailJS environment variables");
+      }
 
-    const serviceId = "service_64run2q"; // Replace with your EmailJS Service ID
-    const templateId = "template_a68ku27"; // Replace with your EmailJS Template ID
-    const publicKey = "KY4oh0khX6r6-kYxL"; // Replace with your EmailJS Public Key
-
-    emailjs
-      .sendForm(serviceId, templateId, e.currentTarget, publicKey)
-      .then(
-        (result) => {
-          console.log("SUCCESS!", result.text);
-          setSubmitStatus("success");
-          setFormData({ username: "", email: "", message: "" });
-          setFocused({ username: false, email: false, message: false });
+      await emailjs.send(
+        emailjsServiceId,
+        emailjsTemplateId,
+        {
+          to_email: contactRecipient,
+          from_name: formData.username,
+          from_email: formData.email,
+          reply_to: formData.email,
+          message: formData.message,
         },
-        (error) => {
-          console.log("FAILED...", error.text);
-          setSubmitStatus("error");
+        {
+          publicKey: emailjsPublicKey,
         }
-      )
-      .finally(() => {
-        setIsSubmitting(false);
-        setTimeout(() => setSubmitStatus("idle"), 5000);
-      });
+      );
+
+      setSubmitStatus("success");
+      setFormData({ username: "", email: "", message: "" });
+      setFocused({ username: false, email: false, message: false });
+    } catch (error) {
+      console.error(error);
+      setSubmitStatus("error");
+    } finally {
+      setIsSubmitting(false);
+      setTimeout(() => setSubmitStatus("idle"), 5000);
+    }
   };
 
   return (
@@ -132,9 +139,9 @@ const Contact = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   viewport={{ once: true }}
-                  className="group bg-gray-900 p-6 rounded-xl transition-all duration-300 hover:bg-gray-800 hover:-translate-y-1"
+                  className="group rounded-xl border border-white/15 bg-gradient-to-br from-rose-200/10 via-pink-200/[0.06] to-slate-100/[0.04] p-6 shadow-[0_16px_44px_-32px_rgba(244,114,182,0.75)] backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:border-rose-200/25 hover:bg-white/[0.06]"
                 >
-                  <div className="mb-3 transition-transform duration-300 group-hover:scale-110">
+                  <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-lg border border-rose-200/20 bg-rose-100/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] transition-transform duration-300 group-hover:scale-105">
                     {info.icon}
                   </div>
                   <h3 className="text-md font-semibold text-gray-100 mb-1">
@@ -147,7 +154,7 @@ const Contact = () => {
                     href={info.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-rose-500 hover:text-rose-400 transition-colors duration-300 text-sm font-medium group/link"
+                    className="group/link inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.05] px-3 py-1.5 text-sm font-medium text-rose-200 transition-colors duration-300 hover:border-rose-200/30 hover:bg-rose-100/10 hover:text-white"
                   >
                     Connect
                     <i className="uil uil-arrow-right transform transition-transform duration-300 group-hover/link:translate-x-1"></i>
@@ -164,7 +171,7 @@ const Contact = () => {
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
             onSubmit={handleSubmit}
-            className="space-y-6 bg-gray-900 p-8 rounded-xl"
+            className="space-y-6 rounded-xl border border-white/15 bg-gradient-to-br from-rose-200/[0.08] via-pink-200/[0.05] to-slate-100/[0.035] p-8 shadow-[0_18px_50px_-34px_rgba(244,114,182,0.8)] backdrop-blur-xl"
           >
             <div className={`relative`}>
               <input
@@ -172,14 +179,14 @@ const Contact = () => {
                 name="username"
                 value={formData.username}
                 onChange={handleInputChange}
-                className="w-full border-2 border-gray-700 bg-transparent py-3 px-4 text-gray-100 rounded-lg outline-none transition-all duration-300 focus:border-rose-600"
+                className="w-full rounded-lg border border-white/15 bg-white/[0.03] px-4 py-3 text-gray-100 outline-none transition-all duration-300 focus:border-rose-300/70 focus:bg-rose-50/[0.04]"
                 onFocus={() => handleFocus("username")}
                 onBlur={() => handleBlur("username")}
                 required
               />
               <label
                 className={`absolute left-4 px-1 text-gray-400 pointer-events-none transition-all duration-300 ${focused.username || formData.username
-                    ? "-top-2.5 text-xs bg-gray-900 text-rose-500"
+                    ? "-top-2.5 bg-[hsl(242,19%,5%)] text-xs text-rose-300"
                     : "top-3.5"
                   }`}
               >
@@ -193,14 +200,14 @@ const Contact = () => {
                 name="email"
                 value={formData.email}
                 onChange={handleInputChange}
-                className="w-full border-2 border-gray-700 bg-transparent py-3 px-4 text-gray-100 rounded-lg outline-none transition-all duration-300 focus:border-rose-600"
+                className="w-full rounded-lg border border-white/15 bg-white/[0.03] px-4 py-3 text-gray-100 outline-none transition-all duration-300 focus:border-rose-300/70 focus:bg-rose-50/[0.04]"
                 onFocus={() => handleFocus("email")}
                 onBlur={() => handleBlur("email")}
                 required
               />
               <label
                 className={`absolute left-4 px-1 text-gray-400 pointer-events-none transition-all duration-300 ${focused.email || formData.email
-                    ? "-top-2.5 text-xs bg-gray-900 text-rose-500"
+                    ? "-top-2.5 bg-[hsl(242,19%,5%)] text-xs text-rose-300"
                     : "top-3.5"
                   }`}
               >
@@ -213,14 +220,14 @@ const Contact = () => {
                 name="message"
                 value={formData.message}
                 onChange={handleInputChange}
-                className="w-full border-2 border-gray-700 bg-transparent py-3 px-4 text-gray-100 rounded-lg outline-none transition-all duration-300 focus:border-rose-600 min-h-[140px] resize-none"
+                className="min-h-[140px] w-full resize-none rounded-lg border border-white/15 bg-white/[0.03] px-4 py-3 text-gray-100 outline-none transition-all duration-300 focus:border-rose-300/70 focus:bg-rose-50/[0.04]"
                 onFocus={() => handleFocus("message")}
                 onBlur={() => handleBlur("message")}
                 required
               ></textarea>
               <label
                 className={`absolute left-4 px-1 text-gray-400 pointer-events-none transition-all duration-300 ${focused.message || formData.message
-                    ? "-top-2.5 text-xs bg-gray-900 text-rose-500"
+                    ? "-top-2.5 bg-[hsl(242,19%,5%)] text-xs text-rose-300"
                     : "top-3.5"
                   }`}
               >
@@ -231,7 +238,7 @@ const Contact = () => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full bg-rose-600 text-white py-3 px-6 rounded-lg font-medium transition-all duration-300 hover:bg-rose-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="flex w-full items-center justify-center gap-2 rounded-lg border border-rose-200/20 bg-gradient-to-r from-rose-500/90 to-pink-500/80 px-6 py-3 font-medium text-white shadow-[0_16px_34px_-24px_rgba(244,63,94,0.9)] transition-all duration-300 hover:border-rose-100/30 hover:from-rose-500 hover:to-pink-500 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {isSubmitting ? (
                 <>

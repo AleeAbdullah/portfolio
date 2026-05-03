@@ -2,9 +2,13 @@
 
 import { useRef, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import Lightbox from "yet-another-react-lightbox";
 import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
+import Zoom from "yet-another-react-lightbox/plugins/zoom";
+import { Home } from "lucide-react";
 import { PortfolioGallery as HeroPortfolioGallery } from "@/components/ui/portfolio-gallery";
+import { BackgroundPathLines } from "@/components/ui/background-paths";
 import "yet-another-react-lightbox/styles.css";
 import "yet-another-react-lightbox/plugins/thumbnails.css";
 
@@ -22,12 +26,14 @@ const categories: GalleryCategory[] = [
     subtitle: "Product, UI, and branding visuals across web and mobile",
     images: [
       "/portfolio-images/mockups/seasons.webp",
+      "/portfolio-images/mockups/seasons2.png",
       "/portfolio-images/mockups/safe%20buy.webp",
       "/portfolio-images/mockups/fitkraft.webp",
       "/portfolio-images/mockups/simplfly.webp",
       "/portfolio-images/mockups/simplfly%201.webp",
       "/portfolio-images/mockups/simplfly%202.webp",
       "/portfolio-images/mockups/simplfly%203.webp",
+      "/portfolio-images/mockups/cpr2.png",
       "/portfolio-images/mockups/cpr.webp",
       "/portfolio-images/mockups/Knowlegge%20Quran.webp",
       "/portfolio-images/mockups/Knowlegge%20Quran%202.webp",
@@ -82,6 +88,31 @@ const categories: GalleryCategory[] = [
       "/portfolio-images/scoopcodes/4.webp",
     ],
   },
+  {
+    id: "coffee-shop",
+    title: "Coffee Shop",
+    subtitle: "Cafe campaign posts and warm product-led social creatives",
+    images: [
+      "/portfolio-images/coffee%20shop/1.png",
+      "/portfolio-images/coffee%20shop/2.png",
+      "/portfolio-images/coffee%20shop/3.png",
+      "/portfolio-images/coffee%20shop/4.png",
+      "/portfolio-images/coffee%20shop/5.png",
+    ],
+  },
+  {
+    id: "creative-company",
+    title: "Creative Company",
+    subtitle: "Brand campaign visuals for a modern creative studio",
+    images: [
+      "/portfolio-images/creative%20company/1.png",
+      "/portfolio-images/creative%20company/2.png",
+      "/portfolio-images/creative%20company/3.png",
+      "/portfolio-images/creative%20company/4.png",
+      "/portfolio-images/creative%20company/5.png",
+      "/portfolio-images/creative%20company/6.png",
+    ],
+  },
 ];
 
 const heroPreview = [
@@ -125,6 +156,16 @@ const heroPreview = [
     alt: "Scoop Codes preview",
     categoryId: "scoop-codes",
   },
+  {
+    src: "/portfolio-images/coffee%20shop/5.png",
+    alt: "Coffee Shop preview",
+    categoryId: "coffee-shop",
+  },
+  {
+    src: "/portfolio-images/creative%20company/1.png",
+    alt: "Creative Company preview",
+    categoryId: "creative-company",
+  },
 
 ];
 
@@ -147,15 +188,27 @@ export default function PortfolioGallery() {
   return (
     <section className="text-gray-100">
       <div className="relative overflow-hidden px-4 pb-8 pt-8 sm:px-6 sm:pb-10 sm:pt-12">
-        <div className="md:hidden">
+        {/* <BackgroundPathLines className="z-0 opacity-70 [mask-image:linear-gradient(to_bottom,black,black,transparent)]" /> */}
+
+        <div className="relative z-10 md:hidden">
           <div className="mx-auto max-w-3xl rounded-2xl border border-rose-300/20 bg-gray-900/50 p-6 text-center backdrop-blur-sm">
             <h1 className="text-3xl font-bold text-gray-100 sm:text-4xl">Portfolio Gallery</h1>
-            <a
-              href="#app-web-design"
-              className="mt-4 inline-flex items-center rounded-full bg-foreground px-5 py-2.5 text-sm font-medium text-background transition hover:bg-foreground/90"
-            >
-              Browse Categories
-            </a>
+
+            <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
+              <Link
+                href="/"
+                className="inline-flex items-center gap-2 rounded-full bg-foreground px-5 py-2.5 text-sm font-medium text-background transition hover:bg-foreground/90"
+              >
+                <Home className="h-4 w-4" />
+                Back to Home
+              </Link>
+              <a
+                href="#app-web-design"
+                className="inline-flex items-center rounded-full bg-foreground px-5 py-2.5 text-sm font-medium text-background transition hover:bg-foreground/90"
+              >
+                Browse Categories
+              </a>
+            </div>
 
             <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
               {heroPreview.slice(0, 2).map((image, index) => (
@@ -182,10 +235,11 @@ export default function PortfolioGallery() {
           </div>
         </div>
 
-        <div className="hidden md:block">
+        <div className="relative z-10 hidden md:block">
           <HeroPortfolioGallery
             title="Portfolio Gallery"
             archiveButton={{ text: "Browse Categories", href: "#app-web-design" }}
+            backButton={{ text: "Back to Home", href: "/" }}
             images={heroPreview}
             className="!px-0 !py-0"
             maxHeight={140}
@@ -240,8 +294,19 @@ export default function PortfolioGallery() {
         close={() => setLightboxOpen(false)}
         slides={slides}
         index={slideIndex}
-        plugins={[Thumbnails]}
+        plugins={[Thumbnails, Zoom]}
         thumbnails={{ position: "bottom", width: 90, height: 58, border: 0 }}
+        zoom={{
+          maxZoomPixelRatio: 4,
+          zoomInMultiplier: 2,
+          doubleTapDelay: 300,
+          doubleClickDelay: 300,
+          doubleClickMaxStops: 2,
+          keyboardMoveDistance: 50,
+          wheelZoomDistanceFactor: 100,
+          pinchZoomDistanceFactor: 100,
+          scrollToZoom: true,
+        }}
       />
     </section>
   );

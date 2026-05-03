@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight } from "lucide-react"
+import { ArrowRight, Home } from "lucide-react"
 import Link from "next/link"
 import { motion } from "framer-motion"
 import { useState } from "react"
@@ -9,6 +9,10 @@ import { cn } from "@/lib/utils"
 interface PortfolioGalleryProps {
   title?: string;
   archiveButton?: {
+    text: string;
+    href: string;
+  };
+  backButton?: {
     text: string;
     href: string;
   };
@@ -39,6 +43,7 @@ export function PortfolioGallery({
     text: "View gallery",
     href: "/work"
   },
+  backButton,
   images: customImages,
   className = "",
   maxHeight = 180,
@@ -69,13 +74,24 @@ export function PortfolioGallery({
         <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-8 py-10 text-center md:py-12">
           <h2 className="text-4xl md:text-6xl font-bold text-foreground mb-8 text-balance">{title}</h2>
 
-          <Link
-            href={archiveButton.href}
-            className="inline-flex items-center gap-3 bg-foreground text-background px-6 py-3 rounded-full font-medium hover:bg-foreground/90 transition-colors group"
-          >
-            <span>{archiveButton.text}</span>
-            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-          </Link>
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            {backButton && (
+              <Link
+                href={backButton.href}
+                className="inline-flex items-center gap-3 bg-foreground text-background px-6 py-3 rounded-full font-medium hover:bg-foreground/90 transition-colors group"
+              >
+                <Home className="w-5 h-5" />
+                <span>{backButton.text}</span>
+              </Link>
+            )}
+            <Link
+              href={archiveButton.href}
+              className="inline-flex items-center gap-3 bg-foreground text-background px-6 py-3 rounded-full font-medium hover:bg-foreground/90 transition-colors group"
+            >
+              <span>{archiveButton.text}</span>
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </div>
         </div>
 
         {/* Desktop 3D overlapping layout - hidden on mobile */}

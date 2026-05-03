@@ -4,11 +4,27 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
+type FeaturedWorkItem = {
+  id: string;
+  title: string;
+  projectUrl: string;
+  image: string;
+  imageWidth: number;
+  imageHeight: number;
+  badge: string[];
+  summary: string;
+  ctaLabel?: string;
+  isInternal?: boolean;
+};
+
 const featuredWork = [
   {
     id: "seasons-restaurant-showcase",
     title: "Seasons Restaurant Web Showcase",
+    projectUrl: "https://seasonseateryhi.com/",
     image: "/portfolio-images/mockups/seasons.webp",
+    imageWidth: 4500,
+    imageHeight: 3000,
     badge: ["Web", "Branding", "Showcase"],
     summary:
       "Designed this Seasons Restaurant showcase visual to present the website with a premium, on-brand feel. I shaped the composition to highlight both interface quality and brand personality, so the first impression feels polished, appetizing, and confidently digital.",
@@ -16,7 +32,10 @@ const featuredWork = [
   {
     id: "greattemplatesart-layout-one",
     title: "Twitch Stream Package Design",
+    projectUrl: "https://greatvtubers.com/",
     image: "/portfolio-images/great-templates-art/twitch-overlay/layout-1.webp",
+    imageWidth: 1920,
+    imageHeight: 1080,
     badge: ["Illustrator", "Canva", "Branding"],
     summary:
       "Built this stream package from scratch in Adobe Illustrator, including every frame and visual element. I then prepared the listing in Canva so the marketplace presentation felt polished, clear, and conversion-focused while keeping the style personality-forward.",
@@ -24,7 +43,10 @@ const featuredWork = [
   {
     id: "safebuy-app-branding",
     title: "SafeBuy App Branding Showcase",
+    projectUrl: "https://safebuy.africa/",
     image: "/portfolio-images/mockups/safe buy.webp",
+    imageWidth: 4500,
+    imageHeight: 3000,
     badge: ["Mobile", "Branding", "App"],
     summary:
       "Created this SafeBuy branding visual to showcase the mobile app with clarity and confidence. The goal was to make the app feel reliable, modern, and easy to trust, while keeping the design language consistent with the product’s identity and communication style.",
@@ -32,7 +54,10 @@ const featuredWork = [
   {
     id: "scoopcodes-post-one",
     title: "Campaign Social Creative",
+    projectUrl: "https://www.linkedin.com/company/scoopcodes/posts/",
     image: "/portfolio-images/scoopcodes/1.webp",
+    imageWidth: 1200,
+    imageHeight: 1200,
     badge: ["Social", "Identity", "Engagement"],
     summary:
       "Created this Scoopcodes social creative to strengthen recognition and keep campaign messaging visually aligned with the brand system. I focused on strong contrast, disciplined spacing, and clear focal points so the design grabs attention and stays easy to understand.",
@@ -40,12 +65,41 @@ const featuredWork = [
   {
     id: "ripeseed-drive-sheet",
     title: "Brand Awareness Post Design",
+    projectUrl: "https://ripeseed.io/",
     image: "/portfolio-images/ripeseed/1.1.webp",
+    imageWidth: 2048,
+    imageHeight: 1152,
     badge: ["LinkedIn", "Marketing", "Awareness"],
     summary:
       "Designed this social post to increase brand awareness and communicate visual direction with clarity. The goal was to make the message feel informative without losing style, so the composition balances readable hierarchy, brand consistency, and a clean, professional finish.",
   },
-];
+  {
+    id: "coffee-shop-social-set",
+    title: "Coffee Shop Campaign Social Set",
+    projectUrl: "/work#coffee-shop",
+    image: "/portfolio-images/coffee%20shop/5.png",
+    imageWidth: 1080,
+    imageHeight: 1080,
+    badge: ["Social", "Cafe", "Campaign"],
+    ctaLabel: "View Gallery",
+    isInternal: true,
+    summary:
+      "Designed this coffee shop campaign set with warm product imagery, bold offer messaging, and a clean social-first layout. The visual direction keeps the cafe brand approachable and premium while making each post easy to scan in a busy feed.",
+  },
+  {
+    id: "creative-company-brand-campaign",
+    title: "Creative Company Brand Campaign",
+    projectUrl: "/work#creative-company",
+    image: "/portfolio-images/creative%20company/1.png",
+    imageWidth: 1200,
+    imageHeight: 1200,
+    badge: ["Branding", "Social", "Creative"],
+    ctaLabel: "View Gallery",
+    isInternal: true,
+    summary:
+      "Created this creative company campaign to present brand strategy with confident typography, structured shapes, and editorial business imagery. The result feels energetic and professional while staying aligned with a clear visual identity.",
+  },
+] satisfies FeaturedWorkItem[];
 
 const Projects = () => {
   return (
@@ -83,15 +137,15 @@ const Projects = () => {
                     } w-full max-w-[568px]`}
                 >
                   <div className="absolute inset-0 rounded-2xl bg-rose-500/20 blur-2xl" />
-                  <div className="relative inline-block w-full overflow-hidden rounded-2xl border border-rose-300/20 bg-gray-900/70 shadow-[0_20px_50px_-20px_rgba(244,63,94,0.45)]">
+                  <div className="relative w-full overflow-hidden rounded-2xl border border-rose-300/20 bg-gray-900/70 shadow-[0_20px_50px_-20px_rgba(244,63,94,0.45)]">
                     <Image
                       src={item.image}
                       alt="Featured work preview"
-                      width={568}
-                      height={354}
+                      width={item.imageWidth}
+                      height={item.imageHeight}
                       sizes="(max-width: 768px) 100vw, 568px"
                       priority={index === 0}
-                      className="h-auto w-full object-cover opacity-95"
+                      className="h-auto w-full opacity-95"
                     />
                   </div>
                 </div>
@@ -102,9 +156,30 @@ const Projects = () => {
                     : "ml-0 mr-auto text-left lg:ml-[72px]"
                     }`}
                 >
-                  <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-rose-300/90">
-                    Featured Project
-                  </p>
+                  <div className="mb-2 flex items-start justify-between gap-3">
+                    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-rose-300/90">
+                      Featured Project
+                    </p>
+                    {item.isInternal ? (
+                      <Link
+                        href={item.projectUrl}
+                        className="inline-flex items-center rounded-full border border-white/25 bg-white/10 px-3 py-1 text-xs font-medium text-rose-100 transition hover:border-white/40 hover:bg-white/15 hover:text-white"
+                      >
+                        {item.ctaLabel ?? "View Project"}
+                        <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
+                      </Link>
+                    ) : (
+                      <a
+                        href={item.projectUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center rounded-full border border-white/25 bg-white/10 px-3 py-1 text-xs font-medium text-rose-100 transition hover:border-white/40 hover:bg-white/15 hover:text-white"
+                      >
+                        {item.ctaLabel ?? "Visit Project"}
+                        <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
+                      </a>
+                    )}
+                  </div>
                   <h3 className="mb-4 text-2xl font-semibold text-rose-100 md:text-4xl">
                     {item.title}
                   </h3>
