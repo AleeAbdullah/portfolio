@@ -95,7 +95,7 @@ const About = () => {
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-12 max-w-2xl mx-auto">
             <StatCard
               icon="uil uil-award"
-              value={2}
+              value={4}
               label="Years of Experience"
               isPlus
             />

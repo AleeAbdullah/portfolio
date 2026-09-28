@@ -92,18 +92,18 @@ const Qualification = () => {
               Education
             </h3>
             <div className="relative border-l-2 border-gray-800 pl-10">
-              <div className="mb-10">
-                <div className="absolute -left-[11px] top-1 h-5 w-5 border-2 border-rose-600 rounded-full bg-gray-900"></div>
+              <div className="relative mb-10">
+                <div className="absolute -left-[51px] top-1 h-5 w-5 border-2 border-rose-600 rounded-full bg-gray-900"></div>
                 <h3 className="text-lg font-semibold mb-1 text-gray-100">
                   FAST-NUCES, Lahore
                 </h3>
-                <p className="text-md mb-3 text-gray-400">Undergrad BS(CS)</p>
+                <p className="text-md mb-3 text-gray-400">BS Computer Science</p>
                 <span className="flex items-center gap-x-2 text-sm text-rose-500">
-                  <i className="uil uil-calendar-alt"></i>2021 - 2025
+                  <i className="uil uil-calendar-alt"></i>2018 - 2022
                 </span>
               </div>
-              <div>
-                <div className="absolute -left-[11px] top-1 h-5 w-5 border-2 border-rose-600 rounded-full bg-gray-900"></div>
+              <div className="relative">
+                <div className="absolute -left-[51px] top-1 h-5 w-5 border-2 border-rose-600 rounded-full bg-gray-900"></div>
                 <h3 className="text-lg font-semibold mb-1 text-gray-100">
                   FCC
                 </h3>
@@ -111,7 +111,7 @@ const Qualification = () => {
                   FSC Pre Engineering
                 </p>
                 <span className="flex items-center gap-x-2 text-sm text-rose-500">
-                  <i className="uil uil-calendar-alt"></i>2019 - 2021
+                  <i className="uil uil-calendar-alt"></i>2016 - 2018
                 </span>
               </div>
             </div>
@@ -124,27 +124,52 @@ const Qualification = () => {
               Experience
             </h3>
             <div className="relative border-l-2 border-gray-800 pl-10">
-              <div className="mb-10">
-                <div className="absolute -left-[11px] top-1 h-5 w-5 border-2 border-rose-600 rounded-full bg-gray-900"></div>
+              <div className="relative mb-10">
+                <div className="absolute -left-[51px] top-1 h-5 w-5 border-2 border-rose-600 rounded-full bg-gray-900"></div>
+                <h3 className="text-lg font-semibold mb-1 text-gray-100">
+                  Ripeseed.io
+                </h3>
+                <p className="text-md mb-3 text-gray-400">Software Engineer</p>
+                <p className="text-sm mb-3 text-gray-400">Faisal Town, Lahore, Pakistan</p>
+                <span className="flex items-center gap-x-2 text-sm text-rose-500">
+                  <i className="uil uil-calendar-alt"></i>Aug 2025 - Present
+                </span>
+                <p className="mt-3 text-sm leading-relaxed text-gray-400">
+                  Building a Django and Next.js roofing platform for distributors,
+                  contractors, and customers. Automated measurements cut material
+                  estimates from three days to about seven minutes and improved
+                  quoting efficiency by 90%.
+                </p>
+              </div>
+              <div className="relative mb-10">
+                <div className="absolute -left-[51px] top-1 h-5 w-5 border-2 border-rose-600 rounded-full bg-gray-900"></div>
                 <h3 className="text-lg font-semibold mb-1 text-gray-100">
                   Tech Grus
                 </h3>
-                <p className="text-md mb-3 text-gray-400">Software Engineer</p>
+                <p className="text-md mb-3 text-gray-400">Software Engineer · Remote</p>
                 <span className="flex items-center gap-x-2 text-sm text-rose-500">
-                  <i className="uil uil-calendar-alt"></i>Feb 2025 - Present
+                  <i className="uil uil-calendar-alt"></i>Feb 2024 - Jul 2025
                 </span>
-              </div>
-              <div>
-                <div className="absolute -left-[11px] top-1 h-5 w-5 border-2 border-rose-600 rounded-full bg-gray-900"></div>
-                <h3 className="text-lg font-semibold mb-1 text-gray-100">
-                  724.One
-                </h3>
-                <p className="text-md mb-3 text-gray-400">
-                  React Native Intern
+                <p className="mt-3 text-sm leading-relaxed text-gray-400">
+                  Built Next.js and NestJS restaurant platforms for two brands,
+                  with PWAs, payments, dashboards, and loyalty features that
+                  helped raise repeat orders by 25%.
                 </p>
+              </div>
+              <div className="relative">
+                <div className="absolute -left-[51px] top-1 h-5 w-5 border-2 border-rose-600 rounded-full bg-gray-900"></div>
+                <h3 className="text-lg font-semibold mb-1 text-gray-100">
+                  Upwork
+                </h3>
+                <p className="text-md mb-3 text-gray-400">Freelance Software Developer · Remote</p>
                 <span className="flex items-center gap-x-2 text-sm text-rose-500">
-                  <i className="uil uil-calendar-alt"></i>Sep 2023 - Jan 2024
+                  <i className="uil uil-calendar-alt"></i>2021 - 2024
                 </span>
+                <p className="mt-3 text-sm leading-relaxed text-gray-400">
+                  Shipped client web and mobile apps using React, Next.js, React
+                  Native, Node.js, Firebase, and Supabase, from interface work
+                  through backend integration and deployment.
+                </p>
               </div>
             </div>
           </div>

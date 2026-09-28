@@ -30,7 +30,7 @@ const Skills = () => {
       id: "frontend",
       icon: <Braces />,
       title: "Frontend",
-      experience: "More than 2 years",
+      experience: "Since 2021",
     },
     {
       id: "backend-and-database",
