@@ -1,6 +1,13 @@
 import type { Metadata } from "next";
+import { Geist } from "next/font/google";
 import "./globals.css";
 import Head from "next/head";
+import { cn } from "@/src/lib/utils";
+
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
 
 export const metadata: Metadata = {
   title: "ali's portfolio",
@@ -13,7 +20,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <Head>
         <link
           rel="stylesheet"
@@ -24,7 +31,14 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </Head>
-      <body>{children}</body>
+      <body
+        className={cn(
+          geistSans.variable,
+          "transition-colors duration-300 h-[calc(100vh-2rem)] mt-4 md:m-4 overflow-hidden border border-border rounded-xl"
+        )}
+      >
+        {children}
+      </body>
     </html>
   );
 }
