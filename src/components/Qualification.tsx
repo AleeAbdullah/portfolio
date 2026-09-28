@@ -4,8 +4,8 @@ import { useEffect } from "react";
 // Define particles.js types on the window object for TypeScript
 declare global {
   interface Window {
-    particlesJS: any;
-    pJSDom?: any[];
+    particlesJS: (elementId: string, config: object) => void;
+    pJSDom?: { pJS: { fn: { vendors: { destroypJS(): void } } } }[];
   }
 }
 

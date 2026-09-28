@@ -124,7 +124,7 @@ const Testimonials = () => {
 
                 {/* Quote */}
                 <p className="text-gray-300 mb-6 relative z-10 italic">
-                  "{testimonial.quote}"
+                  &ldquo;{testimonial.quote}&rdquo;
                 </p>
 
                 {/* Date */}

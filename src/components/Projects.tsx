@@ -121,14 +121,14 @@ const categories = ["all", "app", "web"];
 
 const Projects = () => {
   const [selectedCategory, setSelectedCategory] = useState("all");
-  const [selectedProject, setSelectedProject] = useState<any>(null);
+  const [selectedProject, setSelectedProject] = useState<(typeof projects)[number] | null>(null);
 
   const filteredProjects =
     selectedCategory === "all"
       ? projects
       : projects.filter((p) => p.category === selectedCategory);
 
-  const openModal = (project: any) => {
+  const openModal = (project: (typeof projects)[number]) => {
     setSelectedProject(project);
   };
   const closeModal = () => setSelectedProject(null);
@@ -268,7 +268,7 @@ const Projects = () => {
                       Role & Platform
                     </h4>
                     <div className="space-y-2 text-sm">
-                      {selectedProject.details.map((detail: any) => (
+                      {selectedProject.details.map((detail) => (
                         <div
                           key={detail.label}
                           className="flex justify-between"

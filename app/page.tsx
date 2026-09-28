@@ -9,7 +9,6 @@ import Projects from "../src/components/Projects";
 import Qualification from "../src/components/Qualification";
 import Services from "../src/components/Services";
 import Skills from "../src/components/Skills";
-import Testimonials from "../src/components/Testimonials";
 
 import "./globals.css";
 

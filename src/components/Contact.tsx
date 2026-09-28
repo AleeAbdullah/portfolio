@@ -130,10 +130,10 @@ const Contact = () => {
           >
             <div className="mb-8">
               <h3 className="text-2xl font-semibold text-gray-100 mb-2">
-                Let's work together
+                Let&apos;s work together
               </h3>
               <p className="text-gray-400">
-                I'm currently available for freelance work and full-time
+                I&apos;m currently available for freelance work and full-time
                 positions. Feel free to reach out through any platform below.
               </p>
             </div>
@@ -266,7 +266,7 @@ const Contact = () => {
             {submitStatus === "success" && (
               <div className="bg-green-500/10 border border-green-500 text-green-400 px-4 py-3 rounded-lg text-sm text-center flex items-center justify-center gap-2">
                 <CheckCircle size={18} />
-                Message sent successfully! I'll get back to you soon.
+                Message sent successfully! I&apos;ll get back to you soon.
               </div>
             )}
             {submitStatus === "error" && (

@@ -56,13 +56,13 @@ const Hero = () => {
 
         <div className="z-10">
           <h1 className="text-5xl md:text-6xl font-bold text-gray-100 mb-4">
-            Hi, I'm Ali Abdullah
+            Hi, I&apos;m Ali Abdullah
           </h1>
           <h3 className="text-xl md:text-2xl font-medium mb-4 text-rose-600">
             Full Stack Developer
           </h3>
           <p className="max-w-md text-gray-300 mb-8">
-            I'm a full stack software developer, with extensive knowledge and
+            I&apos;m a full stack software developer, with extensive knowledge and
             years of experience, working with quality work in web and app
             technologies.
           </p>

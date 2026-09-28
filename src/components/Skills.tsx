@@ -1,5 +1,5 @@
 "use client";
-import { Braces, Database, MonitorCog } from "lucide-react";
+import { Braces, MonitorCog } from "lucide-react";
 import { useState } from "react";
 
 // Skills Component
