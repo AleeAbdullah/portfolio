@@ -1,0 +1,107 @@
+{
+  "units": "metres",
+  "assets": {
+    "computer": {
+      "source": "https://elements.envato.com/vintage-desktop-computer-with-mouse-and-keyboard-45XJTRR",
+      "size": [
+        0.7481608986854553,
+        0.49050000319443643,
+        0.41056740283966064
+      ],
+      "normal": {
+        "url": "/models/workstation/normal/computer.glb",
+        "triangles": 4972,
+        "drawables": 8,
+        "bytes": 215812,
+        "gzipBytes": 81243
+      },
+      "low": {
+        "url": "/models/workstation/low/computer.glb",
+        "triangles": 2608,
+        "drawables": 8,
+        "bytes": 140260,
+        "gzipBytes": 50398
+      },
+      "design": "Original modern hardware"
+    },
+    "chair": {
+      "source": "https://elements.envato.com/modern-office-chair-with-high-backrest-and-armrest-AQYRJQV",
+      "originalTriangles": 75792,
+      "size": [
+        0.6434777120065894,
+        1.1799999999999997,
+        0.7811149872159531
+      ],
+      "normal": {
+        "url": "/models/workstation/normal/chair.glb",
+        "triangles": 18254,
+        "drawables": 5,
+        "bytes": 787852,
+        "gzipBytes": 406060
+      },
+      "low": {
+        "url": "/models/workstation/low/chair.glb",
+        "triangles": 6662,
+        "drawables": 5,
+        "bytes": 316440,
+        "gzipBytes": 175365
+      }
+    },
+    "desk": {
+      "source": "https://elements.envato.com/rustic-wooden-desk-with-drawers-U43GGJB",
+      "originalTriangles": 1868,
+      "size": [
+        1.6744222415910213,
+        0.76,
+        0.6544185895804402
+      ],
+      "normal": {
+        "url": "/models/workstation/normal/desk.glb",
+        "triangles": 1868,
+        "drawables": 4,
+        "bytes": 90004,
+        "gzipBytes": 34358
+      },
+      "low": {
+        "url": "/models/workstation/low/desk.glb",
+        "triangles": 1000,
+        "drawables": 4,
+        "bytes": 62180,
+        "gzipBytes": 26643
+      }
+    },
+    "tower": {
+      "source": "Original geometry",
+      "design": "Original modern hardware",
+      "size": [
+        0.2459999918937683,
+        0.4229999864473939,
+        0.3660000115633011
+      ],
+      "normal": {
+        "url": "/models/workstation/normal/tower.glb",
+        "triangles": 2982,
+        "drawables": 8,
+        "bytes": 100168,
+        "gzipBytes": 25103
+      },
+      "low": {
+        "url": "/models/workstation/low/tower.glb",
+        "triangles": 2398,
+        "drawables": 8,
+        "bytes": 81492,
+        "gzipBytes": 20641
+      }
+    }
+  },
+  "screen": {
+    "position": [
+      0,
+      0.31,
+      0.0132
+    ],
+    "width": 0.558,
+    "height": 0.31248,
+    "distanceFactor": 0.2232
+  }
+}

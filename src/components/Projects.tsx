@@ -10,168 +10,9 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { cn } from "../lib/utils";
+import { projects } from "../lib/portfolioData";
+import RoofingExplainer from "./studio/RoofingExplainer";
 
-const projects = [
-  {
-    title: "Seasons Reastaurant Site",
-    category: "web",
-    description:
-      "a comprehensive, end-to-end web platform designed to empower restaurant owners to build a powerful online presence, streamline operations, and foster customer loyalty. This bespoke solution provides a feature-rich admin dashboard for restaurant management and a seamless, modern storefront for customers to engage with the brand.",
-    details: [
-      { label: "Platform", value: "Web" },
-      { label: "Role", value: "sole Full Stack Developer" },
-    ],
-    techStack: ["Next.js", "Tailwind CSS", "TypeScript", "Firebase", "Rive"],
-    features: [
-      "PWA with offline support",
-      "Push notifications for customer engagement",
-      "Dynamic Site & Content Management",
-      "Advanced Menu Creator",
-      "Integrated SEO Blog Engine",
-      "User & Role Management",
-    ],
-    images: ["/mockups/seasons.webp"],
-    github: null,
-    live: "https://seasonseateryhi.com",
-  },
-  {
-    title: "Safe Buy Africa",
-    category: "app",
-    description:
-      "A production-grade, multi-vendor marketplace mobile app for Android & iOS with distinct customer and seller portals.",
-    details: [
-      { label: "Platform", value: "Android & iOS" },
-      { label: "Role", value: "Full Stack Developer" },
-    ],
-    techStack: [
-      "React Native",
-      "Expo",
-      "TypeScript",
-      "Firebase",
-      "Supabase",
-      "Paystack",
-    ],
-    features: [
-      "Secure user identity and real-time data sync",
-      "Efficient full-text search and product catalog",
-      "Robust cart total verification via Cloud Functions",
-      "Seamless multi-seller split payments",
-    ],
-    images: ["/mockups/safe buy.webp"],
-    github: null,
-    live: "dashboard.safebuy.africa",
-  },
-  {
-    title: "FitKraft",
-    category: "app",
-    description:
-      "A health and fitness mobile app that uses AI to generate personalized workout and meal plans based on user BMI.",
-    details: [
-      { label: "Platform", value: "Android" },
-      { label: "Role", value: "Frontend Developer" },
-    ],
-    techStack: [
-      "React Native",
-      "Expo",
-      "Node.js",
-      "Express.js",
-      "MongoDB",
-      "React Native Reanimated",
-    ],
-    features: [
-      "AI-driven personalized workout & meal plans",
-      "Engaging UI with fluid animations",
-      "Secure data encryption and session management",
-      "Seamless API integration for content delivery",
-    ],
-    images: ["/mockups/fitkraft.webp"],
-    github: "https://github.com/AleeAbdullah/fitkraft",
-    live: null,
-  },
-  {
-    title: "Knowledge Quran",
-    category: "app",
-    description:
-      "A comprehensive cross-platform Learning Management Portal for students, teachers, and admins.",
-    details: [
-      { label: "Platform", value: "Android & iOS" },
-      { label: "Role", value: "Frontend Developer" },
-    ],
-    techStack: ["React Native", "Expo", "WebRTC", "Firebase", "Jitsi SDK"],
-    features: [
-      "Real-time peer-to-peer video conferencing",
-      "Role-based access for students, teachers, & admins",
-      "Account management and progress tracking",
-      "Interactive online learning sessions",
-    ],
-    images: [
-      "/mockups/Knowlegge Quran.webp",
-      "/mockups/Knowlegge Quran 2.webp",
-      "/mockups/Knowlegge Quran 3.webp",
-    ],
-    github: "https://github.com/AleeAbdullah/knowlegequran-Expo-App",
-    live: null,
-  },
-  {
-    title: "Simplifly",
-    category: "web",
-    description:
-      "A dual-portal web platform designed to simplify booking and managing flights for travelers and flight sellers.",
-    details: [
-      { label: "Platform", value: "Web" },
-      { label: "Role", value: "Full Stack Developer" },
-    ],
-    techStack: ["React.js", "Node.js", "Express.js", "MongoDB", "TypeScript"],
-    features: [
-      "Real-time flight search and price comparison",
-      "Secure booking and payment management",
-      "Automated email notifications",
-      "Comprehensive admin dashboard for sellers",
-    ],
-    images: [
-      "/mockups/simplfly.webp",
-      "/mockups/simplfly 1.webp",
-      "/mockups/simplfly 2.webp",
-      "/mockups/simplfly 3.webp",
-    ],
-    github: "https://github.com/ye-bhee-theek-ha/Simplify",
-    live: "https://simplifly.scoopcodes.com/",
-  },
-  {
-    title: "Healing Hands CPR Training Platform",
-    category: "web",
-    description:
-      "A comprehensive CPR certification training platform that enables students to browse AHA-certified courses, complete multi-step registration, and securely process payments. Features include course management, Stripe payment integration, admin transaction dashboard, contact forms with email notifications, and a static-export compatible architecture for easy deployment.",
-    details: [
-      { label: "Platform", value: "Web" },
-      { label: "Role", value: "sole Full Stack Developer" },
-    ],
-    techStack: [
-      "Next.js",
-      "React",
-      "TypeScript",
-      "Tailwind CSS",
-      "Stripe",
-      "Supabase",
-      "Lucide React",
-    ],
-    features: [
-      "Multi-step course registration flow with progress tracking",
-      "Stripe payment processing with secure checkout sessions",
-      "Admin dashboard for transaction and order management",
-      "Course catalog with detailed course information",
-      "Contact form with Supabase Edge Function email integration",
-      "Authentication system with protected admin routes",
-      "Static site export compatible architecture",
-      "Responsive design with modern UI components",
-      "Real-time transaction status updates via webhooks",
-      "Digital business card and book showcase sections",
-    ],
-    images: ["/mockups/cpr.webp"],
-    github: null,
-    live: "https://healinghandusa.com/",
-  },
-];
 
 const categories = ["all", "app", "web"];
 
@@ -464,6 +305,8 @@ const Projects = () => {
                 >
                   {selectedProject.description}
                 </p>
+                {selectedProject.overview.map((paragraph) => <p key={paragraph} className="mb-6 text-sm text-muted-foreground">{paragraph}</p>)}
+                {selectedProject.explainer === "roofing-proposal" && <RoofingExplainer />}
 
                 <div className="space-y-6">
                   <div>

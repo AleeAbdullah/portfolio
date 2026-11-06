@@ -1,0 +1,22 @@
+const {chromium}=require(process.env.PLAYWRIGHT_MODULE || '/Users/alee/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
+const path=require('path');
+(async()=>{
+ const browser=await chromium.launch({executablePath:process.env.CHROME_PATH || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',headless:true});
+ const page=await browser.newPage({viewport:{width:1600,height:1000},deviceScaleFactor:1});
+ await page.goto('http://localhost:3003',{waitUntil:'networkidle'});
+ await page.addStyleTag({content:'nextjs-portal{display:none !important}'});
+ await page.waitForTimeout(1800);
+ const save=async name=>page.screenshot({path:path.join(__dirname,'assets',name+'.png')});
+ await save('portfolio-home');
+ await page.locator('#work').scrollIntoViewIfNeeded();
+ await page.waitForTimeout(1300);
+ await save('portfolio-work');
+ await page.getByRole('button',{name:'App',exact:true}).click();
+ await page.waitForTimeout(700);
+ await save('portfolio-apps');
+ await page.getByText('Safe Buy Africa',{exact:true}).first().click();
+ await page.waitForTimeout(700);
+ await save('portfolio-detail');
+ console.log('Captured 4 real portfolio states: home, work, app filter, project detail.');
+ await browser.close();
+})().catch(e=>{console.error(e.message);process.exit(1)});

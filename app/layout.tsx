@@ -10,8 +10,9 @@ const geistSans = Geist({
 });
 
 export const metadata: Metadata = {
-  title: "ali's portfolio",
-  description: "A portfolio showcasing my work and skills.",
+  title: "Ali Abdullah — The Workstation",
+  description:
+    "Step into Ali Abdullah's interactive workspace. Explore the skills, experience, and projects of a full stack web and mobile developer.",
 };
 
 export default function RootLayout({
@@ -34,7 +35,7 @@ export default function RootLayout({
       <body
         className={cn(
           geistSans.variable,
-          "transition-colors duration-300 h-[calc(100vh-2rem)] mt-4 md:m-4 overflow-hidden border border-border rounded-xl"
+          "transition-colors duration-300"
         )}
       >
         {children}

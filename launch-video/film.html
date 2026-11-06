@@ -1,0 +1,75 @@
+<!doctype html><meta charset="utf-8"><title>Ali Abdullah · Portfolio launch</title>
+<style>@font-face{font-family:Geist;src:url(assets/geist.woff2)}*{box-sizing:border-box}body{margin:0;background:#0b1426}canvas{display:block;width:100vw;height:100vh;object-fit:contain}</style><canvas id="film"></canvas>
+<script>
+// Deterministic 60-second film. Every animation depends only on frame / 30.
+// Music: "Cipher" Kevin MacLeod (incompetech.com), CC BY 4.0.
+// https://creativecommons.org/licenses/by/4.0/ — excerpted, faded and mixed.
+const canvas=document.querySelector('canvas'),g=canvas.getContext('2d',{alpha:false});
+const P=new URLSearchParams(location.search).get('format')==='portrait';
+const W=canvas.width=P?1080:1920,H=canvas.height=P?1920:1080;
+const C={ink:'#102039',blue:'#387ef7',paper:'#f4f6fa',muted:'#62738c',line:'#d7dfec',dark:'#091426',white:'#ffffff'};
+const assets={portrait:'../public/22.jpg',home:'assets/portfolio-home.png',work:'assets/portfolio-work.png',apps:'assets/portfolio-apps.png',detail:'assets/portfolio-detail.png',seasons:'../public/mockups/seasons.webp',safe:'../public/mockups/safe buy.webp',fit:'../public/mockups/fitkraft.webp',quran:'../public/mockups/Knowlegge Quran.webp',fly:'../public/mockups/simplfly.webp',cpr:'../public/mockups/cpr.webp'};
+let imgs={};
+window.ready=Promise.all([...Object.entries(assets).map(async([k,v])=>{const im=new Image();im.src=v;await im.decode();imgs[k]=im}),document.fonts.load('600 100px Geist')]).then(()=>true);
+const clamp=(v,a=0,b=1)=>Math.max(a,Math.min(b,v));
+const ease=v=>1-Math.pow(1-clamp(v),4);
+const smooth=v=>{v=clamp(v);return v*v*(3-2*v)};
+const mix=(a,b,p)=>a+(b-a)*p;
+function rect(x,y,w,h,color,r=0){g.fillStyle=color;g.beginPath();g.roundRect(x,y,w,h,r);g.fill()}
+function line(x,y,x2,y2,color=C.line,width=2){g.strokeStyle=color;g.lineWidth=width;g.beginPath();g.moveTo(x,y);g.lineTo(x2,y2);g.stroke()}
+function text(s,x,y,size=30,color=C.ink,weight=500,align='left'){g.fillStyle=color;g.font=`${weight} ${size}px Geist,Arial,sans-serif`;g.textAlign=align;g.textBaseline='alphabetic';g.fillText(s,x,y)}
+function label(s,x,y,color=C.muted){text(s,x,y,P?24:20,color,600)}
+function lines(a,x,y,size,color=C.ink,weight=600,gap=1.08){a.forEach((s,i)=>text(s,x,y+i*size*gap,size,color,weight))}
+function reveal(fn,age,delay=0,duration=.7,dy=42){const v=ease((age-delay)/duration);g.save();g.globalAlpha*=v;g.translate(0,(1-v)*dy);fn();g.restore()}
+function imageFit(k,x,y,w,h,fit='cover',zoom=1,px=.5,py=.5,r=24){const im=imgs[k];g.save();g.beginPath();g.roundRect(x,y,w,h,r);g.clip();const s=(fit==='cover'?Math.max(w/im.width,h/im.height):Math.min(w/im.width,h/im.height))*zoom;const iw=im.width*s,ih=im.height*s;g.drawImage(im,x+(w-iw)*px,y+(h-ih)*py,iw,ih);g.restore()}
+function crop(k,sx,sy,sw,sh,x,y,w,h,r=22){g.save();g.beginPath();g.roundRect(x,y,w,h,r);g.clip();g.drawImage(imgs[k],sx,sy,sw,sh,x,y,w,h);g.restore()}
+function pill(s,x,y,fill=C.white,color=C.ink,size=23){g.font=`500 ${size}px Geist`;let w=g.measureText(s).width+40;rect(x,y,w,51,fill,25);text(s,x+20,y+34,size,color);return w}
+function arrow(x,y,size=35,color=C.blue){line(x,y,x+size,y,color,3);line(x+size,y,x+size-12,y-12,color,3);line(x+size,y,x+size-12,y+12,color,3)}
+function cursor(x,y,press=0){g.save();g.translate(x,y);g.scale(1-press*.18,1-press*.18);g.fillStyle='#111e34';g.strokeStyle='white';g.lineWidth=3;g.beginPath();g.moveTo(0,0);g.lineTo(4,43);g.lineTo(16,32);g.lineTo(28,50);g.lineTo(37,44);g.lineTo(25,27);g.lineTo(43,23);g.closePath();g.fill();g.stroke();g.restore()}
+function chrome(x,y,w,h){g.save();g.shadowColor='#0b254526';g.shadowBlur=45;g.shadowOffsetY=24;rect(x,y,w,h,C.white,26);g.restore();rect(x,y,w,40,'#edf1f8',26);rect(x,y+20,w,20,'#edf1f8');[0,1,2].forEach(i=>{g.fillStyle=['#d0d9e6','#a9b9cd','#7b95b7'][i];g.beginPath();g.arc(x+24+i*17,y+20,4,0,7);g.fill()});label('ALI ABDULLAH  /  PORTFOLIO',x+90,y+26,'#75849a')}
+function base(t,dark=false){rect(0,0,W,H,dark?C.dark:C.paper);g.save();g.globalAlpha=dark?.2:.5;for(let x=70;x<W;x+=100)for(let y=85;y<H;y+=100){g.fillStyle=dark?'#344a70':'#ccd6e5';g.fillRect(x,y,2,2)}g.restore();let x=P?66:90;label('AA',x,72,dark?'#f4f6fa':C.ink);line(x+52,52,x+52,79,dark?'#394965':C.line);label('SELECTED WORK',x+75,72,dark?'#90a2bd':C.muted);
+ // Cover the final label and draw it safely inside the margin.
+ rect(W-(P?340:320),37,P?310:290,51,dark?C.dark:C.paper);text('WEB + MOBILE',W-x,72,P?24:20,dark?'#90a2bd':C.muted,600,'right');
+ line(x,H-60,W-x,H-60,dark?'#263752':C.line,1);line(x,H-60,mix(x,W-x,t/60),H-60,C.blue,3);
+}
+const specs=[
+ {start:16,end:24,k:'seasons',name:'Seasons',n:'01',topic:'RESTAURANT PLATFORM',question:['A restaurant.', 'A complete online presence.'],result:['From menu', 'to management.'],body:['Customer storefront.', 'Content and menu management.'],role:'Sole full stack developer',tech:'Next.js  /  TypeScript  /  Firebase',accent:'#b9db65'},
+ {start:24,end:32,k:'safe',name:'Safe Buy Africa',n:'02',topic:'MULTI-VENDOR COMMERCE',question:['Many sellers.', 'One connected marketplace.'],result:['Commerce,', 'connected.'],body:['Customer and seller portals.', 'Multi-seller split payments.'],role:'Full stack developer',tech:'React Native  /  Expo  /  Firebase',accent:'#71d7b0'},
+ {start:32,end:40,k:'fit',name:'FitKraft',n:'03',topic:'PERSONALIZED FITNESS',question:['Different goals.', 'A more personal experience.'],result:['Fitness with', 'a personal plan.'],body:['AI workout and meal plans.', 'Fluid mobile interactions.'],role:'Frontend developer',tech:'React Native  /  Expo',accent:'#b3c6ef'}
+];
+function opening(t){base(t);const a=ease(t/.9),b=ease((t-2.0)/1.1);let x=P?70:100;label('AN IDEA IS ONLY THE START.',x,P?270:245);reveal(()=>lines(['Make it','work.'],x,P?450:410,P?150:170,C.ink,650,1),t,.12);reveal(()=>text('For the people who use it.',x,P?800:715,P?37:39,C.muted),t,.75);let cx=P?540:1430,cy=P?1210:535;g.save();g.translate(cx,cy);g.rotate(mix(-.12,0,b));const cw=P?820:610,ch=P?540:430;g.save();g.shadowColor='#357df72b';g.shadowBlur=70;rect(-cw/2,-ch/2,cw,ch,'#e5edfb',32);g.restore();g.save();g.beginPath();g.roundRect(-cw/2,-ch/2,cw,ch,32);g.clip();g.globalAlpha=1-b;rect(-cw/2,-ch/2,cw,ch,C.white);for(let i=0;i<4;i++)rect(-cw/2+45,-ch/2+70+i*60,cw-90-i*45,16,i===0?C.blue:'#dfe6f1',8);g.globalAlpha=b;imageFit('seasons',-cw/2,-ch/2,cw,ch,'cover',1.03,.5,.5,0);g.restore();g.restore();reveal(()=>{pill('IDEA',x,P?1590:850,'#e5edfb',C.blue);arrow(x+145,P?1614:875);pill('WORKING PRODUCT',x+205,P?1590:850,C.blue,C.white)},t,2.3);}
+function intro(t){const a=t-4.8;base(t);const x=P?70:100;reveal(()=>label('MEET THE DEVELOPER',x,P?245:220),a);reveal(()=>lines(['Ali','Abdullah.'],x,P?400:420,P?150:164,C.ink,650,1.02),a,.12);reveal(()=>text('Full stack developer',x,P?740:725,P?45:40,C.blue,550),a,.4);reveal(()=>lines(['Web platforms. Mobile apps.', 'Thoughtful execution.'],x,P?822:810,P?30:30,C.muted,450,1.5),a,.65);const bx=P?150:1120,by=P?980:150,bw=P?780:650,bh=P?650:790;reveal(()=>imageFit('portrait',bx,by,bw,bh,'cover',1.03,.66,.56,P?70:180),a,.15,1,80);reveal(()=>pill('REACT  /  NEXT.JS  /  REACT NATIVE',P?160:1100,P?1700:965,'#e5edfb',C.ink,P?27:23),a,1.0);}
+function demo(t){let a=t-9.6;base(t);const x=P?65:90;reveal(()=>lines(P?['Explore the work.']:['Explore the work.'],x,P?245:205,P?69:78),a);reveal(()=>text('Find a project. See the thinking behind it.',x,P?315:267,P?29:30,C.muted),a,.25);let k=a<2.4?'work':a<4.4?'apps':'detail';let bx=P?65:290,by=P?420:320,bw=P?950:1340,bh=P?1120:650;chrome(bx,by,bw,bh);if(P){if(k==='detail')crop(k,463,49,675,903,bx+76,by+42,798,1066,15);else crop(k,k==='apps'?mix(440,16,ease((a-2.6)/.9)):440,100,710,840,bx+12,by+42,bw-24,bh-54,15)}else{if(k==='detail'){text('Inside the project.',bx+65,by+240,48,C.ink,600);text('Role. Features. Technology.',bx+65,by+305,30,C.muted);pill('Safe Buy Africa',bx+65,by+380,'#e5edfb',C.blue,26);crop(k,463,49,675,903,bx+800,by+55,431,577,15)}else crop(k,16,92,1568,710,bx+12,by+42,bw-24,bh-54,15)}
+ if(a<4.5){let cx,cy;if(P){cx=bx+450;cy=by+110;if(a>2.4){cx=mix(bx+450,bx+252,ease((a-2.7)/.8));cy=mix(by+110,by+525,ease((a-2.7)/.8))}}else{cx=bx+665;cy=by+94;if(a>2.4){cx=mix(cx,bx+220,ease((a-2.7)/.8));cy=mix(cy,by+315,ease((a-2.7)/.8))}}cursor(cx,cy,Math.max(0,1-Math.abs(a-2.35)*8));}
+ if(P){pill(a<2.4?'01  Browse':a<4.4?'02  Filter apps':'03  Open project',65,1640,'#e5edfb',C.blue,28)}else{pill(a<2.4?'01  Browse':a<4.4?'02  Filter apps':'03  Open project',90,907,'#e5edfb',C.blue,23)}
+}
+function project(t,s){const a=t-s.start;base(t,true);const x=P?65:90;const top=P?210:200;reveal(()=>label(`${s.n} / ${s.topic}`,x,top,s.accent),a,0);reveal(()=>text(s.name,x,top+(P?112:108),P?85:88,C.white,650),a,.12);
+ const bx=P?65:760,by=P?440:180,bw=P?950:1070,bh=P?700:720;
+ reveal(()=>{rect(bx-2,by-2,bw+4,bh+4,'#263b57',30);imageFit(s.k,bx,by,bw,bh,'cover',1.02+.025*clamp(a/8),.5,.5,28)},a,.13,.85,80);
+ let headline=a<2.3?s.question:s.result;const y=P?1270:485;const size=P?64:(a<2.3?42:52);
+ // After the setup, replace it with the benefit on a single shared baseline.
+ reveal(()=>lines(headline,x,y,size,C.white,600,1.13),a<2.3?a:a-2.3,0,.55,30);
+ reveal(()=>lines(s.body,x,P?1475:685,P?33:28,'#a9b9d0',450,1.55),a,3.0);
+ reveal(()=>{pill(s.role,x,P?1625:850,'#1c2d45',s.accent,P?29:24);text(s.tech,x,P?1745:978,P?26:22,'#8195b4',450)},a,3.6);
+ if(!P){label('PROJECT ARTWORK',bx,970,'#8195b4');text(s.n+' / 03',bx+bw,970,22,'#8195b4',500,'right')}
+}
+function range(t){const a=t-40;base(t);const x=P?65:90;reveal(()=>lines(P?['Different needs.', 'Same care.']:['Different needs. Same care.'],x,P?240:220,P?87:94),a);reveal(()=>text('A selection of web and mobile work.',x,P?455:295,P?32:32,C.muted),a,.25);
+ const items=[['quran','Knowledge Quran','Learning'],['fly','Simplifly','Travel'],['cpr','Healing Hands','Training']];
+ items.forEach(([k,n,cat],i)=>{let bx=P?65:90+i*590,by=P?550+i*365:390,bw=P?950:555,bh=P?315:490;reveal(()=>{rect(bx,by,bw,bh,C.white,26);if(P){imageFit(k,bx,by,470,bh,'cover',1+.025*clamp(a/8),.5,.5,26);label(cat.toUpperCase(),bx+510,by+80);text(n,bx+510,by+145,n==='Knowledge Quran'?35:40,C.ink,600);arrow(bx+510,by+235)}else{imageFit(k,bx,by,bw,340,'cover',1+.025*clamp(a/8),.5,.5,26);label(cat.toUpperCase(),bx+27,by+388);text(n,bx+27,by+444,37,C.ink,600);arrow(bx+bw-70,by+430)}},a,.25+i*.25,.75,60)});
+ reveal(()=>pill('Built for the task. Designed for the person.',x,P?1760:962,'#e5edfb',C.blue,P?30:27),a,2);
+}
+function build(t){let a=t-48;base(t,true);const x=P?65:100;reveal(()=>label('YOUR NEXT PROJECT',x,P?270:230,'#8db5ff'),a);reveal(()=>lines(['From the first idea', 'to the final detail.'],x,P?450:405,P?85:112,C.white,600,1.18),a,.1);const names=['Understand','Build','Refine'];names.forEach((n,i)=>{let bx=P?70:100+i*590,by=P?850+i*235:740,bw=P?940:540;reveal(()=>{rect(bx,by,bw,150,'#14243d',24);pill('0'+(i+1),bx+24,by+49,C.blue,C.white,24);text(n,bx+125,by+96,P?52:47,C.white,500);arrow(bx+bw-80,by+75,34,'#8db5ff')},a,.7+i*.65)});}
+function close(t){let a=t-54.4;base(t);const x=P?70:100;reveal(()=>label('LET’S BUILD SOMETHING USEFUL.',x,P?300:270,C.blue),a);reveal(()=>lines(['Your idea.', 'Let’s make it real.'],x,P?490:445,P?100:136,C.ink,650,1.13),a,.1);reveal(()=>{text('Ali Abdullah',x,P?920:825,P?61:57,C.ink,600);text('Full stack developer',x,P?995:883,P?33:30,C.muted);pill('ali.37803990@gmail.com',x,P?1120:930,C.blue,C.white,P?36:29);arrow(P?880:785,P?1146:955,40,C.blue)},a,.65);
+ if(P){reveal(()=>{crop('portrait',850,350,650,650,70,1310,280,280,140);text('WEB + MOBILE',395,1430,31,C.blue,600);text('Built with care.',395,1480,30,C.muted)},a,.9)}
+ // Required CC-BY attribution is embedded in both exports, held for the full closing.
+ text('“Cipher” — Kevin MacLeod (incompetech.com)',P?x:1220,H-(P?200:175),P?24:18,C.muted,450);
+ text('CC BY 4.0 · creativecommons.org/licenses/by/4.0/',P?x:1220,H-(P?163:138),P?23:18,C.muted,450);
+ text('Music excerpted, faded and mixed.',P?x:1220,H-(P?126:101),P?21:16,C.muted,450);
+}
+window.renderFrame=function(frame){const t=frame/30;g.globalAlpha=1;g.setTransform(1,0,0,1,0,0);if(t<4.8)opening(t);else if(t<9.6)intro(t);else if(t<16)demo(t);else if(t<40)project(t,specs.find(s=>t>=s.start&&t<s.end));else if(t<48)range(t);else if(t<54.4)build(t);else close(t);
+ // Traveling blue edge creates directional continuity at each chapter boundary.
+ for(const cut of [4.8,9.6,16,24,32,40,48,54.4]){const u=(t-cut+.22)/.55;if(u>0&&u<1){let z=smooth(u);let edge=mix(-W*.28,W*1.28,z);rect(edge-W*.14,0,W*.14,H,C.blue);rect(edge-6,0,6,H,'#a9c9ff')}}
+ return canvas.toDataURL('image/jpeg',.95).split(',')[1];
+};
+window.ready.then(()=>renderFrame(0));
+</script>

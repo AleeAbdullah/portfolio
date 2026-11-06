@@ -313,10 +313,9 @@ const Qualification = () => {
                   <i className="uil uil-calendar-alt"></i>Aug 2025 - Present
                 </span>
                 <p className="mt-3 text-sm text-muted-foreground">
-                  Built a Django and Next.js roofing platform connecting distributors,
-                  contractors, and customers. Automated measurements cut material
-                  estimates from three days to about seven minutes and improved
-                  quoting efficiency by 90%.
+                  Building a Django and Next.js contractor platform connecting roof
+                  measurements, material estimates, supplier pricing, and customer
+                  proposals.
                 </p>
               </motion.div>
               <motion.div
