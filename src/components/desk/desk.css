@@ -1,0 +1,72 @@
+/* The desk: a full-window 3D room with the site's tokens (from home.css via .hm). */
+html.dk-page, html.dk-page body { overflow: hidden; }
+.hm.dk { display: block; position: fixed; inset: 0; min-height: 0; overflow: hidden; }
+.dk-canvas { position: absolute !important; inset: 0; }
+
+.dk-top { position: absolute; inset: 20px 24px auto; display: flex; justify-content: space-between; align-items: center; gap: 12px; pointer-events: none; }
+.dk-top > *, .dk-top-right > * { pointer-events: auto; }
+.dk-top-right { display: flex; gap: 8px; }
+.dk-chip { display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 0 12px; border: 1px solid var(--line); border-radius: 8px; background: color-mix(in srgb, var(--bg) 82%, transparent); backdrop-filter: blur(8px); color: var(--fg); font: 500 13px var(--sans); text-decoration: none; cursor: pointer; }
+.dk-chip svg { width: 15px; height: 15px; }
+@media (hover: hover) { .dk-chip:hover { background: var(--surf-2); } }
+
+/* The plain list of objects, for anyone who'd rather not hunt. */
+.dk-list { position: absolute; left: 24px; bottom: 20px; display: flex; flex-wrap: wrap; gap: 6px; max-width: calc(100% - 48px); }
+.dk[data-open] .dk-list { max-width: calc(100% - 48px - min(420px, 38vw) - 24px); }
+.dk-list button { display: inline-flex; align-items: baseline; gap: 6px; min-height: 34px; padding: 0 11px; border: 1px solid var(--line); border-radius: 8px; background: color-mix(in srgb, var(--bg) 82%, transparent); backdrop-filter: blur(8px); color: var(--fg); font: 500 13px var(--sans); cursor: pointer; }
+.dk-list button span { color: var(--mut); font: 500 10.5px var(--mono); letter-spacing: 0.06em; text-transform: uppercase; }
+.dk-list button[data-active] { border-color: var(--ac); }
+@media (hover: hover) { .dk-list button:hover { background: var(--surf-2); } }
+
+/* Hover label in the scene */
+.dk-tag { display: inline-block; padding: 4px 10px; border: 1px solid var(--line); border-radius: 99px; background: color-mix(in srgb, var(--bg) 88%, transparent); color: var(--fg); font: 500 11px var(--mono); letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap; transform: translateY(-14px); }
+.dk-tag b { color: var(--ac); font-weight: 500; }
+
+/* Reading panel beside the object */
+.dk-panel { position: absolute; top: 72px; right: 24px; max-height: calc(100% - 92px); width: min(420px, 38vw); display: flex; flex-direction: column; gap: 14px; padding: 20px 24px 24px; overflow-y: auto; border: 1px solid var(--line); border-radius: 14px; background: color-mix(in srgb, var(--surf) 94%, transparent); backdrop-filter: blur(10px); box-shadow: var(--shadow); font-size: 15px; line-height: 1.6; }
+@media (prefers-reduced-motion: no-preference) { .dk-panel { animation: dk-in 240ms cubic-bezier(0.2, 0, 0, 1) 360ms both; } }
+@keyframes dk-in { from { opacity: 0; transform: translateX(12px); } }
+.dk-panel-top { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.dk-panel h2 { font: 400 32px/1.15 var(--serif); }
+.dk-panel h2:focus { outline: none; }
+.dk-panel > p { color: var(--mut); }
+.dk-kicker { color: var(--ac); font: 500 11px var(--mono); letter-spacing: 0.12em; text-transform: uppercase; }
+.dk-meta { color: var(--mut); font: 500 12px var(--mono); letter-spacing: 0.02em; }
+.dk-panel > .dk-meta { margin-top: -8px; }
+.dk-close { display: inline-flex; align-items: center; gap: 6px; min-height: 32px; margin-right: -8px; padding: 0 8px; border: 0; border-radius: 6px; background: transparent; color: var(--mut); font: 500 13px var(--sans); cursor: pointer; }
+.dk-close svg { width: 14px; height: 14px; }
+.dk-close kbd { padding: 1px 5px; border: 1px solid var(--line); border-radius: 4px; font: 500 10px var(--mono); }
+@media (hover: hover) { .dk-close:hover { color: var(--fg); } }
+.dk-btn { align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 14px; border-radius: 8px; background: var(--ac); color: var(--on-ac); font: 600 14px var(--sans); text-decoration: none; }
+.dk-btn svg { width: 16px; height: 16px; }
+.dk-more { align-self: flex-start; display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 0; border: 0; background: none; color: var(--fg); font: 500 14px var(--sans); text-decoration: none; cursor: pointer; }
+.dk-more svg { width: 15px; height: 15px; color: var(--mut); }
+@media (hover: hover) { .dk-more:hover svg { color: var(--ac); } }
+.dk-back { color: var(--mut); }
+.dk-rows { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--line); }
+.dk-rows li { border-bottom: 1px solid var(--line); }
+.dk-rows a, .dk-rows button { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; width: 100%; padding: 12px 0; border: 0; background: none; color: var(--fg); font: 500 15px/1.4 var(--sans); text-align: left; text-decoration: none; cursor: pointer; }
+.dk-rows .dk-meta { flex: none; }
+@media (hover: hover) { .dk-rows a:hover > span:first-child, .dk-rows button:hover > span:first-child { color: var(--ac); } }
+.dk-prose { font-size: 15px; }
+.dk-links { display: flex; gap: 16px; }
+.dk-pager { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.dk-panel .hm-now { font-size: 14px; }
+
+.dk-failed { position: absolute; left: 50%; top: 45%; transform: translate(-50%, -50%); max-width: 36ch; color: var(--mut); text-align: center; }
+
+/* Phones and touch tablets */
+.dk-gate { display: grid; place-items: center; padding: 24px 16px; }
+.dk-gate > div { display: grid; gap: 14px; max-width: 34ch; }
+.dk-gate h1 { font: 400 40px/1.1 var(--serif); }
+.dk-gate p:not(.dk-kicker) { color: var(--mut); }
+.dk-gate .dk-btn { min-height: 44px; }
+.dk-panel .hm-exp li { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+.dk-poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; transition: opacity 600ms ease-out; }
+.dk-poster[data-hidden] { opacity: 0; }
+.dk-failed { z-index: 1; padding: 12px 16px; border-radius: 10px; background: color-mix(in srgb, var(--bg) 86%, transparent); }
+.dk-panel kbd { padding: 1px 5px; border: 1px solid var(--line); border-radius: 4px; font: 500 11px var(--mono); }
+.dk-term { margin: 0; padding: 14px; overflow-x: auto; border-radius: 10px; background: var(--code); color: var(--code-fg); font: 400 13px/1.6 var(--mono); white-space: pre-wrap; }
+/* With a panel open the list keeps to one row: names only. */
+.dk[data-open] .dk-list button span { display: none; }
+.dk-prose pre { max-width: 100%; overflow-x: auto; }
