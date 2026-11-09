@@ -1,6 +1,7 @@
 export type PortfolioProject = {
   title: string;
   category: "web" | "app";
+  kind: "Team" | "Client" | "Personal" | "Studio";
   description: string;
   overview: string[];
   tier: "main" | "supporting";
@@ -11,21 +12,26 @@ export type PortfolioProject = {
   github: string | null;
   live: string | null;
   explainer?: "roofing-proposal";
+  post?: string; // slug of the blog post about this project
 };
 
 export const projects: PortfolioProject[] = [
   {
-    "title": "Roofing Estimation & Contractor Portal",
+    "title": "Roofing proposals at Ripeseed",
+    "kind": "Team",
+    "post": "modelling-a-roofing-estimate",
     "explainer": "roofing-proposal",
     "category": "web",
-    "description": "A contractor platform for turning roof measurements into material estimates, supplier pricing, and customer proposals.",
+    "description": "A Django and Next.js platform where roofing contractors go from roof measurements to a priced, branded proposal PDF.",
     "overview": [
-      "Leads and contractor referrals connect project activity with roof reports and quotes. Contractors can work from scanned documents, external reports, manual measurements, or direct material quantities. The calculation workflow accounts for roof scope, waste, and product coverage.",
-      "Supplier responses retain separate pricing versions. Contractors can select a response, configure selling prices, and generate a customer proposal as a downloadable PDF."
+      "Contractors start from whatever they have: a scanned document, an external roof report, hand-entered measurements or material quantities. The platform works out materials from roof scope, waste and product coverage, and suppliers send back priced versions of the list.",
+      "My part is the proposal. I built the editor contractors use to change a proposal's pages, copy, layout and brand colour, and save it as a template for the next job. I also built the Django code that works out the proposal's money in one place, so the preview, the PDF and the totals all read the same calculated amounts. Pages can group or hide an amount, but never change one.",
+      "For context on the wider platform: By Brava's own before-and-after, working out a job's materials by hand took its team about 3 days. With our in-house measurement tools it takes about 7 minutes."
     ],
     "techStack": [
       "Next.js",
-      "Django"
+      "Django",
+      "React PDF"
     ],
     "features": [
       "Roof measurements and material estimates",
@@ -48,12 +54,14 @@ export const projects: PortfolioProject[] = [
     "live": null
   },
   {
-    "title": "Hissab",
+    "title": "Tally Stick",
+    "kind": "Personal",
+    "post": "money-and-realtime-in-a-shared-expenses-app",
     "category": "app",
-    "description": "Hissab keeps shared expenses, group balances, and personal spending in one mobile app.",
+    "description": "A shared-expenses app where every balance is summed from a history nobody can edit.",
     "overview": [
-      "People can record who paid, track what others owe, and log settlements. Group activity and reminders help participants follow outstanding balances. Personal transaction records and spending reports cover expenses outside shared groups.",
-      "The backend preserves expense history and supports realtime updates, account exports, and account deletion."
+      "Personal project, built on my own since August 2026 and now being prepared for the App Store. It was called Hissab until November 2026, which is why the screenshots still say so. Groups record who paid and who owes, then settle up in cash or by transfer and log it. Personal spending and reports sit alongside the shared groups.",
+      "Amounts are bigints in minor units. Balances are summed from an append-only ledger that Postgres won't let anyone edit, so a correction is a reversal plus a new version. A transactional outbox tells every phone in the group to refetch. The currency symbol on screen is a per-person display setting."
     ],
     "techStack": [
       "React Native",
@@ -79,16 +87,20 @@ export const projects: PortfolioProject[] = [
         "value": "Main project"
       }
     ],
-    "images": [],
+    "images": [
+      "/mockups/hissab.webp"
+    ],
     "github": null,
     "live": null
   },
   {
     "title": "FitKraft",
+    "kind": "Personal",
     "category": "app",
-    "description": "FitKraft helps people plan their protein intake and keep a consistent resistance-training log.",
+    "description": "A protein planner and training log that keeps working with no signal.",
     "overview": [
-      "Meal suggestions adjust around what has been eaten, skipped, or missed. Workout records and progress tracking sit alongside daily nutrition. SQLite keeps logging available offline; account backup and synchronization run through a Django backend."
+      "A personal prototype I built on my own in October 2026. It spreads the protein you still need across your remaining meals, and re-spreads it when you skip or miss one. Workouts, progress and weight live next to the day's meals.",
+      "Every change is saved to SQLite on the phone first and queued in a local outbox. The queue syncs to a Django backend with backoff, and a background pull never overwrites a change that hasn't been uploaded yet."
     ],
     "techStack": [
       "React Native",
@@ -114,48 +126,20 @@ export const projects: PortfolioProject[] = [
         "value": "Main project"
       }
     ],
-    "images": [],
-    "github": null,
-    "live": null
-  },
-  {
-    "title": "RoadLedger",
-    "category": "web",
-    "description": "RoadLedger turns a truck journey into a route, a driving schedule, and a set of daily logs.",
-    "overview": [
-      "The planning workflow combines route comparison with hours-of-service scheduling. Users can review and edit the generated plan, then download or print the resulting logs."
+    "images": [
+      "/mockups/fitkraft-app.webp"
     ],
-    "techStack": [
-      "Next.js",
-      "Django REST Framework",
-      "Google Maps APIs"
-    ],
-    "features": [
-      "Route comparison",
-      "Hours-of-service scheduling",
-      "Editable plans and downloadable or printable logs"
-    ],
-    "tier": "main",
-    "details": [
-      {
-        "label": "Platform",
-        "value": "Web"
-      },
-      {
-        "label": "Selection",
-        "value": "Main project"
-      }
-    ],
-    "images": [],
     "github": null,
     "live": null
   },
   {
     "title": "Safe Buy Africa",
+    "kind": "Client",
     "category": "app",
-    "description": "Safe Buy Africa brings customer shopping, seller tools, and marketplace administration into a connected commerce platform.",
+    "description": "A marketplace app where one Paystack checkout pays several sellers at once.",
     "overview": [
-      "The mobile app covers product discovery and shopping flows, with dedicated experiences for customers and sellers. A separate web dashboard supports marketplace administration. Firebase, Supabase, and Paystack integrations provide the supporting data and payment functionality."
+      "I built the Expo app and the Next.js admin dashboard between 2025 and early 2026. Customers and sellers each get their own side of the app, with Supabase behind search and the catalogue.",
+      "A cart can hold products from several sellers. At checkout, a Firebase Cloud Function checks stock and builds a Paystack split, so each seller's share goes to their own subaccount. The payment webhook verifies Paystack's signature, then creates one order per seller."
     ],
     "techStack": [
       "React Native",
@@ -189,18 +173,19 @@ export const projects: PortfolioProject[] = [
   },
   {
     "title": "FlowDex",
+    "kind": "Client",
     "category": "web",
-    "description": "FlowDex connects a public token launch with wallet-based purchases and payment monitoring.",
+    "description": "A token sale checkout that follows each crypto payment from the wallet to confirmation.",
     "overview": [
-      "Buyers can review sale information, connect a compatible wallet, and follow a network-specific checkout. Purchase records track submitted transactions and their confirmation status. An administrative workspace supports payment review across the supported networks."
+      "I built all of it, frontend to database, between March and August 2026. Buyers prove they own a wallet by signing a one-time challenge, then pay on one of the supported chains.",
+      "Each payment moves through a strict state machine, from waiting through confirming to confirmed. Amounts are compared as integers in base units, so a short, over or late payment gets its own state instead of passing quietly. Incoming transfer webhooks are checked against an HMAC signature and de-duplicated."
     ],
     "techStack": [
       "Next.js",
       "NestJS",
       "PostgreSQL",
-      "Redis",
-      "BullMQ",
-      "Blockchain integrations"
+      "TypeORM",
+      "viem"
     ],
     "features": [
       "Wallet connections and network-specific checkout",
@@ -223,82 +208,13 @@ export const projects: PortfolioProject[] = [
     "live": null
   },
   {
-    "title": "RouteMate",
-    "category": "app",
-    "description": "RouteMate matches drivers and riders who make compatible recurring journeys.",
-    "overview": [
-      "Users set up their commute through map-based route selection, travel schedules, and driver or rider preferences. They can explore potential matches, review commute details, and manage connections.",
-      "The project combines a mobile onboarding and matching experience with geospatial data in PostgreSQL/PostGIS."
-    ],
-    "techStack": [
-      "React Native",
-      "Expo",
-      "Supabase",
-      "PostgreSQL/PostGIS",
-      "Google Maps"
-    ],
-    "features": [
-      "Map-based commute setup",
-      "Travel schedules and driver or rider preferences",
-      "Potential matches and connection management"
-    ],
-    "tier": "main",
-    "details": [
-      {
-        "label": "Platform",
-        "value": "Mobile"
-      },
-      {
-        "label": "Selection",
-        "value": "Main project"
-      }
-    ],
-    "images": [],
-    "github": null,
-    "live": null
-  },
-  {
-    "title": "Seasons Taiwanese Eatery",
-    "category": "web",
-    "description": "A restaurant website backed by tools for managing menus, content, and customer engagement.",
-    "overview": [
-      "The customer-facing storefront presents the restaurant and its menu. An administration dashboard supports updates to the site and its content, bringing public presentation and restaurant management into the same platform."
-    ],
-    "techStack": [
-      "Next.js",
-      "TypeScript",
-      "Tailwind CSS",
-      "Firebase",
-      "Rive"
-    ],
-    "features": [
-      "Restaurant storefront and menu",
-      "Site and content administration",
-      "Customer engagement tools"
-    ],
-    "images": [
-      "/mockups/seasons.webp"
-    ],
-    "tier": "supporting",
-    "details": [
-      {
-        "label": "Platform",
-        "value": "Web"
-      },
-      {
-        "label": "Selection",
-        "value": "Supporting project"
-      }
-    ],
-    "github": null,
-    "live": null
-  },
-  {
     "title": "Healing Hands CPR",
+    "kind": "Client",
     "category": "web",
-    "description": "A course registration platform for CPR training.",
+    "description": "Course sign-up and Stripe checkout for a CPR instructor, live at healinghandusa.com.",
     "overview": [
-      "Visitors can browse available courses, complete a guided registration, and pay through Stripe checkout. Administrative tools provide access to transaction and order records, connecting course enrolment with payment management."
+      "I built it for a CPR instructor in 2025, to replace cash payments and manual scheduling. Students pick a course, register in a few steps and pay through Stripe Checkout, and the instructor sees every order.",
+      "The site is a static Next.js export with no server of its own. Supabase Edge Functions create the checkout session and verify Stripe's webhook signature before recording a payment."
     ],
     "techStack": [
       "Next.js",
@@ -332,10 +248,11 @@ export const projects: PortfolioProject[] = [
   },
   {
     "title": "Scoopcodes",
+    "kind": "Studio",
     "category": "web",
-    "description": "A software studio website that explains technical services through interactive visuals and project stories.",
+    "description": "The site for Scoopcodes, the small software studio I co-founded in 2024.",
     "overview": [
-      "Custom illustrations show how software and automation workflows operate. Service pages and selected work provide more detail, while contact flows and certificate verification support the studio’s business activities."
+      "I built the current site on my own in 2026, in Next.js with React Three Fiber: interactive 3D illustrations of the studio's services, next to service pages, case studies and a contact flow."
     ],
     "techStack": [
       "Next.js",
@@ -362,26 +279,22 @@ export const projects: PortfolioProject[] = [
     ],
     "images": [],
     "github": null,
-    "live": null
+    "live": "https://scoopcodesllc.com"
   }
 ];
 
 export const experiences = [
-  { company: "Ripeseed.io", role: "Software Engineer", period: "Aug 2025 — Present", location: "Lahore, Pakistan", description: "Building a Django and Next.js contractor platform connecting roof measurements, material estimates, supplier pricing, and customer proposals." },
-  { company: "Tech Grus", role: "Software Engineer", period: "Feb 2024 — Jul 2025", location: "Remote", description: "Built Next.js and NestJS restaurant applications with ordering, payments, dashboards, and loyalty features." },
-  { company: "Upwork", role: "Freelance Software Developer", period: "2021 — 2024", location: "Remote", description: "Delivered web and mobile applications with React, Next.js, React Native, Node.js, Firebase, and Supabase, from frontend development through deployment." },
+  { company: "Ripeseed.io", role: "Software Engineer", period: "Aug 2025 — Present", location: "Lahore, Pakistan", description: "Mostly frontend, on a small team building a Django and Next.js platform for Brava Roof Tile, a US roofing tile manufacturer." },
+  { company: "Scoopcodes", role: "Co-founder", period: "2024 — Present", location: "Pakistan", description: "A small software studio I co-founded alongside my full-time roles. I built its site, including the interactive Three.js explainers." },
+  { company: "Tech Grus", role: "Software Engineer", period: "Dec 2024 — Aug 2025", location: "Remote", description: "Built restaurant ordering apps in Next.js and Firebase: the customer ordering flow, admin dashboards for menus and orders, and the loyalty features." },
+  { company: "Upwork", role: "Freelance Software Developer", period: "2021 — 2024", location: "Remote", description: "Three years of client work: web and mobile apps in React, Next.js and React Native, on Firebase and Supabase." },
+  { company: "724.One", role: "React Native Intern", period: "Sep 2023 — Jan 2024", location: "Pakistan", description: "My first job on a team. Four months of React Native work in sprints, mostly refactoring components and fixing UI issues." },
 ];
 
 export const skillGroups = [
-  { title: "Web & interfaces", skills: ["React", "Next.js", "TypeScript", "JavaScript", "Tailwind CSS", "HTML & CSS"] },
-  { title: "Mobile", skills: ["React Native", "Expo", "React Native Reanimated"] },
-  { title: "Backend & data", skills: ["Node.js", "Express.js", "Django", "Firebase", "Supabase", "PostgreSQL"] },
+  { title: "Web & interfaces", skills: ["React", "Next.js", "TypeScript", "Tailwind CSS", "React PDF", "Three.js"] },
+  { title: "Mobile", skills: ["React Native", "Expo", "SQLite", "Drizzle", "Socket.IO"] },
+  { title: "Backend & data", skills: ["Django", "NestJS", "PostgreSQL", "Firebase", "Supabase", "Stripe", "Paystack"] },
 ];
 
-export const roomSections = [
-  { id: "skills", label: "Skills", object: "The bookshelf", number: "01", description: "The tools I reach for." },
-  { id: "experience", label: "Experience", object: "The pinboard", number: "02", description: "The journey so far." },
-  { id: "projects", label: "Projects", object: "The workstation", number: "03", description: "A few things I've built." },
-] as const;
-
-export type RoomSection = (typeof roomSections)[number]["id"];
+export const email = "ali.37803990@gmail.com";
