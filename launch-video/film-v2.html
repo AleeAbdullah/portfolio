@@ -1,0 +1,83 @@
+<!doctype html><meta charset="utf-8"><title>Ali Abdullah / Built to work</title><style>@font-face{font-family:Geist;src:url(assets/geist.woff2);font-weight:100 900}body{margin:0;background:#08090b}canvas{width:100vw;height:100vh;object-fit:contain;display:block}</style><canvas></canvas><script>
+const c=document.querySelector('canvas'),ctx=c.getContext('2d',{alpha:false});
+const P=new URLSearchParams(location.search).get('format')==='portrait';
+const W=c.width=P?1080:1920,H=c.height=P?1920:1080;
+const blue='#357bff',paper='#eeeee8',black='#090a0c';
+const paths={face:'../public/22.jpg',seasons:'../public/mockups/seasons.webp',safe:'../public/mockups/safe buy.webp',fit:'../public/mockups/fitkraft.webp',quran:'../public/mockups/Knowlegge Quran.webp',fly:'../public/mockups/simplfly.webp',cpr:'../public/mockups/cpr.webp',work:'assets/portfolio-work.png',apps:'assets/portfolio-apps.png',detail:'assets/portfolio-detail.png'};let im={};
+const q=(v)=>Math.max(0,Math.min(1,v)),E=v=>1-(1-q(v))**5,S=v=>{v=q(v);return v*v*(3-2*v)},L=(a,b,t)=>a+(b-a)*t;
+window.ready=Promise.all([...Object.entries(paths).map(async([k,p])=>{im[k]=new Image();im[k].src=p;await im[k].decode()}),document.fonts.load('700 100px Geist')]);
+function bg(col){ctx.fillStyle=col;ctx.fillRect(0,0,W,H)}
+function box(x,y,w,h,col,r=0){ctx.fillStyle=col;ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fill()}
+function txt(s,x,y,size,col=paper,weight=650,align='left'){ctx.font=`${weight} ${size}px Geist,Arial`;ctx.fillStyle=col;ctx.textAlign=align;ctx.textBaseline='alphabetic';ctx.fillText(s,x,y)}
+function rule(x,y,x2,y2,col,w=2){ctx.strokeStyle=col;ctx.lineWidth=w;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x2,y2);ctx.stroke()}
+function crop(k,sx,sy,sw,sh,x,y,w,h){ctx.drawImage(im[k],sx,sy,sw,sh,x,y,w,h)}
+function cover(k,x,y,w,h,zoom=1,px=.5,py=.5){let a=im[k],r=Math.max(w/a.width,h/a.height)*zoom;ctx.save();ctx.beginPath();ctx.rect(x,y,w,h);ctx.clip();ctx.drawImage(a,x+(w-a.width*r)*px,y+(h-a.height*r)*py,a.width*r,a.height*r);ctx.restore()}
+function mask(x,y,w,h,fn,r=0){ctx.save();ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.clip();fn();ctx.restore()}
+function fade(fn,t,d=0,dur=.55,dy=70){let v=E((t-d)/dur);ctx.save();ctx.globalAlpha*=v;ctx.translate(0,(1-v)*dy);fn();ctx.restore()}
+function words(s,x,y,size,t,col=paper){ctx.save();ctx.font=`700 ${size}px Geist`;let xx=x;for(let [i,w] of s.split(' ').entries()){fade(()=>txt(w,xx,y,size,col,700),t,i*.07,.65,size*.8);xx+=ctx.measureText(w+' ').width}ctx.restore()}
+function plus(x,y,col=paper,r=16){rule(x-r,y,x+r,y,col,3);rule(x,y-r,x,y+r,col,3)}
+function small(s,x,y,col=paper){txt(s,x,y,P?25:23,col,500)}
+function shade(y1=H*.45){let gr=ctx.createLinearGradient(0,y1,0,H);gr.addColorStop(0,'#00000000');gr.addColorStop(1,'#000000e8');box(0,y1,W,H-y1,gr)}
+function tag(n,s,t,col=paper){fade(()=>{small(n,P?64:80,86,col);rule(P?118:140,72,P?154:180,72,col);small(s,P?180:210,86,col)},t,0,.5,0)}
+function panel(k,x,y,w,h,rotation=0){ctx.save();ctx.translate(x+w/2,y+h/2);ctx.rotate(rotation);ctx.shadowColor='#00000055';ctx.shadowBlur=50;ctx.shadowOffsetY=30;box(-w/2,-h/2,w,h,'#14171e',12);ctx.shadowColor='transparent';mask(-w/2,-h/2,w,h,()=>cover(k,-w/2,-h/2,w,h),12);ctx.restore()}
+function mouse(x,y,press=0){ctx.save();ctx.translate(x,y);ctx.scale(1-.15*press,1-.15*press);ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(0,42);ctx.lineTo(12,29);ctx.lineTo(26,51);ctx.lineTo(35,44);ctx.lineTo(22,24);ctx.lineTo(42,23);ctx.closePath();ctx.fillStyle=black;ctx.strokeStyle='white';ctx.lineWidth=3;ctx.fill();ctx.stroke();ctx.restore()}
+// Intro: the horizontal stroke turns into a viewport, then reveals actual work.
+function hook(t){bg(paper);const start=E(t/.7);const a=E((t-1.6)/.8),expand=E((t-2.35)/1.05);const M=P?64:80;
+ small('ALI ABDULLAH',M,85,black);small('FULL STACK DEVELOPER',M,H-65,black);plus(W-M-20,72,blue);
+ if(t<2.4){words('GOOD IDEAS.',M,P?520:400,P?128:240,t,black);words('BUILT RIGHT.',M,P?730:655,P?125:237,t-.45,black);
+ let xx=L(M,W*.56,a), yy=P?1000:800, ww=L(0,W-M*2,start);box(M,yy,ww,9,blue);fade(()=>small('WEB PLATFORMS  /  MOBILE EXPERIENCES',M,yy+67,black),t,.9);
+ }else{let margin=L(P?64:80,0,expand);let hh=L(9,H,expand),yy=L(P?1000:800,0,expand);mask(margin,yy,W-2*margin,hh,()=>{cover('seasons',0,0,W,H,1.15-.08*expand);shade(H*.2)});}
+}
+function wall(t){let a=t-3.2;bg(black);const z=L(1.7,.92,E(a/.75));ctx.save();ctx.translate(W/2,L(H*.75,H/2,E(a/.75)));ctx.scale(z,z);ctx.rotate(L(0,.02,E(a/1.5)));let cw=P?650:760,ch=P?510:500,gap=30;const ks=['safe','seasons','fit','fly','quran','cpr'];ks.forEach((k,i)=>{let col=i%3,row=Math.floor(i/3);panel(k,(col-1.5)*cw+(col-1)*gap,(row-1)*ch+(row-.5)*gap,cw,ch,0)});ctx.restore();let fadeV=S((a-1.05)/.45);ctx.globalAlpha=fadeV;box(0,0,W,H,blue);ctx.globalAlpha=1;}
+function identity(t){let a=t-4.8;bg(blue);const M=P?65:80;
+ const px=P?W*.30:W*.55, py=P?H*.38:0, pw=P?W*.7:W*.45,ph=P?H*.62:H;
+ mask(px,py,pw,ph,()=>cover('face',px,py,pw,ph,1.12,.78,.30));
+ box(0,0,P?W:W*.55,P?H*.38:H,blue);
+ fade(()=>small('DESIGN WITH INTENT. BUILD WITH CARE.',M,100),a,.1);
+ const sz=P?156:206;words('ALI',M,P?335:400,sz,a);words('ABDULLAH',M,P?510:625,P?150:180,a-.2);
+ fade(()=>{small('Full stack developer',M,P?650:788);rule(M,P?695:830,M+230,P?695:830,paper,2);small('Web + mobile',M,P?755:902)},a,.6);
+ if(!P){ctx.save();ctx.globalAlpha=.13;txt('AA',W*.58,H-40,390,paper,800);ctx.restore()}
+}
+function explore(t){let a=t-8;bg(black);const M=P?65:80;tag('01','EXPLORE THE WORK',a);fade(()=>txt('The details make it.',M,P?260:245,P?78:118),a,.05);
+ let k=a<1.6?'work':a<3.2?'apps':'detail';
+ const yy=P?420:340,hh=P?H-610:H-405;const sx=P?(k==='apps'?L(440,16,E((a-1.9)/.7)):440):16;
+ if(k==='detail'){
+  if(P)crop(k,463,49,675,903,90,yy,900,1204);
+  else{crop(k,463,49,675,903,W*.63,yy-135,505,675);words('A closer look.',M,520,94,a-3.2);fade(()=>{small('Role. Features. Technology.',M,610,'#98a3b5');small('Safe Buy Africa',M,760,'#73adff')},a,3.5)}
+ }else{
+  ctx.save();let sy=P?100:92,sw=P?653:1568,sh=P?900:601;
+  mask(M,yy,W-M*2,hh,()=>crop(k,sx,sy,sw,sh,M,yy,W-M*2,hh),12);ctx.restore();
+  let xx=P?L(530,300,E((a-1.9)/.7)):L(W*.50,W*.19,E((a-1.9)/.7));let my=P?L(510,1050,E((a-1.9)/.7)):L(400,655,E((a-1.9)/.7));mouse(xx,my,Math.max(0,1-Math.abs(a-1.58)*12));
+ }
+}
+function restaurant(t){let a=t-12.8;bg('#171816');const drift=E(a/.8);ctx.save();ctx.translate(W/2,H/2);ctx.rotate(L(-.10,0,drift));let z=L(1.6,1.03,drift);ctx.scale(z,z);cover('seasons',-W/2,-H/2,W,H,1+.04*(a/5.6),.55,.5);ctx.restore();shade(H*.1);tag('02','RESTAURANT PLATFORM',a);
+ const M=P?65:80;fade(()=>txt('Seasons.',M,P?H-570:H-310,P?146:190,paper,700),a,.3);
+ fade(()=>{txt('Menu to management.',M,P?H-450:H-205,P?51:59);small('Sole full stack developer',M,H-125,'#c4d79f');small('Next.js / TypeScript / Firebase',M,H-82,'#d0d1c9')},a,1.05);
+ // A clean inset detail crosses the edge, suggesting the product beyond one screen.
+ if(!P){let p=E((a-2.2)/.7);ctx.save();ctx.globalAlpha=p;ctx.translate((1-p)*500,0);rule(W-555,128,W-80,128,'#c4d79f',2);small('STOREFRONT',W-555,177);small('+ CONTENT MANAGEMENT',W-555,222);ctx.restore()}
+}
+function commerce(t){let a=t-18.4;bg('#082a20');let M=P?65:80;
+ const px=P?0:W*.27,py=P?450:0,pw=P?W:W*.73,ph=P?H-450:H;
+ mask(px,py,pw,ph,()=>cover('safe',px,py,pw,ph,1.04+.13*(1-E(a/1.2)),.52,.50));
+ if(P)box(0,0,W,450,'#082a20');else{let gr=ctx.createLinearGradient(0,0,W*.65,0);gr.addColorStop(0,'#082a20');gr.addColorStop(.58,'#082a20');gr.addColorStop(1,'#082a2000');box(0,0,W*.65,H,gr)}shade(H*.60);tag('03','MULTI-VENDOR COMMERCE',a,'#a6f0c9');
+ words('Safe Buy',M,P?270:390,P?142:168,a-.12);words('Africa.',M,P?420:575,P?142:168,a-.23);
+ fade(()=>{txt('Many sellers.',M,P?H-360:730,P?61:54);txt('One marketplace.',M,P?H-275:802,P?61:54);small('Full stack developer',M,H-90,'#a6f0c9');small('React Native / Expo / Firebase',M,H-45,'#a6f0c9')},a,.9)
+}
+function fitness(t){let a=t-24;bg('#d2d6df');cover('fit',0,0,W,H,1.1+.14*(1-E(a/.9)),.5,.48);shade(H*.2);tag('04','PERSONALIZED FITNESS',a);
+ const M=P?65:80;fade(()=>txt('FitKraft.',M,P?H-590:H-320,P?177:210,paper,700),a,.18);fade(()=>{txt('A plan that feels personal.',M,P?H-450:H-212,P?57:69);small('AI workout + meal plans',M,H-135);small('Frontend developer  /  React Native + Expo',M,H-70,'#cbd6f1')},a,.8)
+}
+function more(t){let a=t-29.6;const idx=Math.min(2,Math.floor(a/1.8));let names=['Knowledge Quran','Simplifly','Healing Hands'],sub=['CONNECTED LEARNING','TRAVEL, SIMPLIFIED','TRAINING + REGISTRATION'],ks=['quran','fly','cpr'];let u=a-idx*1.8;bg(black);cover(ks[idx],0,0,W,H,1.15-.1*E(u/.9));shade(H*.1);tag('05','MORE WAYS TO BUILD',a);const sz=P?(idx===0?91:138):(idx===0?143:190);words(names[idx],P?65:80,H-(P?350:200),sz,u);small(sub[idx],P?65:80,H-100);}
+function craft(t){let a=t-35.2;bg(paper);const M=P?65:80;tag('06','CONNECTED FROM END TO END',a,black);words('One product.',M,P?370:330,P?119:172,a,black);words('Every layer.',M,P?545:535,P?119:172,a-.15,black);
+ const labels=['INTERFACE','LOGIC','EXPERIENCE'];labels.forEach((v,i)=>{let x=P?M:M+i*590,y=P?850+i*250:730;fade(()=>{plus(x+25,y+25,blue,21);txt(v,x+85,y+40,P?52:43,black,600);rule(x,y+100,x+(P?900:510),y+100,blue,3);small(['React + Next.js','APIs + data','React Native + Expo'][i],x,y+155,'#555b64')},a,.6+i*.3)})}
+function invitation(t){let a=t-40;bg(blue);const M=P?65:80;words('WHAT’S',M,P?500:380,P?160:235,a);words('NEXT?',M,P?725:680,P?230:330,a-.16);
+ const r=E((a-.7)/.9);let px=P?150:W*.65,py=P?1000:180,pw=P?800:620,ph=P?620:740;ctx.save();ctx.translate(px+pw/2,py+ph/2);ctx.rotate(L(.25,-.07,r));ctx.scale(r,r);mask(-pw/2,-ph/2,pw,ph,()=>cover('face',-pw/2,-ph/2,pw,ph,1.12,.78,.25));ctx.restore();fade(()=>small('YOUR IDEA. OUR NEXT CONVERSATION.',M,H-100),a,.85)}
+function end(t){let a=t-43.2;bg(black);const M=P?65:80;fade(()=>small('LET’S BUILD SOMETHING USEFUL.',M,P?240:200,'#8bb7ff'),a,.05);words('ALI',M,P?530:450,P?220:260,a);words('ABDULLAH.',M,P?745:720,P?154:234,a-.15);
+ fade(()=>{txt('ali.37803990@gmail.com',M,P?1030:870,P?50:52,paper,500);rule(M,P?1085:915,W-M,P?1085:915,blue,3);small('Full stack developer  /  Web + mobile',M,P?1185:980,'#929aa7')},a,.65);
+ if(P){crop('face',850,350,650,650,M,1320,260,260);txt('AA',M+320,1500,160,blue,750)}
+ small('“Cipher” Kevin MacLeod (incompetech.com)',M,H-(P?205:70),'#777f8c');txt('CC BY 4.0 · creativecommons.org/licenses/by/4.0/ · excerpted and mixed',M,H-(P?160:35),P?22:18,'#777f8c',450);
+}
+window.renderFrame=function(f){let t=f/30;ctx.setTransform(1,0,0,1,0,0);ctx.globalAlpha=1;ctx.shadowColor='transparent';if(t<3.2)hook(t);else if(t<4.8)wall(t);else if(t<8)identity(t);else if(t<12.8)explore(t);else if(t<18.4)restaurant(t);else if(t<24)commerce(t);else if(t<29.6)fitness(t);else if(t<35.2)more(t);else if(t<40)craft(t);else if(t<43.2)invitation(t);else end(t);
+// Four distinct transitions: viewport expansion, zoom-out, blue takeover, and hard match cuts.
+if(new URLSearchParams(location.search).get('proof')==='1'&&t>12){box(0,H-65,W,65,'#090a0ce8');txt('Music: Cipher — Kevin MacLeod (incompetech.com) · CC BY 4.0 · creativecommons.org/licenses/by/4.0/',P?40:60,H-25,P?15:19,paper,400)}
+return c.toDataURL('image/jpeg',.94).split(',')[1]};window.ready.then(()=>renderFrame(0));
+</script>

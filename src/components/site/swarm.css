@@ -1,0 +1,96 @@
+/* Build switch (nav) */
+.build-switch {
+  display: inline-flex; align-items: center; gap: 8px; cursor: pointer;
+  border: 1px solid var(--s-line); border-radius: 99px; padding: 5px 12px 5px 6px;
+  background: var(--s-surf); color: var(--s-fg); font: inherit; letter-spacing: inherit; text-transform: inherit;
+}
+.build-switch-track { width: 26px; height: 14px; border-radius: 99px; background: var(--s-line); position: relative; transition: background 0.2s; }
+.build-switch-track i { position: absolute; left: 2px; top: 2px; width: 10px; height: 10px; border-radius: 50%; background: var(--s-mut); transition: transform 0.2s, background 0.2s; }
+.build-switch[aria-pressed="true"] .build-switch-track { background: #ff6b1a40; }
+.build-switch[aria-pressed="true"] .build-switch-track i { transform: translateX(12px); background: var(--s-ac); }
+
+/* Swarm: viewport-space layer; the engine writes every transform. */
+.sw-layer { position: fixed; inset: 0; z-index: 45; pointer-events: none; overflow: hidden; }
+.sw-box {
+  position: absolute; left: 0; top: 0; border: 1px solid var(--s-sel, #4f8bff); background: #4f8bff14; border-radius: 4px;
+  opacity: 0; animation: sw-in 0.18s ease 0.05s forwards; /* hidden until the loop has placed it */
+}
+.sw-box::before, .sw-box::after { content: ""; position: absolute; width: 6px; height: 6px; background: #fff; border: 1px solid var(--s-sel, #4f8bff); }
+.sw-box::before { left: -4px; top: -4px; }
+.sw-box::after { right: -4px; bottom: -4px; }
+.sw-box span::before { content: attr(data-size); }
+.sw-box span { position: absolute; left: 50%; bottom: -22px; transform: translateX(-50%); font: 700 10px var(--mono); background: var(--s-sel, #4f8bff); color: #fff; padding: 2px 6px; border-radius: 3px; white-space: nowrap; }
+.sw-box.is-out { animation: sw-out 0.2s ease forwards; }
+.sw-box.is-above span { bottom: auto; top: -22px; } /* the box's bottom is under the bottom bar */
+.sw-box.is-tagless span { display: none; } /* no room, or it would cover another tag */
+/* Intro: the page dims to an empty dark stage under the tile, and lifts as the wave starts. */
+.sw-dim { position: absolute; inset: 0; background: #000; opacity: 0; animation: sw-dim var(--intro, 1.1s) ease both; }
+.sw-agent { position: absolute; left: 0; top: 0; transform-origin: 0 0; will-change: transform; }
+.sw-agent:not(.is-worker) { z-index: 1; } /* lead labels draw above worker arrows */
+/* Workers steer (their arrow faces travel). Idle they are neutral grey; on a crew they take the lead's colour (--team). */
+.sw-agent.is-worker svg { animation: none; fill: var(--team, #a8a29e); filter: drop-shadow(0 0 4px var(--team, #a8a29e55)); transition: fill 0.3s; }
+/* Intro tile: centered in the band between the nav (56px) and the bottom bar (76px); unmounts after the intro. */
+.sw-tile {
+  position: absolute; left: 50%; top: calc(50% - 10px); display: grid; justify-items: center; gap: 10px;
+  transform: translate(-50%, -50%); animation: sw-tile var(--intro, 1.1s) ease both;
+}
+.sw-tile b {
+  display: grid; place-items: center; width: 64px; height: 64px; border-radius: 14px; position: relative; overflow: hidden;
+  border: 1px solid var(--s-sel, #4f8bff); background: #15130ff2; color: var(--s-ac); font: 800 22px var(--mono); letter-spacing: 0.04em;
+  box-shadow: 0 0 0 6px #4f8bff1a, 0 12px 40px -12px #000;
+}
+.sw-tile b::after { content: ""; position: absolute; inset: 0 0 auto; height: 2px; background: var(--s-sel, #4f8bff); box-shadow: 0 0 10px var(--s-sel, #4f8bff); animation: sw-scan 0.9s ease-in-out infinite alternate; }
+.sw-tile span { font: 700 10px var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--s-fg); background: #15130fd9; padding: 3px 8px; border-radius: 4px; }
+.sw-agent svg { display: block; fill: var(--c); filter: drop-shadow(0 0 6px var(--c)); animation: sw-hover 2.6s ease-in-out var(--d) infinite; }
+/* Lead status chip. The engine places it outside the piece being built (--lx/--ly, eased, clear of other chips) and fills its progress line (--p). */
+.sw-agent b {
+  position: absolute; left: 0; top: 0; height: 18px; box-sizing: border-box; padding: 2px 7px 0; overflow: hidden;
+  font: 700 11px/12px var(--mono); white-space: nowrap; color: var(--s-fg); background: #15130f; border: 1px solid var(--c); border-radius: 4px;
+  box-shadow: 0 4px 14px -6px #000; transform: translate(var(--lx, 14px), var(--ly, 14px));
+  transition: opacity 0.15s, visibility 0s;
+}
+.sw-agent b em { font-style: normal; color: var(--c); }
+.sw-agent b i { position: absolute; left: 0; bottom: 0; width: 100%; height: 2px; background: var(--c); transform-origin: 0 0; transform: scaleX(var(--p, 0)); }
+/* Idle agents (orbiting the pointer or resting) are cursors only; the chip fades back in with work and keeps its last text while fading. */
+.sw-agent.is-idle b { opacity: 0; visibility: hidden; transition: opacity 0.2s, visibility 0s 0.2s; }
+@keyframes sw-hover { 50% { transform: translate(3px, -4px); } }
+@keyframes sw-in { to { opacity: 1; } }
+@keyframes sw-out { from { opacity: 1; } to { opacity: 0; } }
+@keyframes sw-tile { 0% { opacity: 0; scale: 0.85; } 15%, 80% { opacity: 1; scale: 1; } 100% { opacity: 0; scale: 1.15; } }
+@keyframes sw-dim { 0% { opacity: 0.6; } 15%, 97% { opacity: 0.985; } 100% { opacity: 0; } } /* a near-black stage; the finished page never shows through */
+@keyframes sw-scan { to { transform: translateY(62px); } }
+
+/* HUD: compact bottom bar, rendered before <main> so its buttons are early tab stops. */
+.hud {
+  position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%); z-index: 55; overflow: hidden;
+  display: flex; align-items: center; gap: 10px; width: min(720px, calc(100% - 32px)); /* fixed, so it never re-centers */
+  padding: 6px 6px 6px 12px; border: 1px solid var(--s-line); border-radius: 12px;
+  background: #15130ff2; backdrop-filter: blur(10px); font-size: 11px; color: #b5aea3; /* ≈ 8:1 on the bar */
+}
+.hud-dots { display: inline-flex; align-items: center; gap: 2px; }
+.hud-dots i { width: 4px; height: 4px; border-radius: 50%; background: currentColor; opacity: 0.7; }
+.hud-dots i.is-lead { width: 7px; height: 7px; opacity: 1; box-shadow: 0 0 6px currentColor; }
+.hud-state { color: var(--s-fg); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.hud-count { color: inherit; min-width: 14ch; }
+.hud-log { display: grid; flex: 1 1 0; min-width: 0; font-size: 10px; line-height: 1.45; }
+.hud-log span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hud-log span:last-child { color: var(--s-fg); }
+.hud-actions { display: inline-flex; gap: 6px; margin-left: auto; }
+.hud button { border: 1px solid var(--s-line); background: var(--s-bg); color: var(--s-fg); font: 700 11px var(--mono); letter-spacing: 0.06em; text-transform: uppercase; min-height: 32px; padding: 0 10px; border-radius: 8px; cursor: pointer; white-space: nowrap; }
+.hud button:hover:not([aria-disabled="true"]) { border-color: var(--s-ac); }
+.hud-speed { min-width: 44px; }
+.hud-tour { min-width: 84px; }
+.hud-skip { min-width: 64px; }
+.hud-speed.is-pulse { animation: hud-pulse 0.35s ease; }
+.hud-speed.is-pulse-b { animation: hud-pulse-b 0.35s ease; }
+.hud-tour.is-replay { animation: hud-glow 1.2s ease 0.2s; } /* once, when the build finishes */
+@media (prefers-reduced-motion: reduce) { .hud button, .build-switch-track, .build-switch-track i { animation: none !important; transition: none !important; } }
+@keyframes hud-pulse { 40% { transform: scale(1.12); border-color: var(--s-ac); color: var(--s-ac); } }
+@keyframes hud-pulse-b { 40% { transform: scale(1.12); border-color: var(--s-ac); color: var(--s-ac); } }
+@keyframes hud-glow { 30% { border-color: var(--s-ac); box-shadow: inset 0 0 0 1px var(--s-ac), 0 0 14px -2px var(--s-ac); color: var(--s-ac); } }
+.hud button { transition: border-color 0.2s, background-color 0.2s, color 0.2s; }
+.hud button[aria-disabled="true"] { opacity: 0.45; cursor: default; }
+.hud button:focus-visible { outline: 2px solid var(--s-ac); outline-offset: -2px; } /* inset: .hud clips overflow */
+.hud button[aria-pressed="true"] { border-color: var(--s-ac); background: #ff6b1a26; color: var(--s-ac); }
+.hud-progress { position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--s-ac); box-shadow: 0 0 10px var(--s-ac); transform-origin: 0 0; transition: transform 0.4s ease; }
+@media (max-width: 900px) { .hud-log span:not(:last-child) { display: none; } }
