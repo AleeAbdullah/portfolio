@@ -153,7 +153,7 @@ export function Flagship({ level = 3 }: { level?: 2 | 3 }) {
 export function Bio() {
   return (
     <>
-      <p>I&apos;m a software engineer in Lahore. I took my first paid project on Upwork in 2021 and spent the next three years building web and mobile apps for small businesses, usually from the first call to deployment. That&apos;s how I ended up doing both the interface and the API. I still take on client projects alongside my full-time job: since 2025 that's been a CPR instructor&apos;s course checkout, a marketplace app that pays several sellers from one Paystack checkout, and a crypto token sale checkout.</p>
+      <p>I&apos;m a software engineer in Lahore. I took my first paid project on Upwork in 2021 and spent the next three years building web and mobile apps for small businesses, usually from the first call to deployment. That&apos;s how I ended up doing both the interface and the API. I still take on client projects alongside my full-time job: since 2025 that&apos;s been a CPR instructor&apos;s course checkout, a marketplace app that pays several sellers from one Paystack checkout, and a crypto token sale checkout.</p>
       <p>In December 2024 I joined Tech Grus to build restaurant ordering in Next.js and Firebase. Since August 2025 I&apos;ve been at <strong>Ripeseed.io</strong>, on a small team building a roofing platform for Brava Roof Tile. I work mostly on the frontend, and my part is the proposal: the editor contractors use to send branded PDFs, and the code that works out its money.</p>
       <p>Outside work I build apps like Tally Stick and FitKraft, usually ones that handle money or have to keep working offline. The blog has the long version of how they work; field notes have the bugs.</p>
     </>
