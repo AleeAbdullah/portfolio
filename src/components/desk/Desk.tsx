@@ -1,15 +1,14 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import Image from "next/image";
 import Link from "next/link";
-import { Component, useCallback, useEffect, useRef, useState, type ReactNode } from "react";
+import { Component, useCallback, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
 import CopyEmail from "../home/CopyEmail";
 import NowPanel from "../home/NowPanel";
 import { social } from "../home/links";
 import { email } from "@/src/lib/portfolioData";
-import { isSpot, spots, type DeskData, type Spot, type Target } from "./data";
+import { coffeeHot, isSpot, spots, type DeskData, type Spot, type Target } from "./data";
 import type { Terminal, Theme } from "./Scene";
 import "../home/home.css";
 import "./desk.css";
@@ -45,7 +44,18 @@ function toggleTheme() {
   try { localStorage.setItem("theme", next); } catch { /* The choice still applies for this visit. */ }
 }
 
-type Nodes = { bio: ReactNode; experience: ReactNode };
+type Job = { company: string; role: string; period: string; location: string; description: string };
+type Nodes = { experience: ReactNode; job: Job };
+
+// The lamp intro plays once per visit, in the dark room only, and not when arriving straight at an object or with reduced motion.
+// Also inlined into the page (so it must stay self-contained, given the spot ids): the poster is dark before first paint.
+function introPlays(ids: string[]) {
+  let seen = null;
+  try { seen = sessionStorage.getItem("desk-intro"); } catch { /* No storage: play it. */ }
+  const open = new URLSearchParams(location.search).get("open");
+  return !seen && !ids.includes(open as string) && document.documentElement.dataset.theme !== "light" && !matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+const spotIds = spots.map((spot) => spot.id);
 
 // The hidden terminal on the computer: a few read-only commands over the same data as the site.
 function run(command: string, data: DeskData): { lines: string[]; open?: number; exit?: boolean } {
@@ -73,27 +83,42 @@ function run(command: string, data: DeskData): { lines: string[]; open?: number;
   }
 }
 
-export default function Desk({ data, bio, experience }: { data: DeskData } & Nodes) {
+export default function Desk({ data, experience, job }: { data: DeskData } & Nodes) {
   const [allowed, setAllowed] = useState<boolean>();
   const [fontsReady, setFontsReady] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
   const [quality, setQuality] = useState<"normal" | "low">("normal");
   const [failed, setFailed] = useState(false);
   const [open, setOpen] = useState<Spot | null>(null);
+  const [panelOpen, setPanelOpen] = useState<Spot | null>(null);
+  useEffect(() => {
+    if (open) { setPanelOpen(open); return; }
+    const timer = setTimeout(() => setPanelOpen(null), reducedMotion ? 0 : 100);
+    return () => clearTimeout(timer);
+  }, [open, reducedMotion]);
   const [note, setNote] = useState<string | null>(null);
   const [workIndex, setWorkIndex] = useState(0);
   const [terminal, setTerminal] = useState<Terminal | null>(null);
   const [hover, setHover] = useState<Target | null>(null);
   const [pulse, setPulse] = useState<Spot | null>(null);
   const [introDone, setIntroDone] = useState(false);
+  const [moreExperience, setMoreExperience] = useState(true);
   const [ready, setReady] = useState(false);
-  const [skipIntro, setSkipIntro] = useState(false);
+  const [playIntro, setPlayIntro] = useState(false);
   const theme = useTheme();
   const listButtons = useRef<Partial<Record<Spot, HTMLButtonElement | null>>>({});
   const title = useRef<HTMLHeadingElement>(null);
   const lastOpen = useRef<Spot | null>(null);
+  const pageFocus = useRef(false);
+  const root = useRef<HTMLDivElement>(null), list = useRef<HTMLElement>(null); // focus the page moved itself, which must not outline the object
+  const introDecided = useRef(false);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
+    if (new URLSearchParams(location.search).has("poster")) root.current?.setAttribute("data-poster", "");
+  }, []);
+
+  // Before paint, so the poster never shows in the wrong light after a client navigation.
+  useLayoutEffect(() => {
     const blocked = matchMedia(blockedQuery), motion = matchMedia("(prefers-reduced-motion: reduce)");
     const update = () => { setAllowed(!blocked.matches); setReducedMotion(motion.matches); };
     update();
@@ -105,35 +130,49 @@ export default function Desk({ data, bio, experience }: { data: DeskData } & Nod
     const params = new URLSearchParams(location.search);
     const wanted = params.get("open");
     if (isSpot(wanted)) {
+      root.current?.setAttribute("data-direct", "");
       setOpen(wanted);
       const slug = params.get("note");
       setNote(data.notes.some((item) => item.slug === slug) ? slug : null);
+      const project = Number(params.get("project"));
+      if (wanted === "work" && Number.isInteger(project) && project >= 1 && project <= data.projects.length) setWorkIndex(project - 1);
     }
-    // The lamp intro plays once per visit, and not when arriving straight at an object.
-    try {
-      if (isSpot(wanted) || sessionStorage.getItem("desk-intro")) setSkipIntro(true);
-      sessionStorage.setItem("desk-intro", "1");
-    } catch { /* No storage: play it. */ }
+    if (!introDecided.current) {
+      introDecided.current = true;
+      setPlayIntro(introPlays(spotIds));
+      try { sessionStorage.setItem("desk-intro", "1"); } catch { /* No storage: it plays again next time. */ }
+    }
     document.documentElement.classList.add("dk-page");
     return () => {
       blocked.removeEventListener("change", update); motion.removeEventListener("change", update);
       document.documentElement.classList.remove("dk-page");
     };
-  }, [data.notes]);
+  }, [data.notes, data.projects.length]);
+
+  // The panel stops above the object list, however many rows the list wraps to.
+  useEffect(() => {
+    const nav = list.current;
+    if (!nav) return;
+    const observer = new ResizeObserver(() => root.current?.style.setProperty("--dk-list-h", `${nav.offsetHeight}px`));
+    observer.observe(nav);
+    return () => observer.disconnect();
+  }, [allowed]);
 
   // Keep the address in step with what's open, so a close-up can be shared.
   useEffect(() => {
     const params = new URLSearchParams();
     if (open) params.set("open", open);
     if (open === "notes" && note) params.set("note", note);
+    if (open === "work") params.set("project", String(workIndex + 1));
     const query = params.toString();
     history.replaceState(null, "", query ? `?${query}` : location.pathname);
-  }, [open, note]);
+  }, [open, note, workIndex]);
 
-  const close = useCallback(() => { setOpen(null); setNote(null); setTerminal(null); }, []);
+  const close = useCallback(() => { setOpen(null); setNote(null); setTerminal(null); setHover(null); }, []);
   const markReady = useCallback(() => setReady(true), []);
   const markIntroDone = useCallback(() => setIntroDone(true), []);
   const select = useCallback((target: Target, slug?: string) => {
+    setPlayIntro(false); // picking anything ends the intro
     if (target === "lamp") { toggleTheme(); return; }
     setOpen(target);
     setNote(target === "notes" ? slug ?? null : null);
@@ -143,7 +182,7 @@ export default function Desk({ data, bio, experience }: { data: DeskData } & Nod
   // Focus moves to the panel title when something opens, and back to its list button on close.
   useEffect(() => {
     if (open) title.current?.focus({ preventScroll: true });
-    else if (lastOpen.current) listButtons.current[lastOpen.current]?.focus({ preventScroll: true });
+    else if (lastOpen.current) { pageFocus.current = true; listButtons.current[lastOpen.current]?.focus({ preventScroll: true }); pageFocus.current = false; }
     lastOpen.current = open;
   }, [open, note]);
 
@@ -204,32 +243,33 @@ export default function Desk({ data, bio, experience }: { data: DeskData } & Nod
     );
   }
 
-  const intro = ready && !introDone && !skipIntro && !reducedMotion && !failed;
+  const introPending = playIntro && !introDone && !failed;
 
   return (
-    <div className="hm dk" data-open={open ?? undefined}>
+    <div ref={root} className="hm dk" data-open={open ?? undefined}>
       <h1 className="hm-sr">Ali Abdullah&apos;s desk</h1>
       {allowed && fontsReady && !failed && (
         <SceneBoundary onFail={() => setFailed(true)}>
           <Scene
             data={data} theme={theme} quality={quality} open={open} hover={hover} pulse={pulse} workIndex={workIndex} note={note} terminal={terminal}
-            reducedMotion={reducedMotion} skipIntro={skipIntro} onReady={markReady} onIntroDone={markIntroDone}
+            reducedMotion={reducedMotion} skipIntro={!playIntro} onReady={markReady} onIntroDone={markIntroDone}
             onHover={setHover} onSelect={select}
           />
         </SceneBoundary>
       )}
-      {/* Shown while the room loads, and instead of it if 3D can't run. */}
-      {(!introDone || failed) && <Image className="dk-poster" data-hidden={(ready && !failed) || undefined} src="/models/desk/poster.webp" alt="" fill priority sizes="100vw" />}
+      {/* Shown while the room loads, and instead of it if 3D can't run. Kept until the lamp has reached its final light level. */}
+      <div className="dk-poster" data-dim={introPending || undefined} data-hidden={(ready && !introPending && !failed) || undefined} suppressHydrationWarning />
+      <script suppressHydrationWarning dangerouslySetInnerHTML={{ __html: `(${introPlays})(${JSON.stringify(spotIds)})&&document.currentScript.previousElementSibling.setAttribute("data-dim","")` }} />
       {failed && <p className="dk-failed">The 3D room couldn&apos;t start in this browser. Everything in it is still here, in the list below.</p>}
 
       <header className="dk-top">
         <Link href="/" className="dk-chip"><ArrowLeft aria-hidden /> Portfolio</Link>
         <div className="dk-top-right">
-          {intro && <button type="button" className="dk-chip" onClick={() => setSkipIntro(true)}>Skip intro</button>}
+          {ready && introPending && <button type="button" className="dk-chip" onClick={() => setPlayIntro(false)}>Skip intro</button>}
         </div>
       </header>
 
-      <nav className="dk-list" aria-label="Things on the desk">
+      <nav ref={list} className="dk-list" aria-label="Things on the desk">
         {spots.map((spot) => (
           <button
             key={spot.id}
@@ -241,22 +281,28 @@ export default function Desk({ data, bio, experience }: { data: DeskData } & Nod
             onClick={() => (open === spot.id ? close() : select(spot.id))}
             onPointerEnter={() => setHover(spot.id)}
             onPointerLeave={() => setHover((current) => (current === spot.id ? null : current))}
-            onFocus={() => setHover(spot.id)}
+            onFocus={() => { if (!pageFocus.current) setHover(spot.id); }}
             onBlur={() => setHover((current) => (current === spot.id ? null : current))}
           >
             {spot.label}<span>{spot.object}</span>
           </button>
         ))}
-        <button type="button" onClick={toggleTheme}>Room lights<span>{theme === "dark" ? "Off" : "On"}</span></button>
+        <button type="button" onClick={toggleTheme}>Room lights<span>{theme === "dark" ? "Turn on" : "Turn off"}</span></button>
       </nav>
 
-      {open && (
-        <aside id="dk-panel" key={open} className="dk-panel" aria-labelledby="dk-panel-title">
+      {panelOpen && (
+        <aside id="dk-panel" key={panelOpen} data-closing={!open || undefined} className="dk-panel" aria-labelledby="dk-panel-title">
           <div className="dk-panel-top">
-            <span className="dk-kicker">{spots.find((spot) => spot.id === open)?.label}</span>
+            <span className="dk-kicker">{spots.find((spot) => spot.id === panelOpen)?.label}</span>
             <button type="button" className="dk-close" onClick={close}><ArrowLeft aria-hidden /> Back to room <kbd>Esc</kbd></button>
           </div>
-          <PanelBody open={open} data={data} note={note} setNote={setNote} workIndex={workIndex} setWorkIndex={setWorkIndex} terminal={terminal} setTerminal={setTerminal} bio={bio} experience={experience} titleRef={title} />
+          <div className="dk-body" onScroll={(event) => { const el = event.currentTarget; setMoreExperience(el.scrollHeight - el.scrollTop - el.clientHeight > 8); }}>
+            <PanelBody
+              open={panelOpen} data={data} note={note} setNote={setNote} workIndex={workIndex} setWorkIndex={setWorkIndex} terminal={terminal} setTerminal={setTerminal}
+              showProject={(index) => { setWorkIndex(index); select("work"); }} experience={experience} job={job} titleRef={title}
+            />
+          </div>
+          {panelOpen === "experience" && moreExperience && <div className="dk-scroll-cue">Scroll for more ↓</div>}
         </aside>
       )}
     </div>
@@ -266,14 +312,14 @@ export default function Desk({ data, bio, experience }: { data: DeskData } & Nod
 type BodyProps = Nodes & {
   open: Spot; data: DeskData; note: string | null; setNote: (slug: string | null) => void;
   workIndex: number; setWorkIndex: (fn: (i: number) => number) => void; titleRef: React.RefObject<HTMLHeadingElement | null>;
-  terminal: Terminal | null; setTerminal: (terminal: Terminal | null) => void;
+  terminal: Terminal | null; setTerminal: (terminal: Terminal | null) => void; showProject: (index: number) => void;
 };
 
 function Draft({ draft }: { draft: boolean }) {
   return draft ? <span className="hm-draft">Draft</span> : null;
 }
 
-function PanelBody({ open, data, note, setNote, workIndex, setWorkIndex, terminal, setTerminal, bio, experience, titleRef }: BodyProps) {
+function PanelBody({ open, data, note, setNote, workIndex, setWorkIndex, terminal, setTerminal, showProject, experience, job, titleRef }: BodyProps) {
   const heading = (text: ReactNode) => <h2 id="dk-panel-title" ref={titleRef} tabIndex={-1}>{text}</h2>;
 
   if (open === "blog") {
@@ -331,23 +377,41 @@ function PanelBody({ open, data, note, setNote, workIndex, setWorkIndex, termina
 
   if (open === "work") {
     const project = data.projects[workIndex];
+    const projectLink = project.live || project.github;
     const step = (by: number) => setWorkIndex((i) => (i + by + data.projects.length) % data.projects.length);
     return (
       <>
-        {heading(project.title)}
-        <p>{project.description}</p>
-        <div className="hm-tags">{project.techStack.slice(0, 6).map((tech) => <span key={tech} className="hm-tag">{tech}</span>)}</div>
-        <div className="dk-links">
-          {project.live && <a href={project.live} target="_blank" rel="noopener noreferrer" className="dk-more">Live <ArrowUpRight aria-hidden /></a>}
-          {project.github && <a href={project.github} target="_blank" rel="noopener noreferrer" className="dk-more">Code <ArrowUpRight aria-hidden /></a>}
+        <div className="dk-work-summary">
+          {heading(project.title)}
+          <p>{project.description}</p>
+          <div className="hm-tags">{project.techStack.slice(0, 6).map((tech) => <span key={tech} className="hm-tag">{tech}</span>)}</div>
+
         </div>
         <div className="dk-pager">
           <button type="button" className="dk-chip" onClick={() => step(-1)} aria-label="Previous project"><ArrowLeft aria-hidden /></button>
-          <span className="dk-meta">{workIndex + 1} / {data.projects.length} · use ← →</span>
+          <span className="dk-meta">{workIndex + 1} of {data.projects.length}</span>
           <button type="button" className="dk-chip" onClick={() => step(1)} aria-label="Next project"><ArrowRight aria-hidden /></button>
         </div>
-        <Link href="/work" className="dk-more">All work <ArrowRight aria-hidden /></Link>
+        <div className="dk-links">
+          {projectLink && <a href={projectLink} target="_blank" rel="noopener noreferrer" className="dk-btn">{project.live ? "Visit project" : "View code"} <ArrowUpRight aria-hidden /></a>}
+          <Link href="/work" className="dk-more">All work <ArrowRight aria-hidden /></Link>
+          {project.live && project.github && <a href={project.github} target="_blank" rel="noopener noreferrer" className="dk-more">Code <ArrowUpRight aria-hidden /></a>}
+        </div>
         <button type="button" className="dk-more dk-back" onClick={() => setTerminal({ lines: ["Type help to see what's here. Esc goes back."], input: "" })}>Developer? Open the terminal <kbd>`</kbd></button>
+      </>
+    );
+  }
+
+  if (open === "now") {
+    return (
+      <>
+        {heading(`${job.role} at ${job.company}`)}
+        <p className="dk-meta">{job.period} · {job.location}</p>
+        <p>{job.description}</p>
+        <p>My part is the proposal: the editor contractors use to send branded PDFs, and the code that works out its money.</p>
+        {coffeeHot(data.activity) && <p>Coffee&apos;s hot: I pushed code today.</p>}
+        <div className="hm-tags">{data.projects[0].techStack.map((tech) => <span key={tech} className="hm-tag">{tech}</span>)}</div>
+        <button type="button" className="dk-btn" onClick={() => showProject(0)}>See it on the computer <ArrowRight aria-hidden /></button>
       </>
     );
   }
@@ -358,7 +422,9 @@ function PanelBody({ open, data, note, setNote, workIndex, setWorkIndex, termina
     return (
       <>
         {heading("Hi, I'm Ali.")}
-        <div className="hm-prose dk-prose">{bio}</div>
+        <p>I&apos;m a software engineer in Lahore. I build web and mobile apps, from the interface to the API.</p>
+        <p>At Ripeseed.io, I work on Brava Roof Tile&apos;s roofing platform: the proposal editor and the code that works out its money.</p>
+        <p>Alongside client work, I build apps like Tally Stick and FitKraft, often for handling money or working offline.</p>
         <Link href="/about" className="dk-more">More about me <ArrowRight aria-hidden /></Link>
       </>
     );

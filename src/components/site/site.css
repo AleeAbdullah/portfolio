@@ -1,0 +1,397 @@
+html:has(.site) { background: #0b0a09; }
+
+/* Construction tint: while the engine sets data-construct, a faint warm wash and grid lift the page. */
+@property --wash { syntax: "<color>"; inherits: false; initial-value: transparent; }
+@property --gridline { syntax: "<color>"; inherits: false; initial-value: transparent; }
+
+.site {
+  --s-bg: #0b0a09;
+  --s-surf: #15130f;
+  --s-line: #2a2620;
+  --s-fg: #f5f2ec;
+  --s-mut: #958e83;
+  --s-ac: #ff6b1a;
+  --s-sel: #4f8bff;
+  --bp-fill: rgb(165 148 125 / 0.19);
+  --bp-bar: rgb(165 148 125 / 0.26);
+  --bp-line: rgb(79 139 255 / 0.9);
+  --under: var(--s-bg);
+  --display: var(--font-archivo), "Arial Black", sans-serif;
+  --serif: var(--font-instrument), Georgia, serif;
+  --mono: var(--font-jbmono), ui-monospace, monospace;
+  position: relative;
+  min-height: 100vh;
+  overflow-x: clip;
+  background:
+    linear-gradient(var(--gridline) 1px, transparent 1px) 0 0 / 56px 56px,
+    linear-gradient(90deg, var(--gridline) 1px, transparent 1px) 0 0 / 56px 56px,
+    linear-gradient(var(--wash) 0 0),
+    radial-gradient(ellipse 70% 50% at 20% 0%, #ff6b1a1f, transparent 70%), var(--s-bg);
+  transition: --wash 0.4s ease, --gridline 0.4s ease;
+  color: var(--s-fg);
+  font-family: var(--mono);
+  font-size: 15px;
+  line-height: 1.6;
+}
+.site[data-construct] { --wash: rgb(150 140 125 / 0.06); --gridline: rgb(150 140 125 / 0.08); }
+.site::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.85'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.site a { color: inherit; text-decoration: none; }
+/* Zero-specificity reset, so list classes like .s-grid can still set their own margins. */
+:where(.site) ul, :where(.site) ol { list-style: none; margin: 0; padding: 0; }
+.site h1, .site h2, .site h3, .site p, .site dl, .site dd { margin: 0; }
+.site h2, .site h3 { color: inherit; }
+.site :focus-visible { outline: 2px solid var(--s-ac); outline-offset: 3px; }
+.s-wrap { width: min(1200px, 100% - 64px); margin: 0 auto; }
+
+/* Nav */
+.s-nav {
+  position: fixed; inset: 0 0 auto; z-index: 50;
+  display: flex; align-items: center; justify-content: space-between; gap: 24px;
+  padding: 14px 32px;
+  background: #0b0a09ee; backdrop-filter: blur(12px);
+  border-bottom: 1px solid #2a262080;
+  font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--s-mut);
+}
+.s-logo { display: flex; align-items: center; gap: 8px; color: var(--s-fg) !important; font-weight: 700; }
+.s-logo b { background: var(--s-ac); color: var(--s-bg); padding: 2px 6px; border-radius: 3px; }
+.s-nav nav { display: flex; gap: 22px; }
+.s-nav nav a:hover, .s-desk:hover { color: var(--s-fg); }
+.s-nav-end { display: flex; align-items: center; gap: 18px; }
+
+/* Shared type */
+.s-label, .s-meta { font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--s-ac); }
+.s-meta { color: var(--s-mut); font-weight: 500; }
+.s-h2 { font: 900 clamp(40px, 6vw, 76px)/0.95 var(--display); font-stretch: 125%; letter-spacing: -0.03em; margin-top: 14px !important; }
+.s-h2-xl { font-size: clamp(44px, 8vw, 112px); }
+.s-h3 { font: italic 400 clamp(28px, 3.4vw, 40px)/1.05 var(--serif); }
+.s-lede { font: italic 400 clamp(20px, 2vw, 26px)/1.3 var(--serif); color: var(--s-fg); max-width: 34ch; }
+.s-lede em { color: var(--s-ac); }
+.s-copy { color: var(--s-fg); max-width: 60ch; }
+.s-muted { color: var(--s-mut); }
+.s-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.s-chips li { font-size: 11.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; border: 1px solid var(--s-line); border-radius: 3px; padding: 3px 7px; color: #b5aea3; }
+.s-btn {
+  display: inline-flex; align-items: center; gap: 8px; cursor: pointer;
+  font: 700 11px var(--mono); letter-spacing: 0.12em; text-transform: uppercase;
+  border: 1px solid var(--s-line); border-radius: 4px; padding: 12px 18px;
+  background: var(--s-surf); color: var(--s-fg); transition: border-color 0.2s, transform 0.2s;
+}
+@media (hover: hover) { .s-btn:hover { border-color: var(--s-ac); transform: translateY(-1px); } }
+.s-btn-primary { background: var(--s-ac); border-color: var(--s-ac); color: var(--s-bg) !important; }
+.s-links { display: flex; gap: 16px; font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
+.s-links a { color: var(--s-ac) !important; }
+.s-links a:hover { text-decoration: underline; }
+
+/* Hero */
+.s-hero { position: relative; min-height: 100vh; min-height: 100svh; display: flex; align-items: center; padding: 120px 0 80px; }
+.s-hero-word {
+  position: absolute; left: 50%; top: 96px; transform: translateX(-50%);
+  font: 900 clamp(40px, 16vw, 270px)/0.85 var(--display); font-stretch: 125%; letter-spacing: -0.04em;
+  color: transparent; -webkit-text-stroke: 1.5px #ff6b1aa6; white-space: nowrap; user-select: none;
+}
+.s-hero-grid { position: relative; display: grid; grid-template-columns: 1.5fr 1fr; gap: 48px; align-items: end; margin-top: clamp(80px, 14vw, 220px); }
+.s-hello { font: italic 400 26px var(--serif); }
+.s-name {
+  display: inline-block; margin: 6px 0 16px !important;
+  font: 900 clamp(40px, 6.4vw, 92px)/1 var(--display); font-stretch: 125%; letter-spacing: -0.03em;
+  background: var(--s-ac); color: var(--s-bg); padding: 4px 16px 8px;
+}
+.s-role { display: inline-flex; align-items: center; gap: 10px; border: 1px solid var(--s-line); padding: 4px 10px; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; }
+.s-role::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--s-ac); }
+.s-hero .s-lede { margin-top: 22px; }
+.s-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+.s-spec { --under: var(--s-surf); background: var(--s-surf); border: 1px solid var(--s-line); border-radius: 8px; padding: 6px 18px; font-size: 12px; }
+.s-spec div { display: flex; justify-content: space-between; gap: 16px; padding: 11px 0; border-bottom: 1px dashed var(--s-line); }
+.s-spec div:last-child { border-bottom: 0; }
+.s-spec dt { color: var(--s-mut); text-transform: uppercase; letter-spacing: 0.12em; font-size: 10.5px; }
+.s-spec dd { text-align: right; }
+
+/* Sections */
+.s-section { padding: 130px 0; border-top: 1px solid #2a262080; }
+.s-section-tight { border-top: 0; padding-top: 40px; }
+.s-about { display: grid; grid-template-columns: 1fr 1.1fr; gap: 64px; }
+.s-about-body { display: grid; gap: 22px; color: var(--s-mut); font-size: 15px; }
+.s-about-body > p:first-child { color: var(--s-fg); }
+.s-facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px; }
+.s-facts li { --under: var(--s-surf); background: var(--s-surf); border: 1px solid var(--s-line); border-radius: 6px; padding: 14px; font-size: 11px; color: var(--s-mut); text-transform: uppercase; letter-spacing: 0.1em; }
+.s-facts b { display: block; font: 900 32px/1.1 var(--display); font-stretch: 125%; color: var(--s-ac); letter-spacing: -0.02em; margin-bottom: 4px; text-transform: none; }
+
+.s-flagship { --under: var(--s-surf); display: grid; grid-template-columns: 1.4fr 1fr; gap: 40px; margin-top: 56px; padding: 32px; background: var(--s-surf); border: 1px solid var(--s-line); border-radius: 12px; }
+.s-flagship > div { display: grid; gap: 16px; align-content: start; }
+.s-pipeline { display: grid; gap: 10px; align-content: center; counter-reset: step; }
+.s-pipeline li { --under: var(--s-bg); position: relative; display: flex; gap: 14px; align-items: center; padding: 14px 16px; border: 1px solid var(--s-line); border-radius: 6px; background: var(--s-bg); font-size: 13px; }
+.s-pipeline li:not(:last-child)::before { content: ""; position: absolute; left: 30px; bottom: -11px; height: 10px; border-left: 1px dashed var(--s-ac); }
+.s-pipeline li > span:first-child { color: var(--s-ac); font-weight: 700; }
+.s-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 48px; }
+.s-card { --under: var(--s-surf); display: grid; gap: 10px; align-content: start; padding: 22px; background: var(--s-surf); border: 1px solid var(--s-line); border-radius: 10px; transition: border-color 0.2s, transform 0.2s; }
+@media (hover: hover) { .s-card:hover { border-color: #ff6b1a80; transform: translateY(-2px); } }
+.s-card[data-step]:not([data-step="done"]):hover { transform: none; }
+.s-card h3 { font: italic 400 26px/1.05 var(--serif); }
+.s-card > p:not(.s-meta) { color: var(--s-mut); font-size: 13.5px; }
+/* Full-bleed 16:9 cover on top of every More-work card. */
+.s-cover { position: relative; aspect-ratio: 16 / 9; margin: -22px -22px 4px; overflow: hidden; border-radius: 9px 9px 0 0; border-bottom: 1px solid var(--s-line); background: #1b1814; }
+.s-cover img { object-fit: cover; }
+/* Photos are much brighter than the dark covers, so they sit under a dark vignette and frame. */
+.s-cover.is-photo::before {
+  content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: radial-gradient(ellipse 80% 75% at 50% 45%, transparent 50%, #0b0a09b3), #0b0a0933;
+  box-shadow: inset 0 0 0 1px #0b0a0980;
+}
+.s-cover-type {
+  position: absolute; inset: 0; display: grid; align-content: center; padding: 16px 22px;
+  background:
+    radial-gradient(110% 90% at 100% 0%, #ff6b1a33, transparent 60%),
+    linear-gradient(#2a262080 1px, transparent 1px) 0 0 / 24px 24px,
+    linear-gradient(90deg, #2a262080 1px, transparent 1px) 0 0 / 24px 24px,
+    #1b1814;
+}
+.s-cover-type b { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4; overflow: hidden; max-width: 17ch; font: italic 400 32px/1.06 var(--serif); color: var(--s-fg); }
+
+.s-jobs { margin-top: 48px; border-top: 1px solid var(--s-line); }
+.s-jobs li { display: grid; grid-template-columns: 200px 1fr 1.4fr; gap: 32px; padding: 28px 0; border-bottom: 1px solid var(--s-line); }
+.s-jobs h3 { font: italic 400 32px/1 var(--serif); margin-bottom: 6px; }
+.s-jobs li > p { color: var(--s-mut); }
+
+.s-stack { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 48px; }
+.s-stack-group { --under: var(--s-surf); padding: 22px; background: var(--s-surf); border: 1px solid var(--s-line); border-radius: 10px; }
+.s-stack-group h3 { font: italic 400 26px var(--serif); margin-bottom: 16px; }
+
+.s-contact { padding-bottom: 160px; }
+.s-contact .s-lede { margin-top: 24px; }
+.s-contact-row { display: flex; flex-wrap: wrap; align-items: center; gap: 18px; margin-top: 36px; }
+.s-email { font: 900 clamp(20px, 3vw, 36px) var(--display); font-stretch: 125%; border-bottom: 2px solid var(--s-ac); }
+.s-contact-links { margin-top: 28px; }
+.s-footer { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 28px 0 40px; border-top: 1px solid var(--s-line); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--s-mut); }
+.s-footer a:hover { color: var(--s-fg); }
+.site:has(.hud) .s-footer { padding-bottom: 104px; } /* keeps the closing line clear of the build bar */
+
+/* Build mode. The engine sets data-step and --step-ms on every [data-build] piece. With no
+   data-step, or at "done", none of these rules match and the page renders finished. */
+@property --sk { syntax: "<color>"; inherits: true; initial-value: #15130f; }
+/* Reveal progress 0 → 1; it rests at 1 (fully shown) whenever nothing animates it. */
+@property --wipe { syntax: "<number>"; inherits: false; initial-value: 1; }
+/* Declared on each piece so --step-ms (set inline by the engine) and the pulsing --sk resolve there. */
+.site [data-build] {
+  --pace: var(--step-ms, 600ms);
+  --lines: linear-gradient(transparent 24%, var(--sk) 24% 76%, transparent 76%) 0 0 / 100% 1lh;
+  --trim: linear-gradient(#000 0 0) 0 0 / 100% calc(100% - 1lh) no-repeat, linear-gradient(90deg, #000 72%, transparent 0) 0 100% / 100% 1lh no-repeat;
+  /* Selection handles (top-left, bottom-right) like the agents' measuring box, --h square. */
+  --h: 6px;
+  --handles:
+    linear-gradient(#fff 0 0) 1px 1px / calc(var(--h) - 2px) calc(var(--h) - 2px) no-repeat,
+    linear-gradient(var(--s-sel) 0 0) 0 0 / var(--h) var(--h) no-repeat,
+    linear-gradient(#fff 0 0) calc(100% - 1px) calc(100% - 1px) / calc(var(--h) - 2px) calc(var(--h) - 2px) no-repeat,
+    linear-gradient(var(--s-sel) 0 0) 100% 100% / var(--h) var(--h) no-repeat;
+}
+.site [data-build="text"] { --h: 5px; }
+.site .s-hero [data-build="text"] { --h: 4px; }
+:where(.site [data-build], .site [data-slot]) { position: relative; }
+:where(.site :is([data-build="text"], [data-build="heading"], [data-build="chips"], [data-slot]:not([data-slot="chips"], [data-slot="cover"]))) { width: fit-content; }
+.s-facts li > span { display: block; text-transform: none; letter-spacing: 0.02em; font-size: 12px; }
+.s-actions, .s-contact-row, .s-contact-links { width: fit-content; border-radius: 4px; }
+
+/* Skeleton pulse: queued pieces breathe dimly, the one being blocked out a little brighter. */
+.site [data-build][data-step="wait"] { animation: s-queue 1.8s ease-in-out infinite; }
+.site [data-build][data-step="skeleton"], .site [data-build="card"][data-step="content"] { animation: s-pulse 1.4s ease-in-out infinite; }
+@keyframes s-queue { 0%, 100% { --sk: #110f0c; } 50% { --sk: #1a1713; } }
+/* The low point stays above the card surface (#15130f) so bars never vanish into it. */
+@keyframes s-pulse { 0%, 100% { --sk: #1f1b15; } 50% { --sk: #2e271e; } }
+/* Busy: an Ember outline and glow (not while the box is being dragged out); at done it fades instead of vanishing. */
+.site [data-busy][data-step]:not([data-step="done"], [data-step="blueprint"], [data-step="frame"]) { outline: 1px solid #ff6b1a73; outline-offset: 4px; box-shadow: 0 0 28px -8px #ff6b1a66; }
+/* Paragraphs are skipped: their content mask already hid the outline, so fading it from full would flash. */
+.site [data-build]:not([data-build="text"])[data-step="done"] { animation: s-settle var(--pace) ease-out; }
+.site [data-busy][data-step="fill"] { animation: s-settle var(--pace) ease-out reverse both; }
+@keyframes s-settle {
+  from { outline: 1px solid #ff6b1a73; outline-offset: 4px; box-shadow: 0 0 28px -8px #ff6b1a66; }
+  to { outline: 1px solid transparent; outline-offset: 4px; box-shadow: 0 0 28px -8px transparent; }
+}
+
+/* Text and headings: glyphs hidden, line bars in their place (last line a little shorter). */
+.site :is([data-build="text"], [data-build="heading"]):is([data-step="wait"], [data-step="blueprint"], [data-step="skeleton"]) { -webkit-text-fill-color: transparent; background-color: transparent; border-color: transparent; }
+.site :is([data-build="text"], [data-build="heading"]):is([data-step="wait"], [data-step="blueprint"], [data-step="skeleton"])::before { visibility: hidden; }
+.site :is([data-build="text"], [data-build="heading"]):is([data-step="wait"], [data-step="skeleton"])::after {
+  content: ""; position: absolute; inset: 0; padding: inherit; pointer-events: none;
+  background: var(--lines); background-origin: content-box; background-clip: content-box;
+  -webkit-mask: var(--trim); mask: var(--trim);
+}
+/* The BUILDER wordmark is a thin outline when finished, so its placeholder is a faint dashed box, not a bar. */
+.site .s-hero-word:is([data-step="wait"], [data-step="skeleton"])::after {
+  background: none; -webkit-mask: none; mask: none; inset: 0.08em 0; border: 1px dashed #ff6b1a59; border-radius: 6px;
+  animation: s-breathe 1.4s ease-in-out infinite;
+}
+.site .s-hero-word[data-step="wait"]::after { opacity: 0.5; animation-duration: 1.8s; }
+@keyframes s-breathe { 50% { border-color: #ff6b1aa6; } }
+
+/* Line-staggered reveal: one mask band per line (the last band takes any lines past the fifth), each
+   starting 7% after the line above and sweeping for 65% of the animation, linear. Paragraphs reveal
+   through the bands; a card body's opaque cover is the inverse and stays where text isn't shown yet. */
+.site [data-build="text"][data-step="content"], .site [data-build="card"][data-step="content"] [data-slot="body"]::after {
+  --x0: calc(100% - 100% * clamp(0, var(--wipe) / 0.65, 1));
+  --x1: calc(100% - 100% * clamp(0, (var(--wipe) - 0.07) / 0.65, 1));
+  --x2: calc(100% - 100% * clamp(0, (var(--wipe) - 0.14) / 0.65, 1));
+  --x3: calc(100% - 100% * clamp(0, (var(--wipe) - 0.21) / 0.65, 1));
+  --x4: calc(100% - 100% * clamp(0, (var(--wipe) - 0.28) / 0.65, 1));
+  --x5: calc(100% - 100% * clamp(0, (var(--wipe) - 0.35) / 0.65, 1));
+  --bands: var(--sweep) var(--x0) 0 / 250% 1lh no-repeat, var(--sweep) var(--x1) 1lh / 250% 1lh no-repeat,
+    var(--sweep) var(--x2) 2lh / 250% 1lh no-repeat, var(--sweep) var(--x3) 3lh / 250% 1lh no-repeat,
+    var(--sweep) var(--x4) 4lh / 250% 1lh no-repeat, var(--sweep) var(--x5) 5lh / 250% 100% no-repeat;
+  -webkit-mask: var(--bands); mask: var(--bands);
+}
+.site [data-build="text"][data-step="content"] { --sweep: linear-gradient(90deg, #000 40%, transparent 60%); animation: s-wipe var(--pace) linear both; }
+@keyframes s-wipe { from { --wipe: 0; } to { --wipe: 1; } }
+
+/* Headings grow as they type: four quick steps from 40% to full size, full for the last quarter.
+   Only the inner span scales (from its top-left), so layout never moves. */
+.type-grow { display: inline-block; }
+.site [data-build="heading"][data-step="content"] .type-grow { transform-origin: left top; animation: s-grow var(--pace) ease-out both; }
+@keyframes s-grow { 0%, 18% { transform: scale(0.4); } 25%, 43% { transform: scale(0.6); } 50%, 68% { transform: scale(0.8); } 75%, 100% { transform: none; } }
+/* The orange name block paints in from the left ahead of the caret instead of flashing on. */
+.site .s-name[data-step="content"] { background: linear-gradient(var(--s-ac) 0 0) 0 0 / 100% 100% no-repeat; animation: s-paint calc(var(--pace) * 0.3) cubic-bezier(0.3, 0.7, 0.4, 1) both; }
+@keyframes s-paint { from { background-size: 0 100%; } }
+
+/* Chips: pulsing pills, then each pops in on its own beat (--n of --count). */
+.site [data-build="chips"]:is([data-step="wait"], [data-step="blueprint"], [data-step="skeleton"]) li,
+.site [data-build="card"]:is([data-step="blueprint"], [data-step="skeleton"]) :is([data-slot="chips"] li, [data-slot="links"] a) { -webkit-text-fill-color: transparent; background-color: var(--sk); border-color: transparent; border-radius: 3px; }
+.site [data-build="chips"][data-step="content"] li { animation: s-chip calc(var(--pace) * 0.25) ease-out calc(var(--pace) * 0.75 * var(--n, 0) / var(--count, 1)) both; }
+.site [data-build="card"][data-step="content"] [data-slot="chips"] li { animation: s-chip calc(var(--pace) * 0.15) ease-out calc(var(--pace) * (0.5 + 0.35 * var(--n, 0) / var(--count, 1))) both; }
+.site [data-build="card"][data-step="content"] [data-slot="links"] a { animation: s-chip calc(var(--pace) * 0.15) ease-out calc(var(--pace) * 0.78) both; }
+.site [data-build="card"][data-step="content"] [data-slot="links"] a + a { animation-delay: calc(var(--pace) * 0.85); }
+@keyframes s-chip { from { -webkit-text-fill-color: transparent; background-color: #2a241c; border-color: transparent; transform: scale(0.9); } }
+
+/* Cards and blocks: the agent drags the box out from the top-left like a selection rectangle (the
+   engine drives --draw 0 → 1; absent means fully drawn), then the real surface and border fade in
+   while the drawn plate dissolves top to bottom. */
+.site [data-build="card"]:is([data-step="wait"], [data-step="frame"], [data-step="fill"]) > *,
+.site [data-build="block"]:is([data-step="wait"], [data-step="blueprint"], [data-step="frame"], [data-step="fill"]) > * { opacity: 0; }
+.site :is([data-build="card"], [data-build="block"]):is([data-step="wait"], [data-step="frame"]) { background-color: transparent; border-color: transparent; }
+.site :is([data-build="card"], [data-build="block"])[data-step="fill"] { transition: background-color var(--pace) ease-out, border-color var(--pace) ease-out; }
+.site .s-pipeline li:is([data-step="wait"], [data-step="blueprint"])::before { opacity: 0; }
+.site :is([data-build="card"], [data-build="block"]):is([data-step="wait"], [data-step="frame"], [data-step="fill"])::after {
+  content: ""; position: absolute; inset: -1px; border-radius: inherit; pointer-events: none;
+}
+.site :is([data-build="card"], [data-build="block"])[data-step="wait"]::after { background: var(--sk); }
+.site :is([data-build="card"], [data-build="block"]):is([data-step="frame"], [data-step="fill"])::after {
+  inset: -1px auto auto -1px; box-sizing: border-box;
+  width: calc(var(--draw, 1) * (100% + 2px)); height: calc(var(--draw, 1) * (100% + 2px));
+  background: var(--bp-fill); border: 1px solid var(--bp-line);
+}
+/* Handles ride the growing corner (this also takes over the pipeline connector's ::before). */
+.site :is([data-build="card"], [data-build="block"]):is([data-step="frame"], [data-step="fill"])::before {
+  content: ""; position: absolute; z-index: 3; pointer-events: none; inset: calc(-1px - var(--h) / 2) auto auto calc(-1px - var(--h) / 2);
+  box-sizing: border-box; border: 0; opacity: 1;
+  width: calc(var(--draw, 1) * (100% + 2px) + var(--h)); height: calc(var(--draw, 1) * (100% + 2px) + var(--h));
+  background: var(--handles);
+}
+.site :is([data-build="card"], [data-build="block"])[data-step="fill"]::before,
+.site :is([data-build="card"], [data-build="block"])[data-step="fill"]::after {
+  -webkit-mask: linear-gradient(transparent 40%, #000 60%) 0 100% / 100% 250% no-repeat; mask: linear-gradient(transparent 40%, #000 60%) 0 100% / 100% 250% no-repeat;
+  animation: s-dissolve var(--pace) ease-in-out both;
+}
+@keyframes s-dissolve { to { -webkit-mask-position: 0 0; mask-position: 0 0; } }
+/* A card's skeleton slots fade in over the fresh surface rather than popping. */
+.site [data-build="card"][data-step="skeleton"] > * { animation: s-fade calc(var(--pace) * 0.5) ease-out both; }
+@keyframes s-fade { from { opacity: 0; } }
+@keyframes s-out { to { opacity: 0; } }
+
+.site [data-build="block"][data-step="content"] > * { animation: s-rise calc(var(--pace) * 0.45) ease-out calc(var(--pace) * 0.12 * var(--d, 0)) both; }
+.site [data-build="block"] > :nth-child(2) { --d: 1; }
+.site [data-build="block"] > :nth-child(3) { --d: 2; }
+.site [data-build="block"] > :nth-child(4) { --d: 3; }
+.site [data-build="block"] > :nth-child(n + 5) { --d: 4; }
+@keyframes s-rise { from { opacity: 0; transform: translateY(6px); } }
+
+/* Card slots: opaque placeholder covers (the card's surface sits under them, so --under matches).
+   In content, the title types itself, the meta cover slides off and the body is revealed line by line. */
+.site [data-build="card"]:is([data-step="skeleton"], [data-step="content"]) :is([data-slot="meta"], [data-slot="title"], [data-slot="body"])::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(var(--under) 0 0) 100% 100% / 30% 1lh no-repeat, var(--lines), var(--under);
+}
+.site [data-build="card"][data-step="content"] [data-slot="title"]::after { content: none; }
+/* Until its reveal starts, each slot keeps its pulsing bars (fill-mode both holds the first keyframe). */
+.site [data-build="card"][data-step="content"] [data-slot="meta"]::after { animation: s-uncover calc(var(--pace) * 0.3) ease-out both; }
+.site [data-build="card"][data-step="content"] [data-slot="body"]::after { --sweep: linear-gradient(90deg, transparent 40%, #000 60%); animation: s-wipe calc(var(--pace) * 0.5) linear calc(var(--pace) * 0.45) both; }
+@keyframes s-uncover { from { clip-path: inset(0 0 0 0); } to { clip-path: inset(0 0 0 100%); } }
+/* Cover: a crossed placeholder box that cross-fades into the picture as it develops from grey to
+   colour (typographic covers simply fade in). */
+.site [data-build="card"]:is([data-step="skeleton"], [data-step="content"]) [data-slot="cover"]::after {
+  content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  background:
+    linear-gradient(to top right, transparent calc(50% - 1px), #f5f2ec12 50%, transparent calc(50% + 1px)),
+    linear-gradient(to bottom right, transparent calc(50% - 1px), #f5f2ec12 50%, transparent calc(50% + 1px)),
+    var(--sk);
+}
+.site [data-build="card"][data-step="content"] [data-slot="cover"]::after { animation: s-out calc(var(--pace) * 0.3) ease-out both; }
+.site [data-build="card"][data-step="content"] [data-slot="cover"] > * { animation: s-develop calc(var(--pace) * 0.6) ease-out both; }
+.site [data-build="card"][data-step="content"] [data-slot="cover"] > .s-cover-type { animation-name: s-fade; }
+@keyframes s-develop { 0% { opacity: 0; filter: grayscale(1) brightness(0.75); } 30% { opacity: 1; } 100% { opacity: 1; filter: grayscale(0) brightness(1); } }
+
+/* Blueprint: every visible piece turns into a selected wireframe at once: a warm translucent plate,
+   a blue outline and corner handles like the agents' measuring box. Text keeps faint line bars;
+   cards show their slots as nested wireframes; blocks show the outer box only. */
+.site [data-build][data-step="blueprint"] {
+  --sk: var(--bp-bar); --lines: linear-gradient(transparent 36%, var(--sk) 36% 64%, transparent 64%) 0 0 / 100% 1lh;
+  background-color: var(--bp-fill); border-color: transparent; outline: 1px solid var(--bp-line); outline-offset: -1px;
+}
+.site :is([data-build="text"], [data-build="heading"])[data-step="blueprint"] { background: var(--lines) content-box, var(--bp-fill); border-radius: 4px; }
+.site .s-hero-word[data-step="blueprint"] { background: var(--bp-fill); }
+.site [data-build][data-step="blueprint"]::after { content: ""; position: absolute; inset: calc(var(--h) / -2); z-index: 3; pointer-events: none; background: var(--handles); }
+.site [data-build="card"][data-step="blueprint"] { -webkit-text-fill-color: transparent; }
+.site [data-build="card"][data-step="blueprint"] :is([data-slot="meta"], [data-slot="title"], [data-slot="body"])::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: var(--lines); -webkit-mask: var(--trim); mask: var(--trim);
+}
+/* The cover adds no fill of its own, only a light outline and X, so the card stays as translucent as the hero. */
+.site [data-build="card"][data-step="blueprint"] [data-slot="cover"] { background: transparent; border-color: transparent; }
+.site [data-build="card"][data-step="blueprint"] [data-slot="cover"]::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none; border-radius: inherit;
+  box-shadow: inset 0 0 0 1px rgb(79 139 255 / 0.4);
+  background:
+    linear-gradient(to top right, transparent calc(50% - 0.5px), var(--bp-bar) 50%, transparent calc(50% + 0.5px)),
+    linear-gradient(to bottom right, transparent calc(50% - 0.5px), var(--bp-bar) 50%, transparent calc(50% + 0.5px));
+}
+.site [data-build="card"][data-step="blueprint"] [data-slot="cover"] > *, .site [data-build="card"][data-step="blueprint"] [data-slot="cover"]::before { visibility: hidden; }
+
+.type-ghost { color: transparent; -webkit-text-stroke-color: transparent; }
+/* I-beam caret, solid while typing (it only exists mid-type); zero net width so text never reflows. */
+/* The layout box stays inside the tightest line-height (0.85); the stem and serifs reach past it absolutely. */
+.type-caret { --w: max(2px, 0.04em); position: relative; display: inline-block; width: var(--w); height: 0.8em; margin: 0 calc(var(--w) / -2); vertical-align: -0.04em; }
+.type-caret::before { content: ""; position: absolute; inset: -0.1em 0; background: var(--s-sel); border-radius: 1px; }
+.type-caret::after { content: ""; position: absolute; inset: -0.1em calc(var(--w) * -1.5); border-block: var(--w) solid var(--s-sel); border-radius: 1px; }
+.type-sel { background: rgb(79 139 255 / 0.38); border-radius: 2px; }
+/* Blue turns mauve on the orange name block, so it gets a dark tint; the giant outline wordmark gets
+   no selection and a caret sized to its caps rather than its full em box. */
+.s-name .type-sel { background: rgb(11 10 9 / 0.22); }
+.s-hero-word .type-sel { background: none; }
+.s-hero-word .type-caret { --w: 3px; height: 0.5em; vertical-align: 0.1em; }
+.s-name .type-caret { --s-sel: #0b0a09; } /* dark caret on the orange name block */
+.s-hero-word .type-caret::before, .s-hero-word .type-caret::after { inset-block: -0.03em; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+@media (prefers-reduced-motion: reduce) {
+  .site { transition: none !important; }
+  .site [data-build], .site [data-build] *, .site [data-build]::before, .site [data-build]::after, .site [data-build] *::after { animation: none !important; transition: none !important; }
+  .site [data-build="text"][data-step="content"] { -webkit-mask: none; mask: none; }
+}
+
+@media (max-width: 960px) {
+  .s-nav nav a:not([href="#contact"]) { display: none; }
+  .s-nav nav { margin-left: auto; }
+  .s-hero-grid, .s-about, .s-flagship { grid-template-columns: 1fr; }
+  .s-grid, .s-stack { grid-template-columns: 1fr 1fr; }
+  .s-jobs li { grid-template-columns: 1fr; gap: 8px; }
+}
+@media (max-width: 640px) {
+  .s-wrap { width: calc(100% - 32px); }
+  .s-nav { padding: 12px 16px; }
+  .s-section { padding: 90px 0; }
+  .s-grid, .s-stack, .s-facts { grid-template-columns: 1fr; }
+  .s-flagship { padding: 20px; }
+}
