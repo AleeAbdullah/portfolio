@@ -47,8 +47,8 @@ function toggleTheme() {
 type Job = { company: string; role: string; period: string; location: string; description: string };
 type Nodes = { experience: ReactNode; job: Job };
 
-// The lamp intro plays once per visit, in the dark room only, and not when arriving straight at an object or with reduced motion.
-// Also inlined into the page (so it must stay self-contained, given the spot ids): the poster is dark before first paint.
+// The wireframe plays once per visit in the dark room, except on deep links or with reduced motion.
+// Also inlined before paint; keep this self-contained.
 function introPlays(ids: string[]) {
   let seen = null;
   try { seen = sessionStorage.getItem("desk-intro"); } catch { /* No storage: play it. */ }
@@ -101,7 +101,6 @@ export default function Desk({ data, experience, job }: { data: DeskData } & Nod
   const [terminal, setTerminal] = useState<Terminal | null>(null);
   const [hover, setHover] = useState<Target | null>(null);
   const [pulse, setPulse] = useState<Spot | null>(null);
-  const [introDone, setIntroDone] = useState(false);
   const [moreExperience, setMoreExperience] = useState(true);
   const [ready, setReady] = useState(false);
   const [playIntro, setPlayIntro] = useState(false);
@@ -170,7 +169,7 @@ export default function Desk({ data, experience, job }: { data: DeskData } & Nod
 
   const close = useCallback(() => { setOpen(null); setNote(null); setTerminal(null); setHover(null); }, []);
   const markReady = useCallback(() => setReady(true), []);
-  const markIntroDone = useCallback(() => setIntroDone(true), []);
+  const markFailed = useCallback(() => setFailed(true), []);
   const select = useCallback((target: Target, slug?: string) => {
     setPlayIntro(false); // picking anything ends the intro
     if (target === "lamp") { toggleTheme(); return; }
@@ -219,7 +218,7 @@ export default function Desk({ data, experience, job }: { data: DeskData } & Nod
 
   // First visit: each object glows once, in turn, so people know they can be clicked.
   useEffect(() => {
-    if (!introDone || reducedMotion) return;
+    if (!ready || reducedMotion) return;
     try { if (localStorage.getItem("desk-seen")) return; localStorage.setItem("desk-seen", "1"); } catch { return; }
     let i = 0;
     setPulse(spots[0].id);
@@ -228,7 +227,7 @@ export default function Desk({ data, experience, job }: { data: DeskData } & Nod
       if (i >= spots.length) { window.clearInterval(timer); setPulse(null); } else setPulse(spots[i].id);
     }, 420);
     return () => window.clearInterval(timer);
-  }, [introDone, reducedMotion]);
+  }, [ready, reducedMotion]);
 
   if (allowed === false) {
     return (
@@ -243,29 +242,30 @@ export default function Desk({ data, experience, job }: { data: DeskData } & Nod
     );
   }
 
-  const introPending = playIntro && !introDone && !failed;
+  const showWireframe = playIntro && !reducedMotion && !failed && !open && theme === "dark";
+  const introPending = showWireframe && !ready;
 
   return (
     <div ref={root} className="hm dk" data-open={open ?? undefined}>
       <h1 className="hm-sr">Ali Abdullah&apos;s desk</h1>
       {allowed && fontsReady && !failed && (
-        <SceneBoundary onFail={() => setFailed(true)}>
+        <SceneBoundary onFail={markFailed}>
           <Scene
             data={data} theme={theme} quality={quality} open={open} hover={hover} pulse={pulse} workIndex={workIndex} note={note} terminal={terminal}
-            reducedMotion={reducedMotion} skipIntro={!playIntro} onReady={markReady} onIntroDone={markIntroDone}
+            reducedMotion={reducedMotion} onReady={markReady} onFail={markFailed}
             onHover={setHover} onSelect={select}
           />
         </SceneBoundary>
       )}
-      {/* Shown while the room loads, and instead of it if 3D can't run. Kept until the lamp has reached its final light level. */}
-      <div className="dk-poster" data-dim={introPending || undefined} data-hidden={(ready && !introPending && !failed) || undefined} suppressHydrationWarning />
-      <script suppressHydrationWarning dangerouslySetInnerHTML={{ __html: `(${introPlays})(${JSON.stringify(spotIds)})&&document.currentScript.previousElementSibling.setAttribute("data-dim","")` }} />
+      {/* Detailed linework while loading; a themed still remains available if WebGL fails. */}
+      <div className="dk-poster" data-wireframe={showWireframe || undefined} data-hidden={(ready && !failed) || undefined} aria-hidden="true" suppressHydrationWarning />
+      <script suppressHydrationWarning dangerouslySetInnerHTML={{ __html: `(${introPlays})(${JSON.stringify(spotIds)})&&document.currentScript.previousElementSibling.setAttribute("data-wireframe","")` }} />
       {failed && <p className="dk-failed">The 3D room couldn&apos;t start in this browser. Everything in it is still here, in the list below.</p>}
 
       <header className="dk-top">
         <Link href="/" className="dk-chip"><ArrowLeft aria-hidden /> Portfolio</Link>
         <div className="dk-top-right">
-          {ready && introPending && <button type="button" className="dk-chip" onClick={() => setPlayIntro(false)}>Skip intro</button>}
+          {introPending && <button type="button" className="dk-chip" onClick={() => setPlayIntro(false)}>Skip intro</button>}
         </div>
       </header>
 
