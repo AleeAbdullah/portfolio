@@ -106,3 +106,5 @@ What actually covers the gap is the code above. Three things trigger a full refe
 - **A server-side `resync`.** If the server loses its database listener, it tells every socket to refetch and drops them.
 
 That's enough for an app you open, glance at and close. There's one hole I know about: when the server drops a socket on purpose, Socket.IO doesn't reconnect by itself, and I don't handle `disconnect` yet. A phone that stays open in the foreground could sit on stale data until the next time it's backgrounded. That's the next fix.
+
+**Update, 9 November 2026:** fixed. When the server drops the socket, the app now reconnects with backoff from 1 to 30 seconds, and every reconnect refetches.

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Footer, NoteList } from "@/src/components/home/sections";
 import { getNotes } from "@/src/lib/content";
 
-export const metadata: Metadata = { title: "Field notes — Ali Abdullah", description: "Short notes from Ali Abdullah on bugs and edge cases from real projects: the problem, the cause, the fix." };
+export const metadata: Metadata = { title: "Field notes — Ali Abdullah", description: "Short notes from Ali Abdullah on bugs and edge cases from real projects: the problem, the cause, the fix.", alternates: { canonical: "/field-notes/" } };
 
 export default function FieldNotes() {
   return (

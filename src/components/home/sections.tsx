@@ -41,6 +41,7 @@ export function NoteList({ notes, openFirst = true, level = 3 }: { notes: Entry[
           tag={note.tags[0] ? <span className="hm-tag">{note.tags[0]}</span> : undefined}
         >
           <div className="hm-prose" dangerouslySetInnerHTML={{ __html: note.html }} />
+          <Link href={`/field-notes/${note.slug}`} className="hm-inline">Open this note on its own page →</Link>
         </Disclosure>
       ))}
     </div>
@@ -104,18 +105,20 @@ export function ProjectList({ items, level = 3 }: { items: PortfolioProject[]; l
   );
 }
 
-// Phones only (CSS): the rows become a swipe carousel of screenshot cards.
+// Shared project images stay visible before opening the full write-up.
 export function ProjectCards({ items }: { items: PortfolioProject[] }) {
   return (
     <ul className="hm-cards" aria-label="More projects">
-      {items.map((project) => (
+      {items.map((project, index) => (
         <li key={project.title}>
           <Link href={`/work#${projectId(project.title)}`} className="hm-pcard">
             <span className="hm-pcard-shot" aria-hidden>
-              {project.images[0] ? <Image src={encodeURI(project.images[0])} alt="" fill sizes="80vw" /> : initials(project.title)}
+              {project.images[0] ? <Image src={encodeURI(project.images[0])} alt="" fill sizes={index === 0 ? "(max-width: 640px) 84vw, (max-width: 900px) 100vw, 720px" : "(max-width: 640px) 84vw, (max-width: 900px) 50vw, 360px"} /> : initials(project.title)}
             </span>
             <span className="hm-pcard-title">{project.title}</span>
-            <span className="hm-pcard-sub">{project.kind} · {project.category === "app" ? "Mobile" : "Web"} · {project.description}</span>
+            <span className="hm-meta">{project.kind} · {project.category === "app" ? "Mobile" : "Web"}</span>
+            <span className="hm-pcard-sub">{project.description}</span>
+            <span className="hm-pcard-more">Explore project →</span>
           </Link>
         </li>
       ))}
@@ -128,22 +131,30 @@ export function Flagship({ level = 3 }: { level?: 2 | 3 }) {
   return (
     <article className="hm-flag">
       <div className="hm-flag-body">
-        <p className="hm-meta">Ripeseed.io · Frontend and proposal backend · 2025 — now</p>
+        <p className="hm-meta">Team project · Ripeseed.io · 2025 — now</p>
         <Title className="hm-flag-title">{flagship.title}</Title>
         <p>{flagship.description}</p>
-        <ol className="hm-steps" aria-label="How a proposal is made">
-          <li>Roof measurements</li><li>Material estimates</li><li>Supplier pricing</li><li>PDF proposal</li>
-        </ol>
-        <Reveal label="What I built"><ProjectDetails project={flagship} /></Reveal>
+        <p><strong>My part:</strong> frontend development, including the proposal editor, and the backend that calculates proposal amounts.</p>
+        <Reveal label="My contribution in detail">
+          <ProjectDetails project={flagship} />
+          <div className="hm-doc">
+            <div className="hm-doc-sheet">
+              <div className="hm-doc-head"><b>Sample proposal</b><span>Illustrative figures</span></div>
+              {[["Shingles", "$8,640"], ["Underlayment", "$1,920"], ["Ridge cap", "$760"], ["Labor", "$6,400"]].map(([item, cost]) => <div key={item} className="hm-doc-row"><span>{item}</span><span>{cost}</span></div>)}
+              <div className="hm-doc-total"><span>Total</span><b>$17,720</b></div>
+              <div className="hm-doc-file">→ proposal.pdf</div>
+            </div>
+          </div>
+        </Reveal>
       </div>
-      <div className="hm-doc" aria-hidden>
-        <div className="hm-doc-sheet">
-          <div className="hm-doc-head"><b>Sample proposal</b><span>Illustrative figures</span></div>
-          {/* Made-up figures, labelled as a sample, so the sheet reads as a finished proposal rather than a loading state. */}
-          {[["Shingles", "$8,640"], ["Underlayment", "$1,920"], ["Ridge cap", "$760"], ["Labor", "$6,400"]].map(([item, cost]) => <div key={item} className="hm-doc-row"><span>{item}</span><span>{cost}</span></div>)}
-          <div className="hm-doc-total"><span>Total</span><b>$17,720</b></div>
-          <div className="hm-doc-file">→ proposal.pdf</div>
-        </div>
+      <div className="hm-platform">
+        <p className="hm-meta">Inside the portal</p>
+        <ol className="hm-platform-flow">
+          <li><b>Roof measurements</b><span>Reports and in-house measurement tools</span></li>
+          <li><b>Material estimates</b><span>Quantities, waste and product coverage</span></li>
+          <li><b>Supplier pricing</b><span>Separate priced versions of the material list</span></li>
+          <li><b>Customer proposals</b><span>Branded pages, templates and PDF exports</span></li>
+        </ol>
       </div>
     </article>
   );
@@ -153,7 +164,7 @@ export function Flagship({ level = 3 }: { level?: 2 | 3 }) {
 export function Bio() {
   return (
     <>
-      <p>I&apos;m a software engineer in Lahore. I took my first paid project on Upwork in 2021 and spent the next three years building web and mobile apps for small businesses, usually from the first call to deployment. That&apos;s how I ended up doing both the interface and the API. I still take on client projects alongside my full-time job: since 2025 that&apos;s been a CPR instructor&apos;s course checkout, a marketplace app that pays several sellers from one Paystack checkout, and a crypto token sale checkout.</p>
+      <p>I&apos;m a product engineer in Lahore. I took my first paid project on Upwork in 2021 and spent the next three years building web and mobile apps for small businesses, usually from the first call to deployment. That&apos;s how I ended up doing both the interface and the API. I still take on client projects alongside my full-time job: since 2025 that&apos;s been a CPR instructor&apos;s course checkout, a marketplace app that pays several sellers from one Paystack checkout, and a crypto token sale checkout.</p>
       <p>In December 2024 I joined Tech Grus to build restaurant ordering in Next.js and Firebase. Since August 2025 I&apos;ve been at <strong>Ripeseed.io</strong>, on a small team building a roofing platform for Brava Roof Tile. I work mostly on the frontend, and my part is the proposal: the editor contractors use to send branded PDFs, and the code that works out its money.</p>
       <p>Outside work I build apps like Tally Stick and FitKraft, usually ones that handle money or have to keep working offline. The blog has the long version of how they work; field notes have the bugs.</p>
     </>

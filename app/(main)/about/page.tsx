@@ -3,10 +3,12 @@ import CopyEmail from "@/src/components/home/CopyEmail";
 import { Bio, Footer, SectionHead, email } from "@/src/components/home/sections";
 import { skillGroups } from "@/src/lib/portfolioData";
 
-export const metadata: Metadata = { title: "About — Ali Abdullah", description: "Ali Abdullah is a software engineer in Lahore. Freelancing since 2021, now building roofing quote tools at Ripeseed.io." };
+export const metadata: Metadata = { title: "About — Ali Abdullah", description: "Ali Abdullah is a product engineer in Lahore. Freelancing since 2021, now on Brava Pro Portal, a roofing platform, at Ripeseed.io.", alternates: { canonical: "/about/" } };
 
 // Habits, each backed by a project on the site.
 const habits = [
+  { where: "Ripeseed", title: "Work the money out in one place.", body: "I work out every amount on a roofing proposal in one Django function. The pages can group or hide a number, never change it." },
+  { where: "Tally Stick", title: "Don't store what you can sum.", body: "I sum Tally Stick's balances from a ledger that can't be edited, only corrected, so there's no running total to drift." },
   { where: "FitKraft", title: "Make it work without a signal first.", body: "FitKraft logs every set and meal to SQLite on the phone, and syncs with the server when it can." },
   { where: "Field notes", title: "Leave a note when a bug costs me an hour.", body: "If a fix took me an hour to find, the field note should take the next person a minute to read: the problem, the cause, the fix." },
 ];

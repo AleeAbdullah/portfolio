@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Empty, Footer } from "@/src/components/home/sections";
 import { formatDate, getPosts } from "@/src/lib/content";
 
-export const metadata: Metadata = { title: "Blog — Ali Abdullah", description: "Posts on building web and mobile products: data, realtime, shipping and the lessons behind them." };
+export const metadata: Metadata = { title: "Blog — Ali Abdullah", description: "Posts on building web and mobile products: data, realtime, shipping and the lessons behind them.", alternates: { canonical: "/blog/" } };
 
 export default function BlogIndex() {
   const posts = getPosts();

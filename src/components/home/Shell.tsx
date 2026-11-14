@@ -11,15 +11,15 @@ import "./home.css";
 
 const nav = [
   { href: "/", label: "Home" },
+  { href: "/work", label: "Work" },
   { href: "/blog", label: "Blog" },
   { href: "/field-notes", label: "Field notes" },
-  { href: "/work", label: "Work" },
   { href: "/about", label: "About" },
 ];
 
 // On the home page these nav items jump to the matching section and light up while it is in view;
 // each section's own "All …" link goes on to the full page.
-const sectionNav: Record<string, string> = { blog: "/blog", "field-notes": "/field-notes", work: "/work" };
+const sectionNav: Record<string, string> = { work: "/work", blog: "/blog", "field-notes": "/field-notes" };
 
 const clean = (path: string) => (path.length > 1 ? path.replace(/\/$/, "") : path);
 
@@ -95,7 +95,7 @@ export default function Shell({ children, activity }: { children: ReactNode; act
       <aside id="hm-side" className="hm-side" aria-label="Site">
         <div>
           <Link href="/" className="hm-name" style={{ textDecoration: "none" }}>Ali<br />Abdullah</Link>
-          <p className="hm-role">Software engineer, web &amp; mobile.</p>
+          <p className="hm-role">Product engineer, web, mobile &amp; AI.</p>
         </div>
         <NowPanel activity={activity} />
         <nav className="hm-nav" aria-label="Main">

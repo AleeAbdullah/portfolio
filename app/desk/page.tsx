@@ -9,6 +9,7 @@ import { experiences, projects } from "@/src/lib/portfolioData";
 export const metadata: Metadata = {
   title: "The Desk — Ali Abdullah",
   description: "Ali Abdullah's desk: a 3D room where the newspaper is the blog, the corkboard holds field notes and the computer plays his work.",
+  robots: { index: false },
 };
 
 export default async function DeskPage() {

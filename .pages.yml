@@ -1,0 +1,84 @@
+# Pages CMS (app.pagescms.org): edits content/blog and content/field-notes in the browser and commits to GitHub.
+media:
+  input: public/uploads
+  output: /uploads
+
+content:
+  - name: blog
+    label: Blog
+    type: collection
+    path: content/blog
+    format: yaml-frontmatter
+    filename:
+      template: "{fields.title}.md"
+      field: create
+    view:
+      fields: [title, date, draft]
+      primary: title
+      default:
+        sort: date
+        order: desc
+    fields:
+      - name: title
+        type: string
+        required: true
+      - name: date
+        type: date
+        required: true
+        options:
+          format: yyyy-MM-dd
+      - name: summary
+        type: text
+        required: true
+      - name: tags
+        type: string
+        list: true
+      - name: draft
+        label: Draft (still listed, with a Draft badge)
+        type: boolean
+        default: false
+      - name: cover
+        label: Card motif
+        type: select
+        options:
+          values: [roof, ledger]
+      - name: body
+        type: code
+        options:
+          format: markdown
+
+  - name: field-notes
+    label: Field notes
+    type: collection
+    path: content/field-notes
+    format: yaml-frontmatter
+    filename:
+      template: "{fields.title}.md"
+      field: create
+    view:
+      fields: [title, date, draft]
+      primary: title
+      default:
+        sort: date
+        order: desc
+    fields:
+      - name: title
+        type: string
+        required: true
+      - name: date
+        type: date
+        required: true
+        options:
+          format: yyyy-MM-dd
+      - name: tags
+        type: string
+        list: true
+      - name: draft
+        label: Draft (still listed, with a Draft badge)
+        type: boolean
+        default: false
+      - name: body
+        type: code
+        default: "**Problem:** \n\n**Cause:** \n\n**Fix:** "
+        options:
+          format: markdown

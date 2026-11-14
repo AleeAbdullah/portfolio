@@ -3,6 +3,7 @@ import { Archivo, Geist, Geist_Mono, Instrument_Serif, JetBrains_Mono } from "ne
 import "./globals.css";
 import Head from "next/head";
 import { cn } from "@/src/lib/utils";
+import { SAME_AS, SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/src/lib/site";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -17,9 +18,31 @@ const jetbrains = JetBrains_Mono({ variable: "--font-jbmono", subsets: ["latin"]
 const themeScript = `try{var t=localStorage.getItem("theme");if(t!=="light"&&t!=="dark")t=matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";document.documentElement.dataset.theme=t;matchMedia("(prefers-color-scheme: light)").addEventListener("change",function(e){try{if(!localStorage.getItem("theme"))document.documentElement.dataset.theme=e.matches?"light":"dark"}catch(_){}})}catch(e){document.documentElement.dataset.theme="dark"}`;
 
 export const metadata: Metadata = {
-  title: "Ali Abdullah — Software Engineer",
-  description:
-    "Ali Abdullah is a software engineer in Lahore. He builds roofing quote tools at Ripeseed.io, and posts what he learns: long reads on the blog, quick fixes in field notes.",
+  metadataBase: new URL(SITE_URL),
+  title: "Ali Abdullah — Product Engineer · Next.js, React Native, AI",
+  description: SITE_DESCRIPTION,
+  authors: [{ name: SITE_NAME, url: SITE_URL }],
+  openGraph: { type: "website", siteName: SITE_NAME, locale: "en_US", images: [{ url: "/og.png", width: 1200, height: 630, alt: "Ali Abdullah, product engineer in Lahore" }] },
+  twitter: { card: "summary_large_image", images: ["/og.png"] },
+  alternates: { types: { "application/rss+xml": "/feed.xml" } },
+};
+
+const personLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": `${SITE_URL}/#person`,
+      name: SITE_NAME,
+      url: `${SITE_URL}/`,
+      jobTitle: "Product Engineer",
+      worksFor: { "@type": "Organization", name: "Ripeseed.io" },
+      address: { "@type": "PostalAddress", addressLocality: "Lahore", addressCountry: "PK" },
+      knowsAbout: ["Next.js", "React", "React Native", "Expo", "Django", "NestJS", "PostgreSQL", "TypeScript", "Product engineering", "AI features"],
+      sameAs: SAME_AS,
+    },
+    { "@type": "WebSite", "@id": `${SITE_URL}/#website`, url: `${SITE_URL}/`, name: SITE_NAME, author: { "@id": `${SITE_URL}/#person` } },
+  ],
 };
 
 export default function RootLayout({
@@ -32,6 +55,7 @@ export default function RootLayout({
       <head>
         {/* Sets the theme before first paint: the saved choice, else the system setting. */}
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(personLd) }} />
       </head>
       <Head>
         <link
