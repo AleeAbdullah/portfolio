@@ -4,7 +4,7 @@ import { Suspense, useEffect, useLayoutEffect, useMemo, useRef, useState, type D
 import { Canvas, useFrame, useLoader, useThree, type ThreeEvent } from "@react-three/fiber";
 import { Html } from "@react-three/drei/web/Html";
 import { useGLTF } from "@react-three/drei/core/Gltf";
-import { ACESFilmicToneMapping, BackSide, Box3, BufferGeometry, CanvasTexture, Color, Fog, LinearFilter, LinearMipmapLinearFilter, MathUtils, Mesh, MeshBasicMaterial, NormalBlending, PlaneGeometry, Quaternion, ShaderMaterial, SRGBColorSpace, TextureLoader, Vector2, Vector3, type Group, MeshPhysicalMaterial, MeshStandardMaterial, PMREMGenerator, RepeatWrapping, ShaderChunk, type Object3D, type WebGLProgramParametersWithUniforms } from "three";
+import { ACESFilmicToneMapping, WebGLRenderer, BackSide, Box3, BufferGeometry, CanvasTexture, Color, Fog, LinearFilter, LinearMipmapLinearFilter, MathUtils, Mesh, MeshBasicMaterial, NormalBlending, PlaneGeometry, Quaternion, ShaderMaterial, SRGBColorSpace, TextureLoader, Vector2, Vector3, type Group, MeshPhysicalMaterial, MeshStandardMaterial, PMREMGenerator, RepeatWrapping, ShaderChunk, type Object3D, type WebGLProgramParametersWithUniforms } from "three";
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
 import { mergeVertices } from "three/examples/jsm/utils/BufferGeometryUtils.js";
 import { email } from "@/src/lib/portfolioData";
@@ -25,9 +25,8 @@ export type SceneProps = {
   note: string | null;
   terminal: Terminal | null;
   reducedMotion: boolean;
-  skipIntro: boolean;
   onReady: () => void;
-  onIntroDone: () => void;
+  onFail: () => void;
   onHover: Dispatch<SetStateAction<Target | null>>;
   onSelect: (target: Target, note?: string) => void;
 };
@@ -537,20 +536,7 @@ function useRoom(data: DeskData) {
   }, [environment, plaster, gltf, lightmaps, data.notes.length, data.jobs.length]);
 }
 
-// The lamp flickers on, then the room comes up to full.
-const flicker = (t: number) => {
-  const keys = [[0, 0], [0.08, 0.8], [0.16, 0.15], [0.26, 0.9], [0.36, 0.35], [0.5, 1]];
-  if (t <= 0) return 0;
-  for (let i = 1; i < keys.length; i++) {
-    const [t1, v1] = keys[i], [t0, v0] = keys[i - 1];
-    if (t < t1) return v0 + ((v1 - v0) * (t - t0)) / (t1 - t0);
-  }
-  return 1;
-};
-
 function Light({ room, scene }: { room: Room; scene: SceneProps }) {
-  // The intro's clock starts on the second frame: the first one compiles shaders and uploads the bakes, which stalls.
-  const started = useRef<number | null>(null), frames = useRef(0), done = useRef(false);
   const lit = scene.theme === "light" ? 1 : 0;
   const fade = useRef({ from: lit, to: lit, at: 0 });
   const { invalidate, gl, scene: world } = useThree();
@@ -561,26 +547,19 @@ function Light({ room, scene }: { room: Room; scene: SceneProps }) {
     invalidate();
   }, [lit, room, invalidate]);
   useEffect(() => { room.rimMaterial.color.set(theme[scene.theme].accent); invalidate(); }, [room, scene.theme, scene.open, invalidate]);
-  useEffect(() => { invalidate(); }, [scene.skipIntro, invalidate]); // a skip mid-intro must reach a frame
   useFrame(() => {
-    if (++frames.current === 2) started.current = performance.now();
-    const t = started.current === null ? -1 : (performance.now() - started.current) / 1000 - 0.3;
-    const instant = scene.skipIntro || scene.reducedMotion;
-    const level = instant ? 1 : 0.85 + 0.15 * flicker(t) * Math.min(1, Math.max(0, t) / 1.3);
     const { from, to, at } = fade.current;
     const k = scene.reducedMotion ? 1 : Math.min(1, (performance.now() - at) / 300);
     const mix = (room.blend.value = from + (to - from) * k * (2 - k));
     if (k < 1) invalidate();
     // The bake stores light scaled to fit 8 bits; this undoes it (MeshBasicMaterial divides by PI).
-    for (const material of room.baked) material.lightMapIntensity = (Math.PI / bake.scale.dark) * level;
+    for (const material of room.baked) material.lightMapIntensity = Math.PI / bake.scale.dark;
     for (const material of room.paper) material.color.setScalar(MathUtils.lerp(theme.dark.paper, theme.light.paper, mix));
     const sky = room.meshes.get("sky");
     if (sky) (sky.material as MeshBasicMaterial).color.setScalar(MathUtils.lerp(theme.dark.sky, theme.light.sky, mix));
     gl.toneMappingExposure = MathUtils.lerp(theme.dark.exposure, theme.light.exposure, mix);
     (world.background as Color).lerpColors(theme.dark.bg, theme.light.bg, mix);
     world.fog!.color.copy(world.background as Color);
-    if (done.current) return;
-    if (level >= 1) { done.current = true; scene.onIntroDone(); } else invalidate();
   });
   return null;
 }
@@ -888,7 +867,15 @@ export default function Scene(props: SceneProps) {
       dpr={props.quality === "low" ? 1 : [1, 1.75]}
       frameloop="demand"
       camera={{ fov: 38, near: 0.01, far: 30, position: views.room.pos }}
-      gl={{ antialias: props.quality === "normal" }}
+      gl={(defaults) => {
+        try {
+          return new WebGLRenderer({ ...defaults, antialias: props.quality === "normal" });
+        } catch (error) {
+          // Canvas initializes asynchronously, outside the React error boundary.
+          props.onFail();
+          throw error;
+        }
+      }}
       onCreated={({ gl, scene }) => {
         gl.toneMapping = ACESFilmicToneMapping;
         scene.background = theme[props.theme].bg.clone(); // the Light fades these when the theme changes
