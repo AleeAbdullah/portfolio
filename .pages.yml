@@ -27,6 +27,11 @@ content:
         required: true
         options:
           format: yyyy-MM-dd
+      - name: updated
+        label: Last updated (optional)
+        type: date
+        options:
+          format: yyyy-MM-dd
       - name: summary
         type: text
         required: true
@@ -70,6 +75,14 @@ content:
         required: true
         options:
           format: yyyy-MM-dd
+      - name: updated
+        label: Last updated (optional)
+        type: date
+        options:
+          format: yyyy-MM-dd
+      - name: summary
+        label: Summary (optional; defaults to the first sentence)
+        type: text
       - name: tags
         type: string
         list: true

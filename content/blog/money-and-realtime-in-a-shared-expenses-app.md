@@ -24,7 +24,7 @@ const remainder = Number(totalMinor % BigInt(userIds.length));
 const amountMinor = base + (index < remainder ? 1n : 0n);
 ```
 
-The app runs the same maths for its preview, and a reconcile script checks every stored split against this rule in SQL. There's a [field note](/field-notes#who-gets-the-leftover-cent) on why the sort matters.
+The app runs the same maths for its preview, and a reconcile script checks every stored split against this rule in SQL. There's a [field note](/field-notes/who-gets-the-leftover-cent/) on why the sort matters.
 
 ## I deleted the balances table
 
@@ -65,7 +65,7 @@ So how do you fix a typo in an expense? You don't edit it. An edit inserts a new
 
 Three edge cases showed up once the rule was in place:
 
-- **Undoing an undo.** A reversal is just another event, so nothing stopped one reversal from pointing at another. A second trigger now refuses that ([field note](/field-notes#reversing-a-reversal)).
+- **Undoing an undo.** A reversal is just another event, so nothing stopped one reversal from pointing at another. A second trigger now refuses that ([field note](/field-notes/reversing-a-reversal/)).
 - **Two people editing the same expense.** Every edit has to send the version it started from. If someone else saved first, the API answers "Expense version conflict" instead of quietly replacing it.
 - **Double taps on a bad connection.** Each save carries an idempotency key, so tapping Save twice on a slow network records one expense, not two.
 

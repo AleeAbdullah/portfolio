@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
+import { FEED_ALTERNATE } from "@/src/lib/site";
 import { Flagship, Footer, ProjectList, otherProjects } from "@/src/components/home/sections";
 
 export const metadata: Metadata = {
   title: "Work — Ali Abdullah",
   description: "Web and mobile products Ali Abdullah has worked on, from Brava Pro Portal, a roofing platform, to an offline-first training log, with his part in each.",
-  alternates: { canonical: "/work/" },
+  alternates: { canonical: "/work/", types: FEED_ALTERNATE },
 };
 
 export default function Work() {

@@ -75,4 +75,4 @@ A proposal sent last Tuesday has to say what it said last Tuesday. Three choices
 
 ## Then the PDF
 
-The PDF had one bug worth a note. Near a page end, the totals block could run over the footer and leave a blank page behind it, because the layout was allowed to split the block across the break. The fix was one prop. There's a [field note](/field-notes#proposal-totals-overlapped-the-footer) on it.
+The PDF had one bug worth a note. Near a page end, the totals block could run over the footer and leave a blank page behind it, because the layout was allowed to split the block across the break. The fix was one prop. There's a [field note](/field-notes/proposal-totals-overlapped-the-footer/) on it.

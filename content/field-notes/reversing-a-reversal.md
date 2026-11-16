@@ -1,6 +1,7 @@
 ---
 title: A reversal that reversed a reversal
 date: 2026-08-04
+summary: In Tally Stick, an undo is a REVERSAL event, and nothing stopped one from reversing another and bringing back a cancelled debt. A Postgres trigger now rejects any reversal that targets a reversal.
 tags: [Tally Stick, PostgreSQL]
 draft: false
 ---
