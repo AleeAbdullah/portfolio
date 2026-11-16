@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Footer } from "@/src/components/home/sections";
 import { formatDate, getPost, getPosts } from "@/src/lib/content";
-import { SITE_NAME, SITE_URL, absolute } from "@/src/lib/site";
+import { FEED_ALTERNATE, SITE_NAME, absolute, personRef } from "@/src/lib/site";
 
 export const dynamicParams = false;
 export const generateStaticParams = () => getPosts().map((post) => ({ slug: post.slug }));
@@ -15,8 +15,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return {
     title: `${post.title} — Ali Abdullah`,
     description: post.summary,
-    alternates: { canonical: path },
-    openGraph: { type: "article", url: path, title: post.title, description: post.summary, publishedTime: post.date, authors: [SITE_NAME], tags: post.tags, images: [{ url: `${path}og.png`, width: 1200, height: 630, alt: post.title }] },
+    alternates: { canonical: path, types: { ...FEED_ALTERNATE, ...(!post.draft && { "text/markdown": `${path}index.md` }) } },
+    openGraph: { type: "article", siteName: SITE_NAME, locale: "en_US", url: path, title: post.title, description: post.summary, publishedTime: post.date, modifiedTime: post.updated || post.date, authors: [absolute("/about/")], tags: post.tags, images: [{ url: `${path}og.png`, width: 1200, height: 630, alt: post.title }] },
     twitter: { card: "summary_large_image", images: [`${path}og.png`] },
     ...(post.draft && { robots: { index: false } }),
   };
@@ -35,10 +35,11 @@ export default async function Post({ params }: { params: Promise<{ slug: string 
     headline: post.title,
     description: post.summary,
     datePublished: post.date,
+    dateModified: post.updated || post.date,
     url: absolute(`/blog/${post.slug}/`),
     image: absolute(`/blog/${post.slug}/og.png`),
     keywords: post.tags.join(", "),
-    author: { "@id": `${SITE_URL}/#person` },
+    author: personRef,
   };
 
   return (
@@ -48,7 +49,7 @@ export default async function Post({ params }: { params: Promise<{ slug: string 
         <Link href="/blog" className="hm-back">← All posts</Link>
         <header style={{ display: "flex", flexDirection: "column", gap: 18 }}>
           <div className="hm-article-meta">
-            <span className="hm-meta">{formatDate(post.date, "long")} · {post.minutes} min read</span>
+            <span className="hm-meta">{formatDate(post.date, "long")}{post.updated && ` · Updated ${formatDate(post.updated, "long")}`} · {post.minutes} min read</span>
             <div className="hm-tags">{post.tags.map((tag) => <span key={tag} className="hm-tag">{tag}</span>)}</div>
           </div>
           <h1>{post.title}</h1>

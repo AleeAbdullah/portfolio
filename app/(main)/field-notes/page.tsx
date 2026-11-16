@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
+import { FEED_ALTERNATE } from "@/src/lib/site";
 import Link from "next/link";
 import { Footer, NoteList } from "@/src/components/home/sections";
 import { getNotes } from "@/src/lib/content";
 
-export const metadata: Metadata = { title: "Field notes — Ali Abdullah", description: "Short notes from Ali Abdullah on bugs and edge cases from real projects: the problem, the cause, the fix.", alternates: { canonical: "/field-notes/" } };
+export const metadata: Metadata = { title: "Field notes — Ali Abdullah", description: "Short notes from Ali Abdullah on bugs and edge cases from real projects: the problem, the cause, the fix.", alternates: { canonical: "/field-notes/", types: FEED_ALTERNATE } };
 
 export default function FieldNotes() {
   return (

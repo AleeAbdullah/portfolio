@@ -1,6 +1,7 @@
 ---
 title: Proposal totals ran over the PDF footer
 date: 2026-10-21
+summary: In @react-pdf/renderer, a totals table allowed to wrap split across a page break, ran over the footer and left a blank page. Turning wrap off for the totals moves them to the next page whole.
 tags: [React PDF, Ripeseed]
 draft: false
 ---
