@@ -1,6 +1,7 @@
 ---
 title: Who gets the leftover cent?
 date: 2026-08-04
+summary: Splitting 10.00 three ways leaves one cent over, and the app and the server must give it to the same person. Both sort the participant IDs and give the extra units to the first ones in that order.
 tags: [Tally Stick, Money]
 draft: false
 ---

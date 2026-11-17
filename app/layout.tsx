@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import { Archivo, Geist, Geist_Mono, Instrument_Serif, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-import Head from "next/head";
 import { cn } from "@/src/lib/utils";
-import { SAME_AS, SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/src/lib/site";
+import { FEED_ALTERNATE, SAME_AS, SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/src/lib/site";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -21,10 +20,10 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: "Ali Abdullah — Product Engineer · Next.js, React Native, AI",
   description: SITE_DESCRIPTION,
-  authors: [{ name: SITE_NAME, url: SITE_URL }],
+  authors: [{ name: SITE_NAME, url: `${SITE_URL}/about/` }],
   openGraph: { type: "website", siteName: SITE_NAME, locale: "en_US", images: [{ url: "/og.png", width: 1200, height: 630, alt: "Ali Abdullah, product engineer in Lahore" }] },
   twitter: { card: "summary_large_image", images: ["/og.png"] },
-  alternates: { types: { "application/rss+xml": "/feed.xml" } },
+  alternates: { types: FEED_ALTERNATE },
 };
 
 const personLd = {
@@ -35,8 +34,9 @@ const personLd = {
       "@id": `${SITE_URL}/#person`,
       name: SITE_NAME,
       url: `${SITE_URL}/`,
+      description: SITE_DESCRIPTION,
       jobTitle: "Product Engineer",
-      worksFor: { "@type": "Organization", name: "Ripeseed.io" },
+      worksFor: { "@type": "Organization", name: "Ripeseed.io", url: "https://ripeseed.io" },
       address: { "@type": "PostalAddress", addressLocality: "Lahore", addressCountry: "PK" },
       knowsAbout: ["Next.js", "React", "React Native", "Expo", "Django", "NestJS", "PostgreSQL", "TypeScript", "Product engineering", "AI features"],
       sameAs: SAME_AS,
@@ -57,16 +57,6 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(personLd) }} />
       </head>
-      <Head>
-        <link
-          rel="stylesheet"
-          href="https://unicons.iconscout.com/release/v4.0.8/css/line.css"
-        />
-        <link
-          href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
-          rel="stylesheet"
-        />
-      </Head>
       <body
         className={cn(
           geistSans.variable,

@@ -8,14 +8,14 @@ export const dynamic = "force-static";
 export default function sitemap(): MetadataRoute.Sitemap {
   const posts = getPosts().filter((post) => !post.draft);
   const notes = getNotes().filter((note) => !note.draft);
-  const latest = posts[0]?.date;
   return [
-    { url: absolute("/"), lastModified: latest },
+    // Listing pages carry no date: they change whenever any entry does, and a wrong lastmod is worse than none.
+    { url: absolute("/") },
     { url: absolute("/work/") },
     { url: absolute("/about/") },
-    { url: absolute("/blog/"), lastModified: latest },
-    { url: absolute("/field-notes/"), lastModified: notes[0]?.date },
-    ...posts.map((post) => ({ url: absolute(`/blog/${post.slug}/`), lastModified: post.date })),
-    ...notes.map((note) => ({ url: absolute(`/field-notes/${note.slug}/`), lastModified: note.date })),
+    { url: absolute("/blog/") },
+    { url: absolute("/field-notes/") },
+    ...posts.map((post) => ({ url: absolute(`/blog/${post.slug}/`), lastModified: post.updated || post.date })),
+    ...notes.map((note) => ({ url: absolute(`/field-notes/${note.slug}/`), lastModified: note.updated || note.date })),
   ];
 }

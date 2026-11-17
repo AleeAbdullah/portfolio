@@ -1,8 +1,12 @@
+import type { Metadata } from "next";
 import { ArrowDown } from "lucide-react";
 import BlogDeck from "@/src/components/home/BlogDeck";
 import CopyEmail from "@/src/components/home/CopyEmail";
 import { Empty, Experience, Flagship, Footer, NoteList, ProjectCards, SectionHead, email, otherProjects } from "@/src/components/home/sections";
 import { formatDate, getNotes, getPosts } from "@/src/lib/content";
+import { FEED_ALTERNATE } from "@/src/lib/site";
+
+export const metadata: Metadata = { alternates: { canonical: "/", types: FEED_ALTERNATE } };
 
 export default async function Home() {
   const posts = getPosts().map(({ slug, title, summary, date, minutes, tags, draft, cover }) => ({ slug, title, summary, minutes, tags, draft, cover, date: formatDate(date) }));

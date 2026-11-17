@@ -1,6 +1,7 @@
 ---
 title: A sync pull could overwrite an offline edit
 date: 2026-10-04
+summary: In FitKraft, a background sync pull could replace a newer offline edit in SQLite with the older server copy. The pull now skips any row that still has a queued or in-flight local change.
 tags: [FitKraft, SQLite, Sync]
 draft: false
 ---

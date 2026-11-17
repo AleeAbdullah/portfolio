@@ -2,8 +2,19 @@ import type { Metadata } from "next";
 import CopyEmail from "@/src/components/home/CopyEmail";
 import { Bio, Footer, SectionHead, email } from "@/src/components/home/sections";
 import { skillGroups } from "@/src/lib/portfolioData";
+import { FEED_ALTERNATE, SITE_URL, absolute, personRef } from "@/src/lib/site";
 
-export const metadata: Metadata = { title: "About — Ali Abdullah", description: "Ali Abdullah is a product engineer in Lahore. Freelancing since 2021, now on Brava Pro Portal, a roofing platform, at Ripeseed.io.", alternates: { canonical: "/about/" } };
+export const metadata: Metadata = { title: "About — Ali Abdullah", description: "Ali Abdullah is a product engineer in Lahore. Freelancing since 2021, now on Brava Pro Portal, a roofing platform, at Ripeseed.io.", alternates: { canonical: "/about/", types: FEED_ALTERNATE } };
+
+// Marks /about as the canonical page about the Person defined in the root layout.
+const profileLd = {
+  "@context": "https://schema.org",
+  "@type": "ProfilePage",
+  "@id": `${absolute("/about/")}#page`,
+  url: absolute("/about/"),
+  mainEntity: personRef,
+  isPartOf: { "@id": `${SITE_URL}/#website` },
+};
 
 // Habits, each backed by a project on the site.
 const habits = [
@@ -16,6 +27,7 @@ const habits = [
 export default function About() {
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(profileLd) }} />
       <div className="hm-col" style={{ gap: 80 }}>
         <header className="hm-page-head">
           <p className="hm-kicker">About</p>

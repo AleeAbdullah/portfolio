@@ -1,0 +1,19 @@
+# After Vercel finishes a production deploy of this project, tell IndexNow (Bing, which ChatGPT search leans on) which pages changed.
+name: IndexNow
+on: deployment_status
+permissions:
+  contents: read
+jobs:
+  ping:
+    # Exact match: the portfolio-designer Vercel project also reports deployments to this repo.
+    if: github.event.deployment_status.state == 'success' && github.event.deployment.environment == 'Production – portfolio'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.deployment.sha }}
+          fetch-depth: 2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: node scripts/indexnow.mjs

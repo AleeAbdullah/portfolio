@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Footer } from "@/src/components/home/sections";
 import { formatDate, getNote, getNotes } from "@/src/lib/content";
-import { SITE_NAME, SITE_URL, absolute } from "@/src/lib/site";
+import { FEED_ALTERNATE, SITE_NAME, absolute, personRef } from "@/src/lib/site";
 
 export const dynamicParams = false;
 export const generateStaticParams = () => getNotes().map((note) => ({ slug: note.slug }));
@@ -15,8 +15,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return {
     title: `${note.title} — Ali Abdullah`,
     description: note.summary,
-    alternates: { canonical: path },
-    openGraph: { type: "article", url: path, title: note.title, description: note.summary, publishedTime: note.date, authors: [SITE_NAME], tags: note.tags, images: [{ url: `${path}og.png`, width: 1200, height: 630, alt: note.title }] },
+    alternates: { canonical: path, types: { ...FEED_ALTERNATE, ...(!note.draft && { "text/markdown": `${path}index.md` }) } },
+    openGraph: { type: "article", siteName: SITE_NAME, locale: "en_US", url: path, title: note.title, description: note.summary, publishedTime: note.date, modifiedTime: note.updated || note.date, authors: [absolute("/about/")], tags: note.tags, images: [{ url: `${path}og.png`, width: 1200, height: 630, alt: note.title }] },
     twitter: { card: "summary_large_image", images: [`${path}og.png`] },
     ...(note.draft && { robots: { index: false } }),
   };
@@ -36,10 +36,11 @@ export default async function Note({ params }: { params: Promise<{ slug: string 
     headline: note.title,
     description: note.summary,
     datePublished: note.date,
+    dateModified: note.updated || note.date,
     url,
     image: `${url}og.png`,
     keywords: note.tags.join(", "),
-    author: { "@id": `${SITE_URL}/#person` },
+    author: personRef,
   };
 
   return (
@@ -49,7 +50,7 @@ export default async function Note({ params }: { params: Promise<{ slug: string 
         <Link href="/field-notes" className="hm-back">← All field notes</Link>
         <header style={{ display: "flex", flexDirection: "column", gap: 18 }}>
           <div className="hm-article-meta">
-            <span className="hm-meta">Field note · {formatDate(note.date, "long")}</span>
+            <span className="hm-meta">Field note · {formatDate(note.date, "long")}{note.updated && ` · Updated ${formatDate(note.updated, "long")}`}</span>
             <div className="hm-tags">{note.tags.map((tag) => <span key={tag} className="hm-tag">{tag}</span>)}</div>
           </div>
           <h1>{note.title}</h1>
