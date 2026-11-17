@@ -24,6 +24,7 @@ export const metadata: Metadata = {
   openGraph: { type: "website", siteName: SITE_NAME, locale: "en_US", images: [{ url: "/og.png", width: 1200, height: 630, alt: "Ali Abdullah, product engineer in Lahore" }] },
   twitter: { card: "summary_large_image", images: ["/og.png"] },
   alternates: { types: FEED_ALTERNATE },
+  verification: { google: "JWXqRlOnBQk5kcdurXduspn59A7zDgNWiMcbtztiiRw" },
 };
 
 const personLd = {
